@@ -9,7 +9,7 @@ git clone https://github.com/lucasangelino/apps-distribuidas-myhome.git
 # Paso 2: instalar las dependencias
 
 ```bash
-cd myhome
+cd apps-distribuidas-myhome
 npm install
 ```
 
