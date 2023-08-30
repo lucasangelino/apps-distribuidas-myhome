@@ -27,6 +27,12 @@ npm run android
 npm run ios
 ```
 
+# NOTA: En caso de cambiar la configuracion de la aplicacion y que deba ser reiniciada, se sugiere correr el siguiente comando:
+
+```bash
+npm start && npm run android
+```
+
 # Equipo:
 
 | Nombre         | LU      |
