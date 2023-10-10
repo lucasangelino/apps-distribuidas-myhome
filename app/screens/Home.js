@@ -1,10 +1,15 @@
 import React from 'react';
 const {View, Text, StyleSheet} = require('react-native');
+import Button from '@mui/material/Button';
 
 function Home() {
   return (
-    <View style={styles.container}>
+    <View>
       <Text>Home</Text>
+      <Button variant="contained">
+        <Text>Hello world</Text>
+      </Button>
+      ;
     </View>
   );
 }
