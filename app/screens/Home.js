@@ -12,7 +12,7 @@ function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EB6440',
+    backgroundColor: '#E5E5E5',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 5,

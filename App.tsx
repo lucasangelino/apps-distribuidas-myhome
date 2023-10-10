@@ -22,7 +22,7 @@ function App() {
           screenOptions={{
             headerShown: false,
             contentStyle: {
-              backgroundColor: '#EFF5F5',
+              backgroundColor: '#E5E5E5',
               flex: 1,
               minHeight: '100%',
             },
