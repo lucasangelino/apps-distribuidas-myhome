@@ -1,26 +1,43 @@
 import React from 'react';
-const {View, Text, StyleSheet} = require('react-native');
-import Button from '@mui/material/Button';
+const {View, StyleSheet, SafeAreaView, FlatList} = require('react-native');
+import PropiedadCard from '../components/PropiedadCard';
+import Heading from '../components/Heading';
+
+import propiedades from '../mocks/propiedadesList.json';
 
 function Home() {
+  const renderPropiedadCard = ({item}) => {
+    return <PropiedadCard propiedad={item} />;
+  };
   return (
-    <View>
-      <Text>Home</Text>
-      <Button variant="contained">
-        <Text>Hello world</Text>
-      </Button>
-      ;
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Heading>Propiedades cerca de ti</Heading>
+        <FlatList
+          style={styles.propiedadesList}
+          data={propiedades}
+          renderItem={({item}) => renderPropiedadCard({item})}
+          keyExtractor={item => item.id}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#E5E5E5',
-    justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: 5,
+    paddingTop: 5,
+    backgroundColor: '#E5E5E5',
+  },
+  propiedadesList: {
+    marginTop: 10,
+    marginBottom: 100,
+  },
+  propiedadesItem: {
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
   },
 });
 

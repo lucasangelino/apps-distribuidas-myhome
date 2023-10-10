@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "price": 100000,
+    "uri": "https://picsum.photos/700",
+    "expenses": 5000,
+    "location": "New York",
+    "description": "Beautiful apartment in the heart of the city"
+  },
+  {
+    "id": 2,
+    "price": 75000,
+    "uri": "https://picsum.photos/700",
+    "expenses": 3000,
+    "location": "Los Angeles",
+    "description": "Cozy bungalow in a quiet neighborhood"
+  },
+  {
+    "id": 3,
+    "price": 125000,
+    "uri": "https://picsum.photos/700",
+    "expenses": 7000,
+    "location": "Chicago",
+    "description": "Spacious loft with stunning city views"
+  },
+  {
+    "id": 4,
+    "price": 90000,
+    "uri": "https://picsum.photos/700",
+    "expenses": 4000,
+    "location": "Miami",
+    "description": "Charming beachfront condo with private balcony"
+  },
+  {
+    "id": 5,
+    "price": 110000,
+    "uri": "https://picsum.photos/700",
+    "expenses": 6000,
+    "location": "San Francisco",
+    "description": "Modern penthouse with rooftop terrace and jacuzzi"
+  }
+]
