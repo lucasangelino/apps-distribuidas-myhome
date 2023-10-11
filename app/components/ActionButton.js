@@ -15,6 +15,7 @@ const ActionButton = ({label, onClick, fullWith = false}) => (
 const styles = StyleSheet.create({
   actionButtonFullWith: {
     width: '100%',
+    borderRadius: 10,
   },
 });
 

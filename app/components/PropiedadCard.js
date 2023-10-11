@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Card, Text, Chip} from 'react-native-paper';
+import {Card, Text} from 'react-native-paper';
 import ActionButton from './ActionButton';
 
 import {priceFormater} from '../utils/utils';
@@ -10,7 +10,7 @@ const PropiedadCard = ({propiedad}) => {
     propiedad;
   return (
     <Card style={styles.cardContainer} key={id}>
-      <View style={{position: 'relative'}}>
+      <View style={styles.cardImageContainer}>
         <FavouriteIcon />
         <PropiedadType>{propiedadType}</PropiedadType>
         <Card.Cover style={styles.cardCover} source={{uri: uri}} />
@@ -39,7 +39,11 @@ const Location = ({children}) => <Text variant="titleMedium">{children}</Text>;
 const Description = ({children}) => <Text variant="bodySmall">{children}</Text>;
 const FavouriteIcon = () => <Text style={styles.cardFavourite}></Text>;
 const PropiedadType = ({children}) => (
-  <Chip style={styles.cardPropiedadType}>{children || 'Alquiler'}</Chip>
+  <View style={styles.cardPropiedadType}>
+    <Text style={styles.cardPropiedadTypeText}>
+      {children || 'en alquiler'}
+    </Text>
+  </View>
 );
 const Amenities = () => {
   return (
@@ -56,6 +60,9 @@ const Amenities = () => {
 const styles = StyleSheet.create({
   cardContainer: {
     marginVertical: 8,
+  },
+  cardImageContainer: {
+    position: 'relative',
   },
   cardCover: {
     borderRadius: 0,
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
   cardFavourite: {
     position: 'absolute',
     zIndex: 999,
-    right: 10,
+    right: 5,
     top: 5,
     backgroundColor: '#fff',
     height: 30,
@@ -89,9 +96,18 @@ const styles = StyleSheet.create({
   cardPropiedadType: {
     position: 'absolute',
     zIndex: 999,
-    right: 10,
+    right: 5,
     bottom: 5,
     backgroundColor: '#fff',
+    fontSize: 25,
+    paddingHorizontal: 20,
+    paddingVertical: 2,
+    borderRadius: 5,
+  },
+  cardPropiedadTypeText: {
+    color: '#EB6440',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });
 
