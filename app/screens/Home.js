@@ -2,10 +2,12 @@ import React from 'react';
 const {View, StyleSheet, SafeAreaView, FlatList} = require('react-native');
 import PropiedadCard from '../components/PropiedadCard';
 import Heading from '../components/Heading';
-
+import {useUser} from '../hooks/useUser';
 import propiedades from '../mocks/propiedadesList.json';
 
 function Home() {
+  const {user} = useUser();
+
   const renderPropiedadCard = ({item}) => {
     return <PropiedadCard propiedad={item} />;
   };
