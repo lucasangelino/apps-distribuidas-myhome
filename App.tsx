@@ -10,6 +10,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 // components
 import Home from './app/screens/Home';
+import LoginInmobiliaria from './app/screens/LoginInmobiliaria';
+import RegistrarUsuarioInm from './app/screens/RegistrarUsuarioInm';
+import RecuperarMail from './app/screens/RecuperarMail';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +29,16 @@ function App() {
               minHeight: '100%',
             },
           }}>
-          <Stack.Screen name="Splash" component={Home} />
+          <Stack.Screen
+            name="LoginInmobiliaria"
+            component={LoginInmobiliaria}
+          />
+          <Stack.Screen name="Recuperar" component={RecuperarMail} />
+          <Stack.Screen
+            name="RegistrarUsuarioInm"
+            component={RegistrarUsuarioInm}
+          />
+          <Stack.Screen name="Home" component={Home} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
