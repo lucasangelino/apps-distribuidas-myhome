@@ -1,14 +1,29 @@
 import * as React from 'react';
 import {Text, Button, Avatar} from 'react-native-paper';
-import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
-const LoginInmobiliaria = ({navigation}) => {
+const Login = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Avatar.Image
-        size={50}
-        source={require('../assets/images/icons/white_logo.svg')}
-      />
+      <Avatar.Image size={100} source={require('../assets/images/Logo.png')} />
+      <Text variant="headlineMedium" style={{marginLeft: 10, marginTop:30}}>
+        Ingresar como Usuario
+      </Text>
+      <Button
+        style={styles.button}
+        mode="contained"
+        onPress={() => navigation.navigate('Home')}>
+        Continuar con Google
+      </Button>
+      <Text variant="headlineMedium" style={{marginLeft: 10, marginTop:30}}>
+        Ingresar como Inmobiliaria
+      </Text>
+      <Button
+        style={styles.button}
+        mode="contained"
+        onPress={() => navigation.navigate('LoginInmobiliaria')}>
+        Ingresar
+      </Button>
     </View>
   );
 };
@@ -20,20 +35,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
-  input: {
-    width: '100%',
-    height: 40,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  link: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-    marginTop: 10,
-  },
   button: {
     width: '50%',
     justifyContent: 'center',
@@ -41,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginInmobiliaria;
+export default Login;

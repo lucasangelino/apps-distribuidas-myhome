@@ -13,6 +13,8 @@ import Home from './app/screens/Home';
 import LoginInmobiliaria from './app/screens/LoginInmobiliaria';
 import RegistrarUsuarioInm from './app/screens/RegistrarUsuarioInm';
 import RecuperarMail from './app/screens/RecuperarMail';
+import Login from './app/screens/Login';
+import RecuperarFlier from './app/screens/RecuperarFlier';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,10 +31,13 @@ function App() {
               minHeight: '100%',
             },
           }}>
+          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
             name="LoginInmobiliaria"
             component={LoginInmobiliaria}
           />
+          <Stack.Screen name="RecuperarFlier" component={RecuperarFlier} />
+          <Stack.Screen name="RecuperarMail" component={RecuperarMail} />
           <Stack.Screen name="Recuperar" component={RecuperarMail} />
           <Stack.Screen
             name="RegistrarUsuarioInm"

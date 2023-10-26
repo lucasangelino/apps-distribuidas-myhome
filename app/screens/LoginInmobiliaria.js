@@ -1,26 +1,42 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {Text, Button, Avatar} from 'react-native-paper';
 import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 
 const LoginInmobiliaria = ({navigation}) => {
+  const [usuario, setUsuario] = useState('');
+  const [contraseña, setContraseña] = useState('');
   return (
     <View style={styles.container}>
       <Avatar.Image
-        size={50}
-        source={require('../assets/images/icons/white_logo.svg')}
+        size={100}
+        source={require('../assets/images/Logo.png')}
+        marginTop={20}
+        marginLeft={15}
       />
-      <Text variant="headlineMedium" style={{marginLeft: 10}}>
+      <Text variant="headlineMedium" style={{marginLeft: 10, marginTop: 20}}>
+        Ingresar como Inmobiliaria
+      </Text>
+      <Text variant="headlineMedium" style={{marginLeft: 10, marginTop: 30}}>
         Usuario
       </Text>
-      <TextInput style={styles.input} />
-      <Text variant="headlineMedium" style={{marginLeft: 10}}>
+      <TextInput
+        style={styles.input}
+        value={usuario}
+        onChangeText={usuario => setUsuario(usuario)}
+      />
+      <Text variant="headlineMedium" style={{marginLeft: 10, marginTop: 30}}>
         Contraseña
       </Text>
-      <TextInput style={styles.input} secureTextEntry={true} />
+      <TextInput
+        style={styles.input}
+        value={contraseña}
+        onChangeText={contraseña => setContraseña(contraseña)}
+        secureTextEntry={true}
+      />
       <Button
         style={styles.button}
         mode="contained"
-        onPress={() => console.log('Pressed')}>
+        onPress={() => navigation.navigate('Home')}>
         Registrar
       </Button>
       <TouchableOpacity>
@@ -44,7 +60,6 @@ const LoginInmobiliaria = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
   },
@@ -66,6 +81,8 @@ const styles = StyleSheet.create({
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 30,
+    marginBottom: 20,
   },
 });
 
