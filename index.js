@@ -19,6 +19,7 @@ const theme = {
     primary: '#EB6440',
     secondary: '#497174',
     triary: '#F2C94C',
+    outline: '#EB6440',
   },
 };
 

@@ -9,7 +9,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 // components
-import Home from './app/screens/Home';
+// import Home from './app/screens/Home';
+import {AddPropiedadStepOne} from './app/screens/AddPropiedadStepOne';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +27,7 @@ function App() {
               minHeight: '100%',
             },
           }}>
-          <Stack.Screen name="Splash" component={Home} />
+          <Stack.Screen name="Splash" component={AddPropiedadStepOne} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
