@@ -1,9 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {StyleSheet, View, TextInput as TextAreaInput} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  StyleSheet,
+  View,
+  TextInput as TextAreaInput,
+  Image,
+} from 'react-native';
 import {Text, Button, TextInput, Chip} from 'react-native-paper';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import Dropdown from 'react-native-input-select';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import MapView from 'react-native-maps';
+import axios from 'axios';
 
 export const AddPropiedadStepOne = () => {
   return (
@@ -210,6 +218,16 @@ const StepTwo = () => {
   const [barrio, setBarrio] = React.useState('');
   const [localidad, setLocalidad] = React.useState('');
   const [piso, setPiso] = React.useState('');
+
+  useEffect(() => {
+    function getSome() {
+      axios.get('https://jsonplaceholder.typicode.com/todos/1').then(res => {
+        console.log(res.data);
+      });
+    }
+    getSome();
+  }, []);
+
   return (
     <View style={{display: 'flex', gap: 10}}>
       <Text variant="titleLarge" style={{marginBottom: 15}}>
@@ -279,6 +297,17 @@ const StepTwo = () => {
       <Text variant="titleSmall" style={{marginTop: 10, marginBottom: 20}}>
         Ubicacion
       </Text>
+      <View style={{marginBottom: 20}}>
+        <MapView
+          style={{width: '100%', height: 250}}
+          initialRegion={{
+            latitude: -34.603722,
+            longitude: -58.381592,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -855,6 +884,23 @@ const StepFour = () => {
     setVideoUrl(video);
   };
 
+  const selectImagesFromGallery = async () => {
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
+      selectionLimit: 0,
+    });
+    if (!result.cancelled) {
+      console.log(result);
+      const selectedAssets = result.assets;
+      const selectedUris = selectedAssets.map(i => i.uri);
+      console.log('selectedUris: ', selectedUris);
+      setImages(selectedUris);
+    }
+  };
+
+  const addImages = async () => {
+    console.log('add images');
+  };
   return (
     <View style={{display: 'flex', gap: 10}}>
       <Text variant="titleMedium" style={{marginTop: 10}}>
@@ -883,9 +929,6 @@ const StepFour = () => {
           borderRadius: 10,
           borderColor: '#EB6440',
         }}>
-        {amenitiesList.length === 0 ? (
-          <Text>No hay amenities agregados</Text>
-        ) : null}
         {amenitiesList.map((item, index) => {
           return (
             <Chip
@@ -1025,6 +1068,61 @@ const StepFour = () => {
           },
         }}
       />
+
+      <Text variant="titleMedium" style={{marginTop: 10}}>
+        Imagenes
+      </Text>
+
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 10,
+          borderWidth: 1,
+          borderColor: '#EB6440',
+          backgroundColor: '#fff',
+          padding: 10,
+          borderRadius: 10,
+          minHeight: 50,
+        }}>
+        {images.map((item, index) => {
+          console.log('item: ', item);
+          return (
+            <View key={index}>
+              <Image
+                source={{
+                  uri: 'file:///data/user/0/com.myhome/cache/rn_image_picker_lib_temp_d6814c9f-a9e5-4440-87e1-808bd9b9f40c.jpg',
+                }}
+                style={{width: 50, height: 50, borderRadius: 10}}
+              />
+            </View>
+          );
+        })}
+      </View>
+
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-evenly',
+          gap: 2,
+        }}>
+        <Button
+          mode="contained"
+          color="#EB6440"
+          onPress={addImages}
+          style={{marginBottom: 50, marginTop: 10}}>
+          Abrir camara
+        </Button>
+        <Button
+          mode="contained"
+          color="#EB6440"
+          onPress={selectImagesFromGallery}
+          style={{marginBottom: 50}}>
+          Abrir galeria
+        </Button>
+      </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
         Videos (opcional)
