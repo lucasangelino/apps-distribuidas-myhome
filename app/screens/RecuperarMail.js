@@ -9,13 +9,14 @@ const RecuperarMail = ({navigation}) => {
       <Avatar.Image
         size={100}
         source={require('../assets/images/Logo.png')}
-        marginTop={20}
-        marginLeft={15}
+        marginTop={60}
       />
-      <Text variant="headlineMedium" style={{marginLeft: 10, marginTop: 20}}>
+      <Text variant="headlineMedium" style={{marginTop: 20}}>
         Recuperar tu Usuario
       </Text>
-      <Text variant="headlineMedium" style={{marginLeft: 10, marginTop: 50}}>
+      <Text
+        variant="headlineMedium"
+        style={{marginTop: 135, display: 'flex', alignSelf: 'flex-start'}}>
         Email
       </Text>
       <TextInput
@@ -38,21 +39,25 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#eff5f5',
   },
   input: {
     width: '100%',
     height: 40,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: 'gray',
-    borderRadius: 5,
+    borderRadius: 10,
     marginBottom: 10,
     paddingHorizontal: 10,
+    marginTop: 5,
+    backgroundColor: '#fff',
   },
   button: {
-    width: '50%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 100,
+    marginTop: 200,
+    borderRadius: 10,
   },
 });
 

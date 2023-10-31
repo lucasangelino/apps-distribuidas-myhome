@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#eff5f5',
   },
   text: {
     justifyContent: 'center',
@@ -40,8 +41,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   link: {
-    color: 'blue',
-    textDecorationLine: 'underline',
+    color: '#0377ff',
     marginTop: 50,
   },
   button: {
