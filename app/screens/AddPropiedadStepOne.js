@@ -10,7 +10,7 @@ import {Text, Button, TextInput, Chip} from 'react-native-paper';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import Dropdown from 'react-native-input-select';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import axios from 'axios';
 
 export const AddPropiedadStepOne = () => {
@@ -218,15 +218,33 @@ const StepTwo = () => {
   const [barrio, setBarrio] = React.useState('');
   const [localidad, setLocalidad] = React.useState('');
   const [piso, setPiso] = React.useState('');
+  const [geoLocation, setGeoLocation] = useState({
+    latitude: -34.603722,
+    longitude: -58.381592,
+    fullAddress: '',
+  });
 
-  useEffect(() => {
-    function getSome() {
-      axios.get('https://jsonplaceholder.typicode.com/todos/1').then(res => {
-        console.log(res.data);
-      });
-    }
-    getSome();
-  }, []);
+  const getGeoFromAddress = async ({address}) => {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyAFFy-opQJ2zfds9jjVI6obxs1fNsT24iY`;
+    const response = await axios.get(url);
+    const {data} = response;
+
+    return {
+      latitude: data.results[0].geometry.location.lat,
+      longitude: data.results[0].geometry.location.lng,
+      fullAddress: data.results[0].formatted_address,
+    };
+  };
+
+  const showAddressInMap = async () => {
+    const address = `${calleAltura}+${ciudad}+${provincia}+${barrio}+${localidad}`;
+    const location = await getGeoFromAddress({address});
+    setGeoLocation({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      fullAddress: location.fullAddress,
+    });
+  };
 
   return (
     <View style={{display: 'flex', gap: 10}}>
@@ -297,16 +315,21 @@ const StepTwo = () => {
       <Text variant="titleSmall" style={{marginTop: 10, marginBottom: 20}}>
         Ubicacion
       </Text>
+
+      <Button mode="outlined" onPress={showAddressInMap}>
+        Mostrar en el mapa
+      </Button>
       <View style={{marginBottom: 20}}>
-        <MapView
-          style={{width: '100%', height: 250}}
-          initialRegion={{
-            latitude: -34.603722,
-            longitude: -58.381592,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
+        <MapView style={{width: '100%', height: 250}}>
+          <Marker
+            coordinate={{
+              latitude: geoLocation.latitude,
+              longitude: geoLocation.longitude,
+            }}
+            title={geoLocation.fullAddress}
+            description={'Mapa'}
+          />
+        </MapView>
       </View>
     </View>
   );
@@ -865,10 +888,6 @@ const StepThree = () => {
 };
 
 const StepFour = () => {
-  const [modoOperacion, setModoOperacion] = useState('temporada');
-  const [tipoPropiedad, setTipoPropiedad] = React.useState('casa');
-  const [propiedadTitle, setPropiedadTitle] = React.useState('');
-  const [propiedadDes, setPropieadDesc] = React.useState('');
   const [amenitie, setAmenitie] = useState('');
   const [amenitiesList, setAmenitiesList] = useState([]);
   const [orientacion, setOrientacion] = useState('norte');
@@ -894,7 +913,7 @@ const StepFour = () => {
       const selectedAssets = result.assets;
       const selectedUris = selectedAssets.map(i => i.uri);
       console.log('selectedUris: ', selectedUris);
-      setImages(selectedUris);
+      setImages(selectedAssets);
     }
   };
 
