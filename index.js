@@ -8,6 +8,7 @@ import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 import App from './App';
 import {name as appName} from './app.json';
 import AppProvider from './app/context/AppContext';
+import InmobiliariaProvider from './app/context/InmobiliariaContext';
 
 const theme = {
   ...DefaultTheme,
@@ -26,9 +27,11 @@ const theme = {
 export default function Main() {
   return (
     <AppProvider>
-      <PaperProvider theme={theme}>
-        <App />
-      </PaperProvider>
+      <InmobiliariaProvider>
+        <PaperProvider theme={theme}>
+          <App />
+        </PaperProvider>
+      </InmobiliariaProvider>
     </AppProvider>
   );
 }

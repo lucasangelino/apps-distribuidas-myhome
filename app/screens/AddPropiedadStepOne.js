@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,12 +12,24 @@ import Dropdown from 'react-native-input-select';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import MapView, {Marker} from 'react-native-maps';
 import axios from 'axios';
+import {InmobiliariaContext} from '../context/InmobiliariaContext';
 
 export const AddPropiedadStepOne = () => {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const onNextStep = () => {
+    setActiveStep(activeStep + 1);
+  };
+
+  const onPrevStep = () => {
+    setActiveStep(activeStep - 1);
+  };
+
   return (
     <View style={styles.container}>
       <View style={{flex: 1, minHeight: '100%', paddingHorizontal: 5}}>
         <ProgressSteps
+          activeStep={activeStep}
           activeStepIconColor={'#EB6440'}
           activeStepNumColor={'#fff'}
           activeStepIconBorderColor={'#EB6440'}
@@ -27,48 +39,17 @@ export const AddPropiedadStepOne = () => {
           completedStepNumColor={'#fff'}
           borderWidth={5}
           labelColor={'#fff'}>
-          <ProgressStep
-            errors={false}
-            scrollable={true}
-            nextBtnText={'Continuar'}
-            nextBtnStyle={styles.nextButton}
-            nextBtnTextStyle={styles.nextButtonText}>
-            <StepOne />
+          <ProgressStep removeBtnRow={true} errors={false} scrollable={true}>
+            <StepOne onNextStep={onNextStep} />
           </ProgressStep>
-          <ProgressStep
-            errors={false}
-            scrollable={true}
-            nextBtnText={'Continuar'}
-            previousBtnText={'Atras'}
-            nextBtnStyle={styles.nextButton}
-            nextBtnTextStyle={styles.nextButtonText}
-            previousBtnStyle={styles.previousButton}
-            previousBtnTextStyle={styles.prevButtonText}>
-            <StepTwo />
+          <ProgressStep removeBtnRow={true} errors={false} scrollable={true}>
+            <StepTwo onNextStep={onNextStep} onPrevStep={onPrevStep} />
           </ProgressStep>
-          <ProgressStep
-            errors={false}
-            scrollable={true}
-            nextBtnText={'Continuar'}
-            previousBtnText={'Atras'}
-            nextBtnStyle={styles.nextButton}
-            nextBtnTextStyle={styles.nextButtonText}
-            previousBtnStyle={styles.previousButton}
-            previousBtnTextStyle={styles.prevButtonText}>
-            <StepThree />
+          <ProgressStep removeBtnRow={true} errors={false} scrollable={true}>
+            <StepThree onNextStep={onNextStep} onPrevStep={onPrevStep} />
           </ProgressStep>
-          <ProgressStep
-            errors={false}
-            scrollable={true}
-            nextBtnText={'Continuar'}
-            previousBtnText={'Atras'}
-            finishBtnText={'Finalizar'}
-            nextBtnStyle={styles.nextButton}
-            previousBtnStyle={styles.previousButton}
-            nextBtnTextStyle={styles.buttonText}
-            previousBtnTextStyle={styles.prevButtonText}
-            submitBtnStyle={styles.nextButton}>
-            <StepFour />
+          <ProgressStep removeBtnRow={true} errors={false} scrollable={true}>
+            <StepFour onPrevStep={onPrevStep} />
           </ProgressStep>
         </ProgressSteps>
       </View>
@@ -76,11 +57,30 @@ export const AddPropiedadStepOne = () => {
   );
 };
 
-const StepOne = () => {
-  const [modoOperacion, setModoOperacion] = useState('temporada');
-  const [tipoPropiedad, setTipoPropiedad] = React.useState('casa');
-  const [propiedadTitle, setPropiedadTitle] = React.useState('');
-  const [propiedadDes, setPropieadDesc] = React.useState('');
+const StepOne = ({onNextStep}) => {
+  const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
+
+  const [modoOperacion, setModoOperacion] = useState(publicacion.tipoOperacion);
+  const [tipoPropiedad, setTipoPropiedad] = React.useState(
+    publicacion.tipoPropiedad,
+  );
+  const [propiedadTitle, setPropiedadTitle] = React.useState(
+    publicacion.titulo,
+  );
+  const [propiedadDes, setPropieadDesc] = React.useState(
+    publicacion.descripcion,
+  );
+
+  const saveStepOne = () => {
+    setPublicacion({
+      ...publicacion,
+      tipoOperacion: modoOperacion,
+      tipoPropiedad,
+      titulo: propiedadTitle,
+      descripcion: propiedadDes,
+    });
+  };
+
   return (
     <View style={{display: 'flex', gap: 10}}>
       <Text variant="titleLarge" style={{marginBottom: 15}}>
@@ -183,7 +183,6 @@ const StepOne = () => {
       </Text>
       <TextInput
         mode="outlined"
-        label="Ponle un titulo a tu propiedad"
         value={propiedadTitle}
         onChangeText={title => setPropiedadTitle(title)}
       />
@@ -207,21 +206,36 @@ const StepOne = () => {
           marginBottom: 10,
         }}
       />
+
+      <Button
+        mode="contained"
+        onPress={() => {
+          saveStepOne();
+          onNextStep();
+        }}>
+        Continuar
+      </Button>
     </View>
   );
 };
 
-const StepTwo = () => {
-  const [calleAltura, setCalleAltura] = useState('');
-  const [ciudad, setCiudad] = React.useState('');
-  const [provincia, setProvincia] = useState('');
-  const [barrio, setBarrio] = React.useState('');
-  const [localidad, setLocalidad] = React.useState('');
+const StepTwo = ({onNextStep, onPrevStep}) => {
+  const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
+
+  const [calleAltura, setCalleAltura] = useState(
+    publicacion.direccion.calleAltura,
+  );
+  const [ciudad, setCiudad] = React.useState(publicacion.direccion.ciudad);
+  const [provincia, setProvincia] = useState(publicacion.direccion.provincia);
+  const [barrio, setBarrio] = React.useState(publicacion.direccion.barrio);
+  const [localidad, setLocalidad] = React.useState(
+    publicacion.direccion.localidad,
+  );
   const [piso, setPiso] = React.useState('');
   const [geoLocation, setGeoLocation] = useState({
-    latitude: -34.603722,
-    longitude: -58.381592,
-    fullAddress: '',
+    latitude: publicacion.direccion.latitud,
+    longitude: publicacion.direccion.longitud,
+    fullAddress: publicacion.direccion.fullAddress,
   });
 
   const getGeoFromAddress = async ({address}) => {
@@ -234,6 +248,23 @@ const StepTwo = () => {
       longitude: data.results[0].geometry.location.lng,
       fullAddress: data.results[0].formatted_address,
     };
+  };
+
+  const saveStepTwo = () => {
+    setPublicacion({
+      ...publicacion,
+      direccion: {
+        calleAltura,
+        ciudad,
+        provincia,
+        barrio,
+        localidad,
+        piso,
+        fullAddress: geoLocation.fullAddress,
+        latitud: geoLocation.latitude,
+        longitud: geoLocation.longitude,
+      },
+    });
   };
 
   const showAddressInMap = async () => {
@@ -331,33 +362,96 @@ const StepTwo = () => {
           />
         </MapView>
       </View>
+      <View
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          gap: 10,
+          marginBottom: 20,
+          paddingHorizontal: 10,
+        }}>
+        <Button
+          style={{
+            width: '50%',
+            backgroundColor: '#fff',
+          }}
+          mode="outlined"
+          onPress={() => {
+            saveStepTwo();
+            onPrevStep();
+          }}>
+          Atras
+        </Button>
+        <Button
+          style={{
+            width: '50%',
+          }}
+          mode="contained"
+          onPress={() => {
+            saveStepTwo();
+            onNextStep();
+          }}>
+          Continuar
+        </Button>
+      </View>
     </View>
   );
 };
 
-const StepThree = () => {
-  const [calleAltura, setCalleAltura] = useState('');
-  const [ciudad, setCiudad] = React.useState('');
-  const [provincia, setProvincia] = useState('');
-  const [barrio, setBarrio] = React.useState('');
-  const [localidad, setLocalidad] = React.useState('');
-  const [piso, setPiso] = React.useState('');
-  const [countAmenities, setCountAmenities] = useState(0);
-  const [countDormitorios, setCountDormitorios] = useState(0);
-  const [countBanos, setCountBanos] = useState(0);
-  const [countCocheras, setCountCocheras] = useState(0);
-  const [countBalcones, setCountBalcones] = useState(0);
-  const [countTerrazas, setCountTerrazas] = useState(0);
-  const [countBauleras, setCountBauleras] = useState(0);
-  const [superficieCubierta, setSuperficieCubierta] = useState('');
-  const [superficieSemiDesCubierta, setSuperficieSemiDescubierta] =
-    useState('');
-  const [superficieDescubierta, setSuperficieDescubierta] = useState('');
-  const [antiguedad, setAntiguedad] = useState('');
-  const [moneda, setMoneda] = useState('usd');
-  const [precioPropiedad, setPrecioPropiedad] = useState(0);
-  const [expensasMoneda, setExpensasMoneda] = useState('usd');
-  const [expensas, setExpensas] = useState(0);
+const StepThree = ({onNextStep, onPrevStep}) => {
+  const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
+
+  const [countAmenities, setCountAmenities] = useState(publicacion.ambientes);
+  const [countDormitorios, setCountDormitorios] = useState(
+    publicacion.dormitorios,
+  );
+  const [countBanos, setCountBanos] = useState(publicacion.banios);
+  const [countCocheras, setCountCocheras] = useState(publicacion.cocheras);
+  const [countBalcones, setCountBalcones] = useState(publicacion.balcones);
+  const [countTerrazas, setCountTerrazas] = useState(publicacion.terrazas);
+  const [countBauleras, setCountBauleras] = useState(publicacion.bauleras);
+  const [superficieCubierta, setSuperficieCubierta] = useState(
+    publicacion.superficie.cubierta,
+  );
+  const [superficieSemiDesCubierta, setSuperficieSemiDescubierta] = useState(
+    publicacion.superficie.semicubierta,
+  );
+  const [superficieDescubierta, setSuperficieDescubierta] = useState(
+    publicacion.superficie.descubierta,
+  );
+  const [antiguedad, setAntiguedad] = useState(publicacion.antiguedad);
+  const [moneda, setMoneda] = useState(publicacion.precioMoneda);
+  const [precioPropiedad, setPrecioPropiedad] = useState(publicacion.precio);
+  const [expensasMoneda, setExpensasMoneda] = useState(
+    publicacion.expensasMoneda,
+  );
+  const [expensas, setExpensas] = useState(publicacion.expensas);
+
+  const saveStepThree = () => {
+    setPublicacion({
+      ...publicacion,
+      ambientes: countAmenities,
+      dormitorios: countDormitorios,
+      banios: countBanos,
+      cocheras: countCocheras,
+      balcones: countBalcones,
+      terrazas: countTerrazas,
+      bauleras: countBauleras,
+      superficie: {
+        cubierta: superficieCubierta,
+        semicubierta: superficieSemiDesCubierta,
+        descubierta: superficieDescubierta,
+      },
+      antiguedad,
+      precio: precioPropiedad,
+      precioMoneda: moneda,
+      expensas,
+      expensasMoneda,
+    });
+  };
+
   return (
     <View style={{display: 'flex', gap: 10, width: '100%'}}>
       <Text variant="titleLarge" style={{marginBottom: 15}}>
@@ -381,7 +475,7 @@ const StepThree = () => {
               alignItems: 'center',
               gap: 10,
             }}>
-            <Text>Amenities</Text>
+            <Text>Ambientes</Text>
             <View
               style={{
                 display: 'flex',
@@ -425,7 +519,6 @@ const StepThree = () => {
           </View>
         </View>
         <View>
-          {/* <Icon source="camera" color={MD3Colors.error50} size={20} /> */}
           <View
             style={{
               display: 'flex',
@@ -488,7 +581,6 @@ const StepThree = () => {
           marginTop: 20,
         }}>
         <View>
-          {/* <Icon source="camera" color={MD3Colors.error50} size={20} /> */}
           <View
             style={{
               display: 'flex',
@@ -540,7 +632,6 @@ const StepThree = () => {
           </View>
         </View>
         <View>
-          {/* <Icon source="camera" color={MD3Colors.error50} size={20} /> */}
           <View
             style={{
               display: 'flex',
@@ -603,7 +694,6 @@ const StepThree = () => {
           marginTop: 20,
         }}>
         <View>
-          {/* <Icon source="camera" color={MD3Colors.error50} size={20} /> */}
           <View
             style={{
               display: 'flex',
@@ -708,7 +798,6 @@ const StepThree = () => {
         </View>
       </View>
 
-      {/* <Icon source="camera" color={MD3Colors.error50} size={20} /> */}
       <View
         style={{
           display: 'flex',
@@ -854,7 +943,7 @@ const StepThree = () => {
 
       <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
         <Button
-          mode={moneda === 'usd' ? 'contained' : 'outlined'}
+          mode={expensasMoneda === 'usd' ? 'contained' : 'outlined'}
           style={{
             borderColor: '#EB6440',
             justifyContent: 'center',
@@ -865,7 +954,7 @@ const StepThree = () => {
           <Text style={{color: '#000', fontSize: 12}}>USD</Text>
         </Button>
         <Button
-          mode={moneda === 'ars' ? 'contained' : 'outlined'}
+          mode={expensasMoneda === 'ars' ? 'contained' : 'outlined'}
           style={{
             borderColor: '#EB6440',
             justifyContent: 'center',
@@ -883,17 +972,53 @@ const StepThree = () => {
           onChangeText={mts => setSuperficieCubierta(mts)}
         />
       </View>
+      <View
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          gap: 10,
+          marginBottom: 20,
+          paddingHorizontal: 10,
+        }}>
+        <Button
+          style={{
+            width: '50%',
+            backgroundColor: '#fff',
+          }}
+          mode="outlined"
+          onPress={() => {
+            saveStepThree();
+            onPrevStep();
+          }}>
+          Atras
+        </Button>
+        <Button
+          style={{
+            width: '50%',
+          }}
+          mode="contained"
+          onPress={() => {
+            saveStepThree();
+            onNextStep();
+          }}>
+          Continuar
+        </Button>
+      </View>
     </View>
   );
 };
 
-const StepFour = () => {
+const StepFour = ({onPrevStep}) => {
+  const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
+
   const [amenitie, setAmenitie] = useState('');
-  const [amenitiesList, setAmenitiesList] = useState([]);
-  const [orientacion, setOrientacion] = useState('norte');
-  const [disposicion, setDisposicion] = useState('frente');
-  const [videoUrl, setVideoUrl] = useState('');
-  const [images, setImages] = useState([]);
+  const [amenitiesList, setAmenitiesList] = useState(publicacion.amenities);
+  const [orientacion, setOrientacion] = useState(publicacion.orientacion);
+  const [disposicion, setDisposicion] = useState(publicacion.disposicion);
+  const [videoUrl, setVideoUrl] = useState(publicacion.videoUrl);
+  const [images, setImages] = useState(publicacion.images);
 
   const addAmenitie = amenitie => {
     setAmenitiesList([...amenitiesList, amenitie]);
@@ -920,6 +1045,18 @@ const StepFour = () => {
   const addImages = async () => {
     console.log('add images');
   };
+
+  const saveStepFour = () => {
+    setPublicacion({
+      ...publicacion,
+      amenities: amenitiesList,
+      orientacion,
+      disposicion,
+      videoUrl,
+      images,
+    });
+  };
+
   return (
     <View style={{display: 'flex', gap: 10}}>
       <Text variant="titleMedium" style={{marginTop: 10}}>
@@ -1104,7 +1241,7 @@ const StepFour = () => {
           borderRadius: 10,
           minHeight: 50,
         }}>
-        {images.map((item, index) => {
+        {images?.map((item, index) => {
           console.log('item: ', item);
           return (
             <View key={index}>
@@ -1121,24 +1258,32 @@ const StepFour = () => {
 
       <View
         style={{
+          marginTop: 20,
+          width: '100%',
           display: 'flex',
           flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
-          gap: 2,
+          justifyContent: 'center',
+          gap: 10,
+          marginBottom: 20,
+          paddingHorizontal: 10,
         }}>
         <Button
-          mode="contained"
-          color="#EB6440"
-          onPress={addImages}
-          style={{marginBottom: 50, marginTop: 10}}>
+          style={{
+            width: '50%',
+            backgroundColor: '#fff',
+          }}
+          mode="outlined"
+          onPress={selectImagesFromGallery}>
           Abrir camara
         </Button>
         <Button
-          mode="contained"
-          color="#EB6440"
-          onPress={selectImagesFromGallery}
-          style={{marginBottom: 50}}>
+          style={{
+            width: '50%',
+            backgroundColor: '#fff',
+          }}
+          mode="outlined"
+          onPress={selectImagesFromGallery}>
+          {' '}
           Abrir galeria
         </Button>
       </View>
@@ -1153,19 +1298,46 @@ const StepFour = () => {
         onChangeText={url => setVideoUrl(url)}
       />
       <Button
-        mode="contained"
+        mode="outlined"
         color="#EB6440"
         onPress={() => addVideo(videoUrl)}>
         Agregar url del video
       </Button>
 
-      <Button
-        mode="contained"
-        color="#EB6440"
-        onPress={() => {}}
-        style={{marginVertical: 50}}>
-        Guarda y salir
-      </Button>
+      <View
+        style={{
+          marginTop: 20,
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          gap: 10,
+          marginBottom: 20,
+          paddingHorizontal: 10,
+        }}>
+        <Button
+          style={{
+            width: '50%',
+            backgroundColor: '#fff',
+          }}
+          mode="outlined"
+          onPress={() => {
+            saveStepFour();
+            onPrevStep();
+          }}>
+          Atras
+        </Button>
+        <Button
+          style={{
+            width: '50%',
+          }}
+          mode="contained"
+          onPress={() => {
+            saveStepFour();
+          }}>
+          Publicar
+        </Button>
+      </View>
     </View>
   );
 };
