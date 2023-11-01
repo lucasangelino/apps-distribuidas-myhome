@@ -6,7 +6,7 @@ import {
   TextInput as TextAreaInput,
   Image,
 } from 'react-native';
-import {Text, Button, TextInput, Chip} from 'react-native-paper';
+import {Text, Button, TextInput, Chip, Badge} from 'react-native-paper';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import Dropdown from 'react-native-input-select';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -1022,6 +1022,7 @@ const StepFour = ({onPrevStep}) => {
 
   const addAmenitie = amenitie => {
     setAmenitiesList([...amenitiesList, amenitie]);
+    setAmenitie('');
   };
 
   const addVideo = video => {
