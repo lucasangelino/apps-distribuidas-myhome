@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   StyleSheet,
   View,
   TextInput as TextAreaInput,
   Image,
 } from 'react-native';
-import {Text, Button, TextInput, Chip, Badge} from 'react-native-paper';
+import {Text, Button, TextInput, Chip} from 'react-native-paper';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import Dropdown from 'react-native-input-select';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -1047,6 +1047,10 @@ const StepFour = ({onPrevStep}) => {
     console.log('add images');
   };
 
+  const publishPropiedad = async () => {
+    console.log('publish');
+  };
+
   const saveStepFour = () => {
     setPublicacion({
       ...publicacion,
@@ -1333,9 +1337,7 @@ const StepFour = ({onPrevStep}) => {
             width: '50%',
           }}
           mode="contained"
-          onPress={() => {
-            saveStepFour();
-          }}>
+          onPress={publishPropiedad}>
           Publicar
         </Button>
       </View>

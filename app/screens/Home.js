@@ -2,17 +2,16 @@ import React from 'react';
 const {View, StyleSheet, SafeAreaView, FlatList} = require('react-native');
 import PropiedadCard from '../components/PropiedadCard';
 import Heading from '../components/Heading';
-import {useUser} from '../hooks/useUser';
 import propiedades from '../mocks/propiedadesList.json';
+import AppBar from '../components/appbar/AppBar';
 
 function Home() {
-  const {user} = useUser();
-
   const renderPropiedadCard = ({item}) => {
     return <PropiedadCard propiedad={item} />;
   };
   return (
     <SafeAreaView style={styles.container}>
+      {/* <AppBar /> */}
       <View style={styles.container}>
         <Heading>Propiedades cerca de ti</Heading>
         <FlatList
@@ -28,13 +27,11 @@ function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 5,
-    paddingTop: 5,
+    paddingHorizontal: 2,
     backgroundColor: '#E5E5E5',
   },
   propiedadesList: {
     marginTop: 10,
-    marginBottom: 100,
   },
   propiedadesItem: {
     padding: 20,

@@ -26,13 +26,11 @@ const theme = {
 
 export default function Main() {
   return (
-    <AppProvider>
-      <InmobiliariaProvider>
-        <PaperProvider theme={theme}>
-          <App />
-        </PaperProvider>
-      </InmobiliariaProvider>
-    </AppProvider>
+    <InmobiliariaProvider>
+      <PaperProvider theme={theme}>
+        <App />
+      </PaperProvider>
+    </InmobiliariaProvider>
   );
 }
 

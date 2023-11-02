@@ -1,5 +1,8 @@
 import React from 'react';
+import {Text} from 'react-native-paper';
 
-export default Login() {
-  return <div>Login</div>;
+const Login = () => {
+  return <Text>Login</Text>;
 };
+
+export default Login;
