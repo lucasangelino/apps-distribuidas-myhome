@@ -25,7 +25,8 @@ const PropiedadCard = ({propiedad}) => {
       </Card.Content>
       <Card.Actions>
         <ActionButton
-          label="ver mas"
+          disable={true}
+          label="EDITAR (2da entrega)"
           fullWith
           onClick={() => console.log(id)}
         />
