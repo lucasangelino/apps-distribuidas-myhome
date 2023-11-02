@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, Button, Divider} from 'react-native-paper';
 import {
@@ -6,6 +6,8 @@ import {
   statusCodes,
   GoogleSigninButton,
 } from '@react-native-google-signin/google-signin';
+import {AuthContext} from '../context/AppContext';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 GoogleSignin.configure({
   webClientId:
@@ -13,17 +15,24 @@ GoogleSignin.configure({
 });
 
 const Login = ({navigation}) => {
-  const [state, setState] = React.useState({
-    userInfo: null,
-    error: null,
-  });
+  const {setAuth} = React.useContext(AuthContext);
 
   const loginWithGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log('userInfo', userInfo);
-      setState({userInfo});
+      setAuth({
+        hasUser: true,
+        loggedIn: true,
+        user: {
+          isInmobiliaria: false,
+          name: userInfo.user.name,
+          email: userInfo.user.email,
+          photoUrl: userInfo.user.photo,
+          idToken: userInfo.idToken,
+        },
+      });
     } catch (error) {
       console.log('error', error.code);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -43,10 +52,24 @@ const Login = ({navigation}) => {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
-      setState({userInfo: null}); // Remember to remove the user from your app's state as well
+      setAuth({userInfo: null}); // Remember to remove the user from your app's state as well
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const loginWithInmobiliaria = () => {
+    setAuth({
+      hasUser: true,
+      loggedIn: true,
+      user: {
+        isInmobiliaria: true,
+        name: 'Enermax Inmobiliaria',
+        email: 'enermax@gmail.com',
+        photoUrl: '',
+        idToken: '123456789_enermax_token',
+      },
+    });
   };
 
   return (
@@ -54,16 +77,14 @@ const Login = ({navigation}) => {
       <View style={styles.loginView}>
         <Text variant="headlineSmall">Ingresar como usuario</Text>
         <Button style={styles.googleButton} onPress={loginWithGoogle}>
+          <Ionicons name={'logo-google'} size={16} color={'#ccc'} />
           <Text style={styles.googleButtonText}>CONTINUAR CON GOOGLE</Text>
-        </Button>
-        <Button style={styles.googleButton} onPress={logoutWithGoogle}>
-          <Text style={styles.googleButtonText}>CERRAR SESION CON GOOGLE</Text>
         </Button>
       </View>
       <Divider style={styles.divider} />
       <View style={styles.loginView}>
         <Text variant="headlineSmall">Ingresar como Inmobiliaria</Text>
-        <Button style={styles.userButton}>
+        <Button style={styles.userButton} onPress={loginWithInmobiliaria}>
           <Text style={styles.googleButtonText}>INGRESAR</Text>
         </Button>
       </View>
@@ -94,6 +115,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#4285F4',
     display: 'flex',
+    gap: 10,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,

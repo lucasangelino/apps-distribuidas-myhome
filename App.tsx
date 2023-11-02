@@ -1,29 +1,32 @@
-import React, {useState, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import InmobiliariaRoutesFromBottomNav from './app/components/navigation/InmobiliariaRoutesFromBottomNav';
 import UserBottomNav from './app/components/navigation/userBottomNav';
 import Login from './app/screens/Login';
 import {AddPropiedadStepOne} from './app/screens/AddPropiedadStepOne';
+import {AuthContext} from './app/context/AppContext';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
-  const [state, setState] = useState({});
-  const [hasUser, _] = useState(false);
-  const [isUser, __] = useState(false);
+  const {auth} = useContext(AuthContext);
+  console.log('hasUser', auth.user.isInmobiliaria);
+  console.log('!hasUser', !auth.hasUser);
 
-  if (!hasUser) {
+  if (!auth.hasUser) {
     return <AuthRouter />;
   }
 
-  if (isUser) {
-    return <UserApp />;
+  if (true) {
+    return <InmobiliariaApp />;
   }
-  return <InmobiliariaApp />;
+
+  return <UserApp />;
 }
 
 const AuthRouter = () => {
+  console.log('AuthRouter');
   return (
     <NavigationContainer>
       <Stack.Navigator>

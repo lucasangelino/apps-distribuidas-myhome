@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Card, Text} from 'react-native-paper';
+import {Card, Text, Button} from 'react-native-paper';
 import ActionButton from './ActionButton';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {priceFormater} from '../utils/utils';
 
@@ -11,7 +12,7 @@ const PropiedadCard = ({propiedad}) => {
   return (
     <Card style={styles.cardContainer} key={id}>
       <View style={styles.cardImageContainer}>
-        <FavouriteIcon />
+        <FavouriteIcon isFav={false} />
         <PropiedadType>{propiedadType}</PropiedadType>
         <Card.Cover style={styles.cardCover} source={{uri: uri}} />
       </View>
@@ -34,10 +35,38 @@ const PropiedadCard = ({propiedad}) => {
 };
 
 const Price = ({children}) => <Text variant="headlineMedium">{children}</Text>;
-const Expenses = ({children}) => <Text variant="bodySmall">{children}</Text>;
-const Location = ({children}) => <Text variant="titleMedium">{children}</Text>;
+const Expenses = ({children}) => {
+  return (
+    <View style={styles.smallDesc}>
+      <Ionicons name="cash-outline" size={20} color={'#757474'} />
+      <Text variant="bodyMedium" style={styles.smallDescText}>
+        {children}
+      </Text>
+    </View>
+  );
+};
+const Location = ({children}) => {
+  return (
+    <View style={styles.smallDesc}>
+      <Ionicons name="location-outline" size={32} color={'#393939'} />
+      <Text style={styles.locationText}>{children}</Text>
+    </View>
+  );
+};
 const Description = ({children}) => <Text variant="bodySmall">{children}</Text>;
-const FavouriteIcon = () => <Text style={styles.cardFavourite}></Text>;
+const FavouriteIcon = ({isFav}) => {
+  const [fav, setFav] = React.useState(isFav);
+  return (
+    <View style={styles.cardFavourite}>
+      <Ionicons
+        name={fav ? 'bookmark' : 'bookmark-outline'}
+        size={20}
+        color={fav ? '#EB6440' : '#757474'}
+        onPress={() => setFav(!fav)}
+      />
+    </View>
+  );
+};
 const PropiedadType = ({children}) => (
   <View style={styles.cardPropiedadType}>
     <Text style={styles.cardPropiedadTypeText}>
@@ -48,11 +77,44 @@ const PropiedadType = ({children}) => (
 const Amenities = () => {
   return (
     <View style={styles.cardAmenities}>
-      <Text variant="bodySmall">Mts</Text>
-      <Text variant="bodySmall">Baño</Text>
-      <Text variant="bodySmall">Parking</Text>
-      <Text variant="bodySmall">Dormitorios</Text>
-      <Text variant="bodySmall">Ambientes</Text>
+      <View style={styles.smallDesc}>
+        <Ionicons name="resize-outline" size={20} color={'#757474'} />
+        <Text variant="bodyMedium" style={styles.smallDescText}>
+          12 mts
+        </Text>
+      </View>
+      <View style={styles.smallDesc}>
+        <Ionicons name="water-outline" size={20} color={'#757474'} />
+        <Text variant="bodyMedium" style={styles.smallDescText}>
+          3
+        </Text>
+      </View>
+      <View style={styles.smallDesc}>
+        <Ionicons name="car-outline" size={20} color={'#757474'} />
+        <Text variant="bodyMedium" style={styles.smallDescText}>
+          1
+        </Text>
+      </View>
+      <View style={styles.smallDesc}>
+        <Ionicons name="bed-outline" size={20} color={'#757474'} />
+        <Text variant="bodyMedium" style={styles.smallDescText}>
+          3
+        </Text>
+      </View>
+
+      <View style={styles.smallDesc}>
+        <Ionicons name="bed-outline" size={20} color={'#757474'} />
+        <Text variant="bodyMedium" style={styles.smallDescText}>
+          3
+        </Text>
+      </View>
+
+      <View style={styles.smallDesc}>
+        <Ionicons name="business-outline" size={20} color={'#757474'} />
+        <Text variant="bodyMedium" style={styles.smallDescText}>
+          3
+        </Text>
+      </View>
     </View>
   );
 };
@@ -92,6 +154,9 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     borderRadius: 100,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cardPropiedadType: {
     position: 'absolute',
@@ -108,6 +173,22 @@ const styles = StyleSheet.create({
     color: '#EB6440',
     fontSize: 12,
     fontWeight: 'bold',
+  },
+  smallDesc: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  smallDescText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#757474',
+  },
+  locationText: {
+    fontSize: 18,
+    fontWeight: 'semibold',
+    color: '#393939',
   },
 });
 

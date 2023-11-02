@@ -1,38 +1,26 @@
 import React from 'react';
-export const AppContext = React.createContext();
+export const AuthContext = React.createContext();
 
-const inmobiliariaRole = {
-  isUser: false,
-  name: 'Ideas',
-  email: 'ideas@gmail.com',
-  phone: '123456789',
-  cuit: '123456789',
-  location: {
-    latitude: -34.603722,
-    longitude: -58.381592,
+const initialAuthState = {
+  hasUser: false,
+  loggedIn: false,
+  user: {
+    isInmobiliaria: false,
+    name: '',
+    email: '',
+    photoUrl: '',
+    idToken: '',
   },
 };
 
-const userRole = {
-  isUser: 'true',
-  name: 'Lucas',
-  lastName: 'Angelino',
-  email: 'angelino@gmail.com',
-  phone: '999999999',
-  location: {
-    latitude: -34.603722,
-    longitude: -58.381592,
-  },
-};
-
-function AppProvider({children}) {
-  const [user, setUser] = React.useState(userRole);
+function AuthProvider({children}) {
+  const [auth, setAuth] = React.useState(initialAuthState);
 
   return (
-    <AppContext.Provider value={{user, setUser}}>
+    <AuthContext.Provider value={{auth, setAuth}}>
       {children}
-    </AppContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
-export default AppProvider;
+export default AuthProvider;

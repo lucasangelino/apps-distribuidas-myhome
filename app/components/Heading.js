@@ -4,7 +4,7 @@ import {Text} from 'react-native-paper';
 
 function Heading({children: heading}) {
   return (
-    <Text variant="headlineSmall" style={styles.heading}>
+    <Text variant="titleLarge" style={styles.heading}>
       {heading}
     </Text>
   );
@@ -12,7 +12,9 @@ function Heading({children: heading}) {
 
 const styles = StyleSheet.create({
   heading: {
-    marginVertical: 5,
+    marginVertical: 10,
+    color: '#393939',
+    fontWeight: 'bold',
   },
 });
 

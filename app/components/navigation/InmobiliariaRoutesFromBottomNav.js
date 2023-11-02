@@ -1,18 +1,18 @@
 /* eslint-disable react/no-unstable-nested-components */
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
-import Home from '../../screens/Home';
 import Comentarios from '../../screens/inmobiliaria/Comentarios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import InmobiliariaProfile from '../../screens/inmobiliaria/InmobiliariaProfile';
 import AppBar from '../appbar/AppBar';
+import InmobiliariaHome from '../../screens/inmobiliaria/InmobiliariaHome';
 
 const Tab = createBottomTabNavigator();
 
 const InmobiliariaRoutesFromBottomNav = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="InmobiliariaHome"
       screenOptions={({route}) => ({
         tabBarActiveTintColor: '#EB6440',
         tabBarInactiveTintColor: '#f0a895',
@@ -21,7 +21,7 @@ const InmobiliariaRoutesFromBottomNav = () => {
         header: props => <AppBar {...props} />,
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
-          if (route.name === 'Home') {
+          if (route.name === 'InmobiliariaHome') {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Comentarios') {
             iconName = focused ? 'chatbubble' : 'chatbubble-outline';
@@ -31,7 +31,7 @@ const InmobiliariaRoutesFromBottomNav = () => {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}>
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="InmobiliariaHome" component={InmobiliariaHome} />
       <Tab.Screen name="Comentarios" component={Comentarios} />
       <Tab.Screen name="Profile" component={InmobiliariaProfile} />
     </Tab.Navigator>
