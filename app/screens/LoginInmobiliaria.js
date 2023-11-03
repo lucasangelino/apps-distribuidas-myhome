@@ -47,15 +47,17 @@ const LoginInmobiliaria = ({navigation}) => {
   };
 
   const handleLogin = () => {
-    axios.post('http://localhost:8080/v1/auths', {
-      mail: mail,
-      password: password,
+    axios
+      .post('http://10.0.2.2:8080/v1/auths', {
+        mail: mail,
+        password: password,
       })
       .then(response => {
+        console.log(response.data);
         setPost(response.data);
       })
       .catch(error => {
-        console.log(error);
+        console.log(error.message);
       });
   };
 

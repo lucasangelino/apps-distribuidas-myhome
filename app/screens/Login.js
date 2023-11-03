@@ -1,15 +1,19 @@
 import * as React from 'react';
 import {Text, Button, Avatar} from 'react-native-paper';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TouchableHighlight} from 'react-native';
 import axios from 'axios';
 
 const Login = ({navigation}) => {
+  const handleButtonPress = () => {
+    console.log('Presionado');
+  };
   return (
     <View style={styles.container}>
       <Avatar.Image
         size={100}
         style={{marginTop: 30}}
         source={require('../assets/images/Logo.png')}
+        backgroundColor="#eff5f5"
       />
       <Text variant="headlineMedium" style={{marginTop: 140}}>
         Ingresar como Usuario
@@ -28,6 +32,17 @@ const Login = ({navigation}) => {
         onPress={() => navigation.navigate('Home')}>
         Continuar con Google
       </Button>
+      {/* <TouchableHighlight
+        style={styles.button}
+        underlayColor="#fff"
+        onPress={handleButtonPress}>
+        <Avatar.Icon
+          size={40}
+          source={require('../assets/images/Logo-Google.png')}
+          marginTop={30}
+        />
+        <Text style={styles.buttonText}>Continuar con Google</Text>
+      </TouchableHighlight> */}
       <Text variant="headlineSmall" style={{marginLeft: 10, marginTop: 30}}>
         ó
       </Text>
