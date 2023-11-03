@@ -22,6 +22,7 @@ const Login = ({navigation}) => {
           alignItems: 'center',
           marginTop: 25,
           backgroundColor: '#fff',
+          borderRadius: 10,
         }}
         mode="contained"
         onPress={() => navigation.navigate('Home')}>
@@ -30,7 +31,7 @@ const Login = ({navigation}) => {
       <Text variant="headlineSmall" style={{marginLeft: 10, marginTop: 30}}>
         ó
       </Text>
-      <Text variant="headlineMedium" style={{marginLeft: 10, marginTop: 30}}>
+      <Text variant="headlineMedium" style={{marginTop: 30}}>
         Ingresar como Inmobiliaria
       </Text>
       <Button
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
+    borderRadius: 10,
   },
 });
 

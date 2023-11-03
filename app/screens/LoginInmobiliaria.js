@@ -4,14 +4,59 @@ import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import axios from 'axios';
 
 const LoginInmobiliaria = ({navigation}) => {
-  const [usuario, setUsuario] = useState('');
-  const [contraseña, setContraseña] = useState('');
+  const [mail, setMail] = useState('');
+  const [password, setPassword] = useState('');
+  // axios({method: 'get', url: `${baseUrl}/api/users/1`}).then(response => {
+  //   console.log(response.data);
+  // });
+  const [post, setPost] = useState(null);
+  const [errorMailEmpty, setErrorMailEmpty] = useState('');
+  const [errorWrongMail, setErrorWrongMail] = useState('');
+  const [errorPasswordEmpty, setErrorPasswordEmpty] = useState('');
 
-  const handleLogin = (credentials) => {
-    axios.post('localhost:3000/api/login', {
-      usuario: usuario,
-      contraseña: contraseña,
-    });
+  const handleButtonPress = () => {
+    if (mail === '') {
+      setErrorMailEmpty('Completar con un usuario.');
+    } else {
+      setErrorMailEmpty('');
+      var validateEmail = 0;
+      for (let i = 0; i < mail.length; i++) {
+        if (mail[i] === '@') {
+          validateEmail += 1;
+        }
+      }
+      if (validateEmail !== 1) {
+        setErrorWrongMail('El usuario ingresado no es válido.');
+      } else {
+        setErrorWrongMail('');
+      }
+    }
+    if (password === '') {
+      setErrorPasswordEmpty('Completar con una contraseña.');
+    } else {
+      setErrorPasswordEmpty('');
+    }
+
+    if (
+      errorMailEmpty === '' &&
+      errorPasswordEmpty === '' &&
+      errorWrongMail === ''
+    ) {
+      handleLogin();
+    }
+  };
+
+  const handleLogin = () => {
+    axios.post('http://localhost:8080/v1/auths', {
+      mail: mail,
+      password: password,
+      })
+      .then(response => {
+        setPost(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   return (
@@ -31,9 +76,19 @@ const LoginInmobiliaria = ({navigation}) => {
       </Text>
       <TextInput
         style={styles.input}
-        value={usuario}
-        onChangeText={usuario => setUsuario(usuario)}
+        value={mail}
+        onChangeText={mail => setMail(mail)}
       />
+      {errorMailEmpty ? (
+        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+          {errorMailEmpty}
+        </Text>
+      ) : null}
+      {errorWrongMail ? (
+        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+          {errorWrongMail}
+        </Text>
+      ) : null}
       <Text
         variant="headlineMedium"
         style={{
@@ -45,11 +100,19 @@ const LoginInmobiliaria = ({navigation}) => {
       </Text>
       <TextInput
         style={styles.input}
-        value={contraseña}
-        onChangeText={contraseña => setContraseña(contraseña)}
+        value={password}
+        onChangeText={password => setPassword(password)}
         secureTextEntry={true}
       />
-      <Button style={styles.button} mode="contained" onPress={handleLogin}>
+      {errorPasswordEmpty ? (
+        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+          {errorPasswordEmpty}
+        </Text>
+      ) : null}
+      <Button
+        style={styles.button}
+        mode="contained"
+        onPress={handleButtonPress}>
         Ingresar
       </Button>
       <View style={{display: 'flex', flexDirection: 'row'}}>

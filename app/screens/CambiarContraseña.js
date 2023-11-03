@@ -5,6 +5,7 @@ import {View, TextInput, StyleSheet} from 'react-native';
 const CambiarContraseña = ({navigation}) => {
   const [nuevaContraseña, setNuevaContra] = useState('');
   const [confirmarContraseña, setConfirmarContra] = useState('');
+  const [mostrarContraseña, setMostrarContra] = useState(true);
   return (
     <View style={styles.container}>
       <Avatar.Image
@@ -33,7 +34,7 @@ const CambiarContraseña = ({navigation}) => {
         onChangeText={confirmarContraseña =>
           setConfirmarContra(confirmarContraseña)
         }
-        secureTextEntry={true}
+        secureTextEntry={mostrarContraseña}
       />
       <Button
         style={styles.button}

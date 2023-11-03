@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, Button, Avatar} from 'react-native-paper';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 
-const RecuperarFlier = ({navigation}) => {
+const RecuperarContraseña = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Avatar.Image
@@ -52,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecuperarFlier;
+export default RecuperarContraseña;
