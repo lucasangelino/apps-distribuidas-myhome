@@ -52,7 +52,7 @@ const InmobiliariaApp = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="InmobiliariaRoutesFromBottomNav"
+          name="Home"
           component={InmobiliariaRoutesFromBottomNav}
           options={{headerShown: false}}
         />

@@ -2,7 +2,7 @@
   {
     "id": 1,
     "price": 100000,
-    "uri": "https://picsum.photos/700",
+    "uri": "https://res.cloudinary.com/dvjdc3ssy/image/upload/v1699109688/ujig064trmqspwatcrdq.jpg",
     "expenses": 5000,
     "location": "New York",
     "description": "Beautiful apartment in the heart of the city"

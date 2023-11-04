@@ -145,25 +145,33 @@ export const updatePropiedadStepFour = async ({payload}) => {
     photos,
   } = payload;
 
-  console.log('payload', payload);
+  // console.log('payload ', payload);
+  console.log('images ', photos);
+
+  const formData = new FormData();
+  // formData.append('propertyId', propertyId);
+  formData.append('sum', false);
+  // formData.append('swimmingPool', swimmingPool);
+  // formData.append('sport_field', sport_field);
+  // formData.append('laundry', laundry);
+  // formData.append('sauna', sauna);
+  // formData.append('security', security);
+  // formData.append('game_room', game_room);
+  // formData.append('position', position);
+  // formData.append('orientation', orientation);
+
+  photos.forEach((element, idx) => {
+    formData.append('photos[' + idx + ']', element);
+  });
+
+  console.log('formData ::::::::::::', formData);
 
   try {
     const response = await fetch(URL, {
       method: 'PATCH',
-      body: JSON.stringify({
-        propertyId: 26,
-        sum: sum,
-        swimming_pool: swimmingPool,
-        sport_field: sport_field,
-        laundry: laundry,
-        sauna: sauna,
-        security: security,
-        game_room: game_room,
-        position: position,
-        orientation: orientation,
-        photos: photos[0].fileName,
-      }),
+      body: formData,
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjk5OTksImlhdCI6MTY5OTA0OTUyMSwiZXhwIjoxNjk5MTM1OTIxfQ.vUL5nlfC9bG_fblEKyfmfbqiVsBDDdhI2kj9ixZp1Yw'}`,
       },

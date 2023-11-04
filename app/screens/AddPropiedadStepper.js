@@ -20,7 +20,7 @@ import {
   updatePropiedadStepFour,
 } from '../services/API';
 
-export const AddPropiedadStepper = () => {
+export const AddPropiedadStepper = ({navigation}) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const onNextStep = () => {
@@ -29,6 +29,10 @@ export const AddPropiedadStepper = () => {
 
   const onPrevStep = () => {
     setActiveStep(activeStep - 1);
+  };
+
+  const onSubmitSteps = () => {
+    navigation.navigate('Home');
   };
 
   return (
@@ -55,7 +59,7 @@ export const AddPropiedadStepper = () => {
             <StepThree onNextStep={onNextStep} onPrevStep={onPrevStep} />
           </ProgressStep>
           <ProgressStep removeBtnRow={true} errors={false} scrollable={true}>
-            <StepFour onPrevStep={onPrevStep} />
+            <StepFour onPrevStep={onPrevStep} onSubmitSteps={onSubmitSteps} />
           </ProgressStep>
         </ProgressSteps>
       </View>
@@ -250,21 +254,6 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
     });
   };
 
-  const publishPropiedadStepTwo = async () => {
-    const payload = {
-      propertyId: publicacion.id,
-      calleAltura,
-      ciudad,
-      provincia,
-      barrio,
-      localidad,
-      piso,
-      geoLocation,
-    };
-    const data = await updatePropiedad({payload}); // TODO: error hanlder si se rompio
-    onNextStep();
-  };
-
   const saveStepTwo = () => {
     setPublicacion({
       ...publicacion,
@@ -280,6 +269,22 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         longitud: geoLocation.longitude,
       },
     });
+  };
+
+  const publishPropiedadStepTwo = async () => {
+    const payload = {
+      propertyId: publicacion.id,
+      calleAltura,
+      ciudad,
+      provincia,
+      barrio,
+      localidad,
+      piso,
+      geoLocation,
+    };
+    const data = await updatePropiedad({payload}); // TODO: error hanlder si se rompio
+    console.log('STEP TWO', data);
+    onNextStep();
   };
 
   return (
@@ -491,6 +496,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
     };
 
     const data = await updatePropiedadStepThree({payload}); // TODO: error hanlder si se rompio
+    console.log('STEP THREE', data);
     onNextStep();
   };
 
@@ -1091,7 +1097,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
   );
 };
 
-const StepFour = ({onPrevStep}) => {
+const StepFour = ({onPrevStep, onSubmitSteps}) => {
   const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
 
   const [amenitie, setAmenitie] = useState('');
@@ -1100,7 +1106,6 @@ const StepFour = ({onPrevStep}) => {
   const [disposicion, setDisposicion] = useState(publicacion.disposicion);
   const [videoUrl, setVideoUrl] = useState(publicacion.videoUrl);
   const [images, setImages] = useState(publicacion.images);
-  const [amenities, setAmenities] = useState([]);
   const [sum, setSum] = useState(false);
   const [pileta, setPileta] = useState(false);
   const [canchaDeportes, setCanchaDeportes] = useState(false);
@@ -1122,9 +1127,17 @@ const StepFour = ({onPrevStep}) => {
     });
     if (!response.cancelled) {
       const selectedAssets = response.assets;
-      const selectedUris = selectedAssets.map(i => i.uri);
-      console.log('uris from gallery: ', selectedUris);
-      setImages([...images, ...selectedAssets]);
+      const selectedUris = selectedAssets.map(i => {
+        return {
+          name: i.fileName,
+          originalFilename: i.fileName,
+          size: i.fileSize,
+          type: i.type,
+          path: i.originalPath,
+          uri: i.uri,
+        };
+      });
+      setImages([...images, ...selectedUris]);
     }
   };
 
@@ -1135,9 +1148,17 @@ const StepFour = ({onPrevStep}) => {
     });
     if (!response.cancelled) {
       const selectedAssets = response.assets;
-      const selectedUris = selectedAssets.map(i => i.uri);
-      console.log('uris com camara: ', selectedUris);
-      setImages([...images, ...selectedAssets]);
+      const selectedUris = selectedAssets.map(i => {
+        return {
+          name: i.fileName,
+          originalFilename: i.fileName,
+          size: i.fileSize,
+          type: i.type,
+          path: i.originalPath,
+          uri: i.uri,
+        };
+      });
+      setImages([...images, ...selectedUris]);
     }
   };
 
@@ -1145,11 +1166,8 @@ const StepFour = ({onPrevStep}) => {
     console.log('add images');
   };
 
-  const publishPropiedad = async () => {
-    console.log('publish');
-  };
-
   const publishPropiedadStepfour = async () => {
+    console.log('publish');
     const payload = {
       propertyId: publicacion.id,
       sum: sum,
@@ -1165,7 +1183,7 @@ const StepFour = ({onPrevStep}) => {
       photos: images,
     };
     const data = await updatePropiedadStepFour({payload}); // TODO: error hanlder si se rompio
-    console.log('data: ', data);
+    onSubmitSteps();
   };
 
   const saveStepFour = () => {
@@ -1378,7 +1396,7 @@ const StepFour = ({onPrevStep}) => {
           minHeight: 50,
         }}>
         {images?.map((item, index) => {
-          console.log('item: ', item);
+          // console.log('item: ', item);
           return (
             <View key={index}>
               <Image
