@@ -15,7 +15,6 @@ import RegistrarUsuarioInm from './app/screens/RegistrarUsuarioInm';
 import RecuperarMail from './app/screens/RecuperarMail';
 import Login from './app/screens/Login';
 import RecuperarContraseña from './app/screens/RecuperarContraseña';
-import CambiarContraseña from './app/screens/CambiarContraseña';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,9 +36,11 @@ function App() {
             name="LoginInmobiliaria"
             component={LoginInmobiliaria}
           />
-          <Stack.Screen name="RecuperarFlier" component={RecuperarContraseña} />
+          <Stack.Screen
+            name="RecuperarContraseña"
+            component={RecuperarContraseña}
+          />
           <Stack.Screen name="RecuperarMail" component={RecuperarMail} />
-          <Stack.Screen name="Recuperar" component={RecuperarMail} />
           <Stack.Screen
             name="RegistrarUsuarioInm"
             component={RegistrarUsuarioInm}

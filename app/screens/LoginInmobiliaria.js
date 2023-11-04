@@ -132,7 +132,7 @@ const LoginInmobiliaria = ({navigation}) => {
         <TouchableOpacity>
           <Text
             style={{color: '#0377ff', marginTop: 10}}
-            onPress={() => navigation.navigate('Recuperar')}>
+            onPress={() => navigation.navigate('RecuperarMail')}>
             Olvidé mi contraseña
           </Text>
         </TouchableOpacity>

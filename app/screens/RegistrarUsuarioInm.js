@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
 import {Text, Button, Avatar, Checkbox} from 'react-native-paper';
-import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import axios from 'axios';
 
 const RegistrarUsuarioInm = ({navigation}) => {
@@ -16,6 +22,12 @@ const RegistrarUsuarioInm = ({navigation}) => {
   const [errorPasswordEmpty, setErrorPasswordEmpty] = useState('');
   const [errorPasswordLength, setErrorPasswordLength] = useState('');
   const [errorPasswordUpperCase, setErrorPasswordUpperCase] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [errorRepeatPasswordEmpty, setErrorRepeatPasswordEmpty] = useState('');
+  const [errorRepeatPassword, setErrorRepeatPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [errorPhoneNumberEmpty, setErrorPhoneNumberEmpty] = useState('');
+  const [errorPhoneNumberLength, setErrorPhoneNumberLength] = useState('');
   const [checked, setChecked] = React.useState(false);
   const [errorChecked, setErrorChecked] = useState('');
   const [post, setPost] = useState(null);
@@ -81,10 +93,34 @@ const RegistrarUsuarioInm = ({navigation}) => {
       }
     }
 
+    if (repeatPassword === '') {
+      setErrorRepeatPasswordEmpty('Completar con una contraseña.');
+    } else {
+      setErrorRepeatPasswordEmpty('');
+      if (repeatPassword !== password) {
+        setErrorRepeatPassword('Las contraseñas no coinciden.');
+      } else {
+        setErrorRepeatPassword('');
+      }
+    }
+
     if (checked === false) {
       setErrorChecked('Debe aceptar los Términos y Condiciones de Uso.');
     } else {
       setErrorChecked('');
+    }
+
+    if (phoneNumber === '') {
+      setErrorPhoneNumberEmpty('Completar con un número de teléfono.');
+    } else {
+      setErrorPhoneNumberEmpty('');
+      if (phoneNumber.length < 10) {
+        setErrorPhoneNumberLength(
+          'El número de teléfono debe tener al menos 8 dígitos.',
+        );
+      } else {
+        setErrorPhoneNumberLength('');
+      }
     }
 
     if (
@@ -95,162 +131,226 @@ const RegistrarUsuarioInm = ({navigation}) => {
       errorPasswordLength === '' &&
       errorCuitLength === '' &&
       checked === true &&
-      errorNotEmail === ''
+      errorNotEmail === '' &&
+      errorPasswordUpperCase === '' &&
+      errorPhoneNumberEmpty === '' &&
+      errorPhoneNumberLength === '' &&
+      errorRepeatPasswordEmpty === '' &&
+      errorRepeatPassword === ''
     ) {
       handleRegistro();
     }
   };
 
-  const handleRegistro = () => {
-    axios.post('http://localhost:8080/v1/users', {
-      firstName: ' ',
-      lastName: ' ',
-      userType: 'Inmobiliaria',
-      password: password,
-      repeatPassword: password,
-      mail: email,
-      contacMail: email,
-      fantasyName: fantasyName,
-        phone: '',
-      cuit: cuit,
-      photo: null,
-      })
-      .then(Response => {
-        setPost(Response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  const handleRegistro = async () => {
+    const formData = new FormData();
+    formData.append('firstName', fantasyName);
+    formData.append('lastName', fantasyName);
+    formData.append('userType', 'Inmobiliaria');
+    formData.append('password', password);
+    formData.append('repeatPassword', repeatPassword);
+    formData.append('mail', email);
+    formData.append('contactMail', email);
+    formData.append('fantasyName', fantasyName);
+    formData.append('phone', phoneNumber);
+    formData.append('cuit', cuit);
+
+    const request = await fetch('http://10.0.2.2:8080/v1/users', {
+      method: 'POST',
+      body: formData,
+    });
+    const response = await request.json();
+    console.log(response);
   };
   return (
     <View style={styles.container}>
-      <Avatar.Image
-        size={100}
-        style={{marginTop: 30}}
-        source={require('../assets/images/Logo.png')}
-      />
-      <Text variant="headlineSmall" style={{marginLeft: 5}}>
-        Registrate como Inmobiliaria
-      </Text>
-      <Text
-        variant="headlineSmall"
-        style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-        Email
-      </Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={email => setEmail(email)}
-      />
-      {errorEmailEmpty ? (
-        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          {errorEmailEmpty}
-        </Text>
-      ) : null}
-      {errorNotEmail ? (
-        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          {errorNotEmail}
-        </Text>
-      ) : null}
-      <Text
-        variant="headlineSmall"
-        style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-        Nombre de la Inmobiliaria
-      </Text>
-      <TextInput
-        style={styles.input}
-        value={fantasyName}
-        onChangeText={fantasyName => setFantasyName(fantasyName)}
-      />
-      {errorFantasyNameEmpty ? (
-        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          {errorFantasyNameEmpty}
-        </Text>
-      ) : null}
-      <Text
-        variant="headlineSmall"
-        style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-        CUIT
-      </Text>
-      <TextInput
-        style={styles.inputCuit}
-        value={cuit}
-        onChangeText={cuit => setCuit(cuit)}
-      />
-      {errorCuitEmpty ? (
-        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          {errorCuitEmpty}
-        </Text>
-      ) : null}
-      {errorCuitLength ? (
-        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          {errorCuitLength}
-        </Text>
-      ) : null}
-      <Text
-        variant="headlineSmall"
-        style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-        Contraseña
-      </Text>
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={password => setPassword(password)}
-        secureTextEntry={true}
-      />
-      {errorPasswordEmpty ? (
-        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          {errorPasswordEmpty}
-        </Text>
-      ) : null}
-      {errorPasswordLength ? (
-        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          {errorPasswordLength}
-        </Text>
-      ) : null}
-      {errorPasswordUpperCase ? (
-        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          {errorPasswordUpperCase}
-        </Text>
-      ) : null}
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Checkbox
-          status={checked ? 'checked' : 'unchecked'}
-          onPress={() => {
-            setChecked(!checked);
-          }}
-          style={styles.checkbox}
+      <ScrollView>
+        <Avatar.Image
+          size={100}
+          style={{marginTop: 30}}
+          source={require('../assets/images/Logo.png')}
+          backgroundColor="#eff5f5"
         />
-        <Text style={{marginRight: 3.3}}>Acepto los</Text>
-        <TouchableOpacity>
-          <Text style={{color: '#0377ff'}}>Términos y Condiciones de Uso</Text>
-        </TouchableOpacity>
-      </View>
-      {errorChecked ? (
-        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          {errorChecked}
+        <Text variant="headlineSmall" style={{marginLeft: 5}}>
+          Registrate como Inmobiliaria
         </Text>
-      ) : null}
-
-      <Button
-        style={styles.button}
-        mode="contained"
-        onPress={() => handleButtonPress()}>
-        Registrar
-      </Button>
-      <TouchableOpacity>
         <Text
-          style={styles.link}
-          onPress={() => navigation.navigate('Recuperar')}>
-          Olvidé mi contraseña
+          variant="headlineSmall"
+          style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
+          Email
         </Text>
-      </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={email => setEmail(email)}
+        />
+        {errorEmailEmpty ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorEmailEmpty}
+          </Text>
+        ) : null}
+        {errorNotEmail ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorNotEmail}
+          </Text>
+        ) : null}
+        <Text
+          variant="headlineSmall"
+          style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
+          Nombre de la Inmobiliaria
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={fantasyName}
+          onChangeText={fantasyName => setFantasyName(fantasyName)}
+        />
+        {errorFantasyNameEmpty ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorFantasyNameEmpty}
+          </Text>
+        ) : null}
+        <Text
+          variant="headlineSmall"
+          style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
+          CUIT
+        </Text>
+        <TextInput
+          style={styles.inputCuit}
+          value={cuit}
+          onChangeText={cuit => setCuit(cuit)}
+        />
+        {errorCuitEmpty ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorCuitEmpty}
+          </Text>
+        ) : null}
+        {errorCuitLength ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorCuitLength}
+          </Text>
+        ) : null}
+        <Text
+          variant="headlineSmall"
+          style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
+          Teléfono
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={phoneNumber}
+          onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+          secureTextEntry={false}
+        />
+        {errorPhoneNumberEmpty ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorPhoneNumberEmpty}
+          </Text>
+        ) : null}
+        {errorPhoneNumberLength ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorPhoneNumberLength}
+          </Text>
+        ) : null}
+        <Text
+          variant="headlineSmall"
+          style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
+          Contraseña
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={password => setPassword(password)}
+          secureTextEntry={true}
+        />
+        {errorPasswordEmpty ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorPasswordEmpty}
+          </Text>
+        ) : null}
+        {errorPasswordLength ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorPasswordLength}
+          </Text>
+        ) : null}
+        {errorPasswordUpperCase ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorPasswordUpperCase}
+          </Text>
+        ) : null}
+        <Text
+          variant="headlineSmall"
+          style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
+          Repetir Contraseña
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={repeatPassword}
+          onChangeText={repeatPassword => setRepeatPassword(repeatPassword)}
+          secureTextEntry={true}
+        />
+        {errorRepeatPasswordEmpty ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorRepeatPasswordEmpty}
+          </Text>
+        ) : null}
+        {errorRepeatPassword ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorRepeatPassword}
+          </Text>
+        ) : null}
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Checkbox
+            status={checked ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setChecked(!checked);
+            }}
+            style={styles.checkbox}
+          />
+          <Text style={{marginRight: 3.3}}>Acepto los</Text>
+          <TouchableOpacity>
+            <Text style={{color: '#0377ff'}}>
+              Términos y Condiciones de Uso
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {errorChecked ? (
+          <Text
+            style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+            {errorChecked}
+          </Text>
+        ) : null}
+
+        <Button
+          style={styles.button}
+          mode="contained"
+          onPress={() => handleButtonPress()}>
+          Registrar
+        </Button>
+        <TouchableOpacity>
+          <Text
+            style={styles.link}
+            onPress={() => navigation.navigate('Recuperar')}>
+            Olvidé mi contraseña
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };

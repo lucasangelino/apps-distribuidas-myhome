@@ -1,9 +1,35 @@
 import React, {useState} from 'react';
 import {Text, Button, Avatar} from 'react-native-paper';
 import {View, TextInput, StyleSheet} from 'react-native';
+import axios from 'axios';
 
 const RecuperarMail = ({navigation}) => {
   const [email, setEmail] = useState('');
+  const [errorEmailEmpty, setErrorEmailEmpty] = useState('');
+  const [post, setPost] = useState(null);
+
+  const handleButtonPress = () => {
+    if (email === '') {
+      setErrorEmailEmpty('Completar con un email.');
+    } else {
+      setErrorEmailEmpty('');
+    }
+    if (errorEmailEmpty === '') {
+      handleRecuperar();
+    }
+  };
+  const handleRecuperar = () => {
+    axios
+      .post('http://10.0.2.2:8080/v1/auths/forgotPassword', {mail: email})
+      .then(response => {
+        console.log(response.data);
+        setPost(response.data);
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
+    navigation.navigate('RecuperarContraseña');
+  };
   return (
     <View style={styles.container}>
       <Avatar.Image
@@ -24,10 +50,15 @@ const RecuperarMail = ({navigation}) => {
         value={email}
         onChangeText={email => setEmail(email)}
       />
+      {errorEmailEmpty ? (
+        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+          {errorEmailEmpty}
+        </Text>
+      ) : null}
       <Button
         style={styles.button}
         mode="contained"
-        onPress={() => navigation.navigate('RecuperarFlier')}>
+        onPress={handleButtonPress}>
         Recuperar
       </Button>
     </View>
