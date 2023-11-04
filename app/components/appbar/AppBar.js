@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Appbar, Text} from 'react-native-paper';
@@ -8,13 +9,13 @@ const AppBar = ({navigation}) => {
       <View style={styles.appBarContaier}>
         <Text>
           <Text>my</Text>
-          <Text style={{color: '#EB6440', fontSize: 18, fontWeight: 'bold'}}>
+          <Text style={{color: '#EB6440', fontSize: 22, fontWeight: 'bold'}}>
             Home
           </Text>
         </Text>
         <Appbar.Action
           icon="plus-circle"
-          onPress={() => navigation.navigate('AddPropiedadStepOne')}
+          onPress={() => navigation.navigate('AddPropiedadStepper')}
         />
       </View>
     </Appbar.Header>

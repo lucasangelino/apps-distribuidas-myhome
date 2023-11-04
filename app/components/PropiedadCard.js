@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Card, Text, Button} from 'react-native-paper';
+import {Card, Text} from 'react-native-paper';
 import ActionButton from './ActionButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -10,15 +10,17 @@ const PropiedadCard = ({propiedad}) => {
   const {id, price, uri, location, description, expenses, propiedadType} =
     propiedad;
   return (
-    <Card style={styles.cardContainer} key={id}>
+    <Card style={styles.cardContainer} key={id} mode="outlined" elevation={5}>
       <View style={styles.cardImageContainer}>
         <FavouriteIcon isFav={false} />
         <PropiedadType>{propiedadType}</PropiedadType>
         <Card.Cover style={styles.cardCover} source={{uri: uri}} />
       </View>
       <Card.Content style={styles.Content}>
-        <Price>{`${priceFormater({price})}`}</Price>
-        <Expenses>{`${priceFormater({price: expenses})}`}</Expenses>
+        <View style={styles.priceContainer}>
+          <Price>{`${priceFormater({price})}`}</Price>
+          <Expenses>{`${priceFormater({price: expenses})}`}</Expenses>
+        </View>
         <Location>{location}</Location>
         <Amenities />
         <Description>{description}</Description>
@@ -49,12 +51,16 @@ const Expenses = ({children}) => {
 const Location = ({children}) => {
   return (
     <View style={styles.smallDesc}>
-      <Ionicons name="location-outline" size={32} color={'#393939'} />
+      <Ionicons name="location-outline" size={20} color={'#393939'} />
       <Text style={styles.locationText}>{children}</Text>
     </View>
   );
 };
-const Description = ({children}) => <Text variant="bodySmall">{children}</Text>;
+const Description = ({children}) => (
+  <Text variant="bodySmall" style={{marginVertical: 10}}>
+    {children}
+  </Text>
+);
 const FavouriteIcon = ({isFav}) => {
   const [fav, setFav] = React.useState(isFav);
   return (
@@ -123,12 +129,24 @@ const Amenities = () => {
 const styles = StyleSheet.create({
   cardContainer: {
     marginVertical: 8,
+    borderColor: '#fff',
   },
   cardImageContainer: {
     position: 'relative',
   },
+  priceContainer: {
+    width: '100%',
+    display: 'flex',
+    gap: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
   cardCover: {
-    borderRadius: 0,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
   },
   Content: {
     width: '100%',

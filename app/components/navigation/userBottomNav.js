@@ -15,7 +15,7 @@ const UserBottomNav = () => {
       initialRouteName="Home"
       screenOptions={({route}) => ({
         tabBarActiveTintColor: '#EB6440',
-        tabBarInactiveTintColor: '#f0a895',
+        tabBarInactiveTintColor: '#ccc',
         headerShown: false,
         tabBarIcon: ({focused, color, size}) => {
           let iconName;

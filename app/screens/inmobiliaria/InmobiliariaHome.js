@@ -3,6 +3,7 @@ const {View, StyleSheet, SafeAreaView, FlatList} = require('react-native');
 import Heading from '../../components/Heading';
 import PropiedadCard from '../../components/PropiedadCard';
 import propiedades from '../../mocks/propiedadesList.json';
+import {Text} from 'react-native-paper';
 
 function InmobiliariaHome() {
   const renderPropiedadCard = ({item}) => {
@@ -12,6 +13,7 @@ function InmobiliariaHome() {
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <Heading>Mis propiedades</Heading>
+
         <FlatList
           style={styles.propiedadesList}
           data={propiedades}
@@ -26,7 +28,7 @@ function InmobiliariaHome() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 2,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#fff',
   },
   propiedadesList: {
     marginTop: 0,

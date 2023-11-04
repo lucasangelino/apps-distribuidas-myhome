@@ -1,16 +1,32 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Text, Button } from 'react-native-paper';
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
+import {Divider, Text} from 'react-native-paper';
 import Heading from '../../components/Heading';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import uuid from 'react-native-uuid';
 
 const Comentarios = () => {
   const fetchedPoints = 4.5;
   const fetchedComments = [
     {
-      stars: 4,
+      id: '1',
+      stars: 4.5,
       text: 'Muy buena atención, el lugar es muy lindo y la comida es excelente.',
-      date: '2021-05-01',
+      date: 'Sept 12 2021',
+      author: 'Juan Perez',
+    },
+    {
+      id: '2',
+      stars: 3,
+      text: 'Muy buena atención, el lugar es muy lindo y la comida es excelente.',
+      date: 'Sept 12 2021',
+      author: 'Juan Perez',
+    },
+    {
+      id: '3',
+      stars: 5,
+      text: 'Muy buena atención, el lugar es muy lindo y la comida es excelente.',
+      date: 'Sept 12 2021',
       author: 'Juan Perez',
     },
   ];
@@ -18,91 +34,93 @@ const Comentarios = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Heading>Comentarios</Heading>
-        <Text>{fetchedPoints}</Text>
+        <View>
+          <Heading>Comentarios</Heading>
+        </View>
         <Stars stars={fetchedPoints} />
       </View>
       <View style={styles.commentContainer}>
-        {
-          fetchedComments.map(comment => <Comment {...comment} />)
-        }
+        {fetchedComments.map(comment => (
+          <>
+            <Comment key={comment.id} {...comment} />
+            <Divider key={uuid.v4()} />
+          </>
+        ))}
       </View>
     </View>
   );
 };
 
-const Comment = ({ stars, text, date, author }) => {
+const Comment = ({id, stars, text, date, author}) => {
   return (
-    <View style={styles.comment}>
+    <View style={styles.comment} key={id}>
       <Stars stars={stars} />
-      <Text>{text}</Text>
+      <Text style={{marginVertical: 10}}>{text}</Text>
       <View style={styles.commentFooter}>
         <Text>{author}</Text>
         <Text>{date}</Text>
       </View>
     </View>
-  )
+  );
 };
 
-const Stars = ({ stars }) => {
-  const [completedStars, setCompletedStars] = React.useState(0);
-  const [halfStars, setHalfStars] = React.useState(0);
-
-  useEffect(() => {
-    if (stars > 0) {
-      const completedStars = Math.floor(stars / 2);
-      const halfStars = stars % 2;
-      setCompletedStars(completedStars);
-      setHalfStars(halfStars);
-    }
-  }, []);
-
-
-  return (
-    <View style={styles.starContainer}>
-      {
-        completedStars.map((star, index) => <Ionicons key={index} name="star" size={20} color="#FFC107" />)
-      }
-      {
-        halfStars.map((star, index) => <Ionicons key={index} name="star-half" size={20} color="#FFC107" />)
-      }
-    </View>
-  )
-}
+const Stars = ({stars}) => {
+  const starsArray = [];
+  const fullStars = Math.floor(stars);
+  const halfStar = stars % 1;
+  const emptyStars = 5 - fullStars - halfStar;
+  for (let i = 0; i < fullStars; i++) {
+    starsArray.push(
+      <Ionicons key={uuid.v4()} name="star" size={20} color="#FFC107" />,
+    );
+  }
+  if (halfStar) {
+    starsArray.push(
+      <Ionicons key={uuid.v4()} name="star-half" size={20} color="#FFC107" />,
+    );
+  }
+  for (let i = 0; i < emptyStars; i++) {
+    starsArray.push(<Ionicons key={uuid.v4()} name="star-outline" size={20} />);
+  }
+  return <View style={styles.starContainer}>{starsArray}</View>;
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    display: 'flex',
+    width: '100%',
+    padding: 10,
+    backgroundColor: '#fff',
+    minHeight: '100%',
   },
   header: {
-    flex: 1,
+    width: '100%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   starContainer: {
-    flex: 1,
     display: 'flex',
     flexDirection: 'row',
   },
   commentContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 10,
-  },
-  comment: {
-    flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    gap: 10,
+    marginVertical: 10,
+  },
+  comment: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: 10,
+    borderRadius: 10,
   },
   commentFooter: {
-    flex: 1,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-  }
+    marginVertical: 15,
+  },
 });
 
 export default Comentarios;

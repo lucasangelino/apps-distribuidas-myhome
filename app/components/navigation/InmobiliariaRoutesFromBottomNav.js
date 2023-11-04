@@ -15,7 +15,7 @@ const InmobiliariaRoutesFromBottomNav = () => {
       initialRouteName="InmobiliariaHome"
       screenOptions={({route}) => ({
         tabBarActiveTintColor: '#EB6440',
-        tabBarInactiveTintColor: '#f0a895',
+        tabBarInactiveTintColor: '#ccc',
         paddingtop: 100,
         headerShown: true,
         header: props => <AppBar {...props} />,

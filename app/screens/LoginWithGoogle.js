@@ -4,7 +4,6 @@ import {Text, Button, Divider} from 'react-native-paper';
 import {
   GoogleSignin,
   statusCodes,
-  GoogleSigninButton,
 } from '@react-native-google-signin/google-signin';
 import {AuthContext} from '../context/AppContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -59,6 +58,7 @@ const Login = ({navigation}) => {
   };
 
   const loginWithInmobiliaria = () => {
+    console.log('loginWithInmobiliaria');
     setAuth({
       hasUser: true,
       loggedIn: true,

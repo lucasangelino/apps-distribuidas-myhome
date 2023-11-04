@@ -1,20 +1,26 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   TextInput as TextAreaInput,
   Image,
 } from 'react-native';
-import {Text, Button, TextInput, Chip} from 'react-native-paper';
+import {Text, Button, TextInput, Chip, Checkbox} from 'react-native-paper';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import Dropdown from 'react-native-input-select';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import MapView, {Marker} from 'react-native-maps';
 import axios from 'axios';
 import {InmobiliariaContext} from '../context/InmobiliariaContext';
+import {
+  altaPropiedad,
+  updatePropiedad,
+  updatePropiedadStepThree,
+  updatePropiedadStepFour,
+} from '../services/API';
 
-export const AddPropiedadStepOne = () => {
+export const AddPropiedadStepper = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const onNextStep = () => {
@@ -60,7 +66,6 @@ export const AddPropiedadStepOne = () => {
 const StepOne = ({onNextStep}) => {
   const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
 
-  const [modoOperacion, setModoOperacion] = useState(publicacion.tipoOperacion);
   const [tipoPropiedad, setTipoPropiedad] = React.useState(
     publicacion.tipoPropiedad,
   );
@@ -71,10 +76,24 @@ const StepOne = ({onNextStep}) => {
     publicacion.descripcion,
   );
 
+  const publishPropiedadStepOne = async () => {
+    const payload = {
+      tipoPropiedad,
+      propiedadTitle,
+      propiedadDes,
+    };
+    const data = await altaPropiedad({payload});
+    const id = data.id;
+    setPublicacion({
+      ...publicacion,
+      id,
+    });
+    onNextStep();
+  };
+
   const saveStepOne = () => {
     setPublicacion({
       ...publicacion,
-      tipoOperacion: modoOperacion,
       tipoPropiedad,
       titulo: propiedadTitle,
       descripcion: propiedadDes,
@@ -86,37 +105,7 @@ const StepOne = ({onNextStep}) => {
       <Text variant="titleLarge" style={{marginBottom: 15}}>
         Contanos, ¿Qué querés publicar?
       </Text>
-      <Text variant="titleMedium" style={{marginTop: 10}}>
-        Tipo de operacion
-      </Text>
-      <View
-        style={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'row',
-          gap: 30,
-          justifyContent: 'center',
-          marginTop: 10,
-        }}>
-        <Button
-          mode={modoOperacion === 'venta' ? 'contained' : 'outlined'}
-          color="#EB6440"
-          onPress={() => setModoOperacion('venta')}>
-          Venta
-        </Button>
-        <Button
-          mode={modoOperacion === 'alquiler' ? 'contained' : 'outlined'}
-          color="#EB6440"
-          onPress={() => setModoOperacion('alquiler')}>
-          Alguiler
-        </Button>
-        <Button
-          mode={modoOperacion === 'temporada' ? 'contained' : 'outlined'}
-          color="#EB6440"
-          onPress={() => setModoOperacion('temporada')}>
-          Temporada
-        </Button>
-      </View>
+
       <Text variant="titleMedium" style={{marginTop: 10}}>
         Tipo de propiedad
       </Text>
@@ -124,9 +113,9 @@ const StepOne = ({onNextStep}) => {
         onValueChange={itemValue => setTipoPropiedad(itemValue)}
         placeholder="Elige una opcion"
         options={[
-          {label: 'Casa', value: 'casa'},
-          {label: 'PH', value: 'ph'},
-          {label: 'Departamento', value: 'departamento'},
+          {label: 'Casa', value: 'Casa'},
+          {label: 'PH', value: 'PH'},
+          {label: 'Departamento', value: 'Departamento'},
         ]}
         selectedValue={tipoPropiedad}
         primaryColor={'#EB6440'}
@@ -211,7 +200,7 @@ const StepOne = ({onNextStep}) => {
         mode="contained"
         onPress={() => {
           saveStepOne();
-          onNextStep();
+          publishPropiedadStepOne();
         }}>
         Continuar
       </Button>
@@ -221,7 +210,6 @@ const StepOne = ({onNextStep}) => {
 
 const StepTwo = ({onNextStep, onPrevStep}) => {
   const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
-
   const [calleAltura, setCalleAltura] = useState(
     publicacion.direccion.calleAltura,
   );
@@ -233,6 +221,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
   );
   const [piso, setPiso] = React.useState('');
   const [geoLocation, setGeoLocation] = useState({
+    place_id: publicacion.direccion.place_id,
     latitude: publicacion.direccion.latitud,
     longitude: publicacion.direccion.longitud,
     fullAddress: publicacion.direccion.fullAddress,
@@ -244,10 +233,36 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
     const {data} = response;
 
     return {
+      location_id: data.results[0].place_id,
       latitude: data.results[0].geometry.location.lat,
       longitude: data.results[0].geometry.location.lng,
       fullAddress: data.results[0].formatted_address,
     };
+  };
+  const showAddressInMap = async () => {
+    const address = `${calleAltura}+${ciudad}+${provincia}+${barrio}+${localidad}`;
+    const location = await getGeoFromAddress({address});
+    setGeoLocation({
+      place_id: location.location_id,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      fullAddress: location.fullAddress,
+    });
+  };
+
+  const publishPropiedadStepTwo = async () => {
+    const payload = {
+      propertyId: publicacion.id,
+      calleAltura,
+      ciudad,
+      provincia,
+      barrio,
+      localidad,
+      piso,
+      geoLocation,
+    };
+    const data = await updatePropiedad({payload}); // TODO: error hanlder si se rompio
+    onNextStep();
   };
 
   const saveStepTwo = () => {
@@ -264,16 +279,6 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         latitud: geoLocation.latitude,
         longitud: geoLocation.longitude,
       },
-    });
-  };
-
-  const showAddressInMap = async () => {
-    const address = `${calleAltura}+${ciudad}+${provincia}+${barrio}+${localidad}`;
-    const location = await getGeoFromAddress({address});
-    setGeoLocation({
-      latitude: location.latitude,
-      longitude: location.longitude,
-      fullAddress: location.fullAddress,
     });
   };
 
@@ -339,7 +344,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
       <TextInput
         mode="outlined"
         label=""
-        value={piso}
+        value={piso.toString()}
         style={{height: 40}}
         onChangeText={title => setPiso(title)}
       />
@@ -351,7 +356,15 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         Mostrar en el mapa
       </Button>
       <View style={{marginBottom: 20}}>
-        <MapView style={{width: '100%', height: 250}}>
+        <MapView
+          style={{width: '100%', height: 250}}
+          mapType="standard"
+          initialRegion={{
+            latitude: -34.603722,
+            longitude: -58.381592,
+            latitudeDelta: 0.003,
+            longitudeDelta: 0.003,
+          }}>
           <Marker
             coordinate={{
               latitude: geoLocation.latitude,
@@ -391,7 +404,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
           mode="contained"
           onPress={() => {
             saveStepTwo();
-            onNextStep();
+            publishPropiedadStepTwo();
           }}>
           Continuar
         </Button>
@@ -402,7 +415,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
 
 const StepThree = ({onNextStep, onPrevStep}) => {
   const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
-
+  const [modoOperacion, setModoOperacion] = useState(publicacion.tipoOperacion);
   const [countAmenities, setCountAmenities] = useState(publicacion.ambientes);
   const [countDormitorios, setCountDormitorios] = useState(
     publicacion.dormitorios,
@@ -450,6 +463,35 @@ const StepThree = ({onNextStep, onPrevStep}) => {
       expensas,
       expensasMoneda,
     });
+  };
+
+  const publishPropiedadStepThree = async () => {
+    const payload = {
+      propertyId: publicacion.id,
+      propertyType: publicacion.tipoPropiedad,
+      numRooms: countDormitorios,
+      numBathrooms: countBanos,
+      numCars: countCocheras,
+      balcony: true,
+      roofTop: true,
+      vault: true,
+      mtsCovered: superficieCubierta,
+      mtsHalfCovered: superficieSemiDesCubierta,
+      mtsUncovered: superficieDescubierta,
+      antiquity: antiguedad,
+      contract_types: [
+        {
+          contractType: modoOperacion,
+          price: precioPropiedad,
+          expPrice: precioPropiedad,
+          currency: 'AR$',
+          contractDays: 0,
+        },
+      ],
+    };
+
+    const data = await updatePropiedadStepThree({payload}); // TODO: error hanlder si se rompio
+    onNextStep();
   };
 
   return (
@@ -857,9 +899,10 @@ const StepThree = ({onNextStep, onPrevStep}) => {
           Cubierta
         </Text>
         <TextInput
+          keyboardType="numeric"
           mode="outlined"
           label=""
-          value={superficieCubierta}
+          value={superficieCubierta.toString()}
           style={{height: 40}}
           onChangeText={mts => setSuperficieCubierta(mts)}
         />
@@ -868,9 +911,10 @@ const StepThree = ({onNextStep, onPrevStep}) => {
           Semidescubierta
         </Text>
         <TextInput
+          keyboardType="numeric"
           mode="outlined"
           label=""
-          value={superficieSemiDesCubierta}
+          value={superficieSemiDesCubierta.toString()}
           style={{height: 40}}
           onChangeText={mts => setSuperficieSemiDescubierta(mts)}
         />
@@ -879,9 +923,10 @@ const StepThree = ({onNextStep, onPrevStep}) => {
           Descubierta
         </Text>
         <TextInput
+          keyboardType="numeric"
           mode="outlined"
           label=""
-          value={superficieDescubierta}
+          value={superficieDescubierta.toString()}
           style={{height: 40, marginBottom: 20}}
           onChangeText={mts => setSuperficieDescubierta(mts)}
         />
@@ -892,11 +937,45 @@ const StepThree = ({onNextStep, onPrevStep}) => {
       </Text>
       <TextInput
         mode="outlined"
+        keyboardType="numeric"
         label=""
-        value={antiguedad}
+        value={antiguedad.toString()}
         style={{height: 40, marginBottom: 20}}
         onChangeText={mts => setAntiguedad(mts)}
       />
+
+      <Text variant="titleMedium" style={{marginTop: 10}}>
+        Tipo de operacion
+      </Text>
+
+      <View
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 30,
+          justifyContent: 'center',
+          marginTop: 10,
+        }}>
+        <Button
+          mode={modoOperacion === 'Venta' ? 'contained' : 'outlined'}
+          color="#EB6440"
+          onPress={() => setModoOperacion('Venta')}>
+          Venta
+        </Button>
+        <Button
+          mode={modoOperacion === 'Alquiler' ? 'contained' : 'outlined'}
+          color="#EB6440"
+          onPress={() => setModoOperacion('Alquiler')}>
+          Alguiler
+        </Button>
+        <Button
+          mode={modoOperacion === 'Temporada' ? 'contained' : 'outlined'}
+          color="#EB6440"
+          onPress={() => setModoOperacion('Temporada')}>
+          Temporada
+        </Button>
+      </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
         Precio
@@ -907,33 +986,34 @@ const StepThree = ({onNextStep, onPrevStep}) => {
       </Text>
       <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
         <Button
-          mode={moneda === 'usd' ? 'contained' : 'outlined'}
+          mode={moneda === 'US$' ? 'contained' : 'outlined'}
           style={{
             borderColor: '#EB6440',
             justifyContent: 'center',
             borderRadius: 50,
             height: 40,
           }}
-          onPress={() => setMoneda('usd')}>
-          <Text style={{color: '#000', fontSize: 12}}>USD</Text>
+          onPress={() => setMoneda('US$')}>
+          <Text style={{color: '#000', fontSize: 12}}>US$</Text>
         </Button>
         <Button
-          mode={moneda === 'ars' ? 'contained' : 'outlined'}
+          mode={moneda === 'AR$' ? 'contained' : 'outlined'}
           style={{
             borderColor: '#EB6440',
             justifyContent: 'center',
             borderRadius: 50,
             height: 40,
           }}
-          onPress={() => setMoneda('ars')}>
-          <Text style={{color: '#000', fontSize: 12}}>ARS</Text>
+          onPress={() => setMoneda('AR$')}>
+          <Text style={{color: '#000', fontSize: 12}}>AR$</Text>
         </Button>
         <TextInput
           mode="outlined"
+          keyboardType="numeric"
           label=""
-          value={superficieCubierta}
+          value={precioPropiedad.toString()}
           style={{height: 40, width: '50%', marginBottom: 20}}
-          onChangeText={mts => setSuperficieCubierta(mts)}
+          onChangeText={precio => setPrecioPropiedad(precio)}
         />
       </View>
 
@@ -943,33 +1023,34 @@ const StepThree = ({onNextStep, onPrevStep}) => {
 
       <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
         <Button
-          mode={expensasMoneda === 'usd' ? 'contained' : 'outlined'}
+          mode={expensasMoneda === 'US$' ? 'contained' : 'outlined'}
           style={{
             borderColor: '#EB6440',
             justifyContent: 'center',
             borderRadius: 50,
             height: 40,
           }}
-          onPress={() => setExpensasMoneda('usd')}>
-          <Text style={{color: '#000', fontSize: 12}}>USD</Text>
+          onPress={() => setExpensasMoneda('US$')}>
+          <Text style={{color: '#000', fontSize: 12}}>US$</Text>
         </Button>
         <Button
-          mode={expensasMoneda === 'ars' ? 'contained' : 'outlined'}
+          mode={expensasMoneda === 'AR$' ? 'contained' : 'outlined'}
           style={{
             borderColor: '#EB6440',
             justifyContent: 'center',
             borderRadius: 50,
             height: 40,
           }}
-          onPress={() => setExpensasMoneda('ars')}>
-          <Text style={{color: '#000', fontSize: 12}}>ARS</Text>
+          onPress={() => setExpensasMoneda('AR$')}>
+          <Text style={{color: '#000', fontSize: 12}}>AR$</Text>
         </Button>
         <TextInput
+          keyboardType="numeric"
           mode="outlined"
           label=""
-          value={superficieCubierta}
+          value={expensas.toString()}
           style={{height: 40, width: '50%', marginBottom: 20}}
-          onChangeText={mts => setSuperficieCubierta(mts)}
+          onChangeText={exp => setExpensas(exp)}
         />
       </View>
       <View
@@ -1001,7 +1082,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
           mode="contained"
           onPress={() => {
             saveStepThree();
-            onNextStep();
+            publishPropiedadStepThree();
           }}>
           Continuar
         </Button>
@@ -1019,27 +1100,44 @@ const StepFour = ({onPrevStep}) => {
   const [disposicion, setDisposicion] = useState(publicacion.disposicion);
   const [videoUrl, setVideoUrl] = useState(publicacion.videoUrl);
   const [images, setImages] = useState(publicacion.images);
-
-  const addAmenitie = amenitie => {
-    setAmenitiesList([...amenitiesList, amenitie]);
-    setAmenitie('');
-  };
+  const [amenities, setAmenities] = useState([]);
+  const [sum, setSum] = useState(false);
+  const [pileta, setPileta] = useState(false);
+  const [canchaDeportes, setCanchaDeportes] = useState(false);
+  const [laundry, setLaundry] = useState(false);
+  const [solarium, setSolarium] = useState(false);
+  const [gimnasio, setGimnasio] = useState(false);
+  const [sauna, setSauna] = useState(false);
+  const [vigilancia, setVigilancia] = useState(false);
+  const [salaDeJuegos, setSalaDeJuegos] = useState(false);
 
   const addVideo = video => {
     setVideoUrl(video);
   };
 
   const selectImagesFromGallery = async () => {
-    const result = await launchImageLibrary({
+    const response = await launchImageLibrary({
       mediaType: 'photo',
       selectionLimit: 0,
     });
-    if (!result.cancelled) {
-      console.log(result);
-      const selectedAssets = result.assets;
+    if (!response.cancelled) {
+      const selectedAssets = response.assets;
       const selectedUris = selectedAssets.map(i => i.uri);
-      console.log('selectedUris: ', selectedUris);
-      setImages(selectedAssets);
+      console.log('uris from gallery: ', selectedUris);
+      setImages([...images, ...selectedAssets]);
+    }
+  };
+
+  const selectImagesFromCamera = async () => {
+    const response = await launchCamera({
+      mediaType: 'photo',
+      selectionLimit: 0,
+    });
+    if (!response.cancelled) {
+      const selectedAssets = response.assets;
+      const selectedUris = selectedAssets.map(i => i.uri);
+      console.log('uris com camara: ', selectedUris);
+      setImages([...images, ...selectedAssets]);
     }
   };
 
@@ -1049,6 +1147,25 @@ const StepFour = ({onPrevStep}) => {
 
   const publishPropiedad = async () => {
     console.log('publish');
+  };
+
+  const publishPropiedadStepfour = async () => {
+    const payload = {
+      propertyId: publicacion.id,
+      sum: sum,
+      swimming_pool: pileta,
+      sport_field: canchaDeportes,
+      laundry: laundry,
+      gym: gimnasio,
+      sauna: sauna,
+      security: vigilancia,
+      game_room: salaDeJuegos,
+      position: disposicion,
+      orientation: orientacion,
+      photos: images,
+    };
+    const data = await updatePropiedadStepFour({payload}); // TODO: error hanlder si se rompio
+    console.log('data: ', data);
   };
 
   const saveStepFour = () => {
@@ -1067,42 +1184,56 @@ const StepFour = ({onPrevStep}) => {
       <Text variant="titleMedium" style={{marginTop: 10}}>
         Que amenities tiene la propiedad?
       </Text>
-      <TextInput
-        mode="outlined"
-        label="Escribe un amenitie"
-        value={amenitie}
-        onChangeText={am => setAmenitie(am)}
-      />
-      <Button
-        mode="contained"
-        color="#EB6440"
-        onPress={() => addAmenitie(amenitie)}>
-        Agregar amenitie
-      </Button>
-
       <View
         style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: 10,
-          borderWidth: 1,
-          padding: 10,
-          borderRadius: 10,
-          borderColor: '#EB6440',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
         }}>
-        {amenitiesList.map((item, index) => {
-          return (
-            <Chip
-              key={index}
-              mode="outlined"
-              onPress={() => console.log('Pressed')}
-              onClose={() => {
-                setAmenitiesList(amenitiesList.filter(i => i !== item));
-              }}>
-              {item}
-            </Chip>
-          );
-        })}
+        <Checkbox.Item
+          label="Sum"
+          status={sum ? 'checked' : 'unchecked'}
+          onPress={() => setSum(!sum)}
+        />
+        <Checkbox.Item
+          label="Pileta"
+          status={pileta ? 'checked' : 'unchecked'}
+          onPress={() => setPileta(!pileta)}
+        />
+        <Checkbox.Item
+          label="Cancha de deportes"
+          status={canchaDeportes ? 'checked' : 'unchecked'}
+          onPress={() => setCanchaDeportes(!canchaDeportes)}
+        />
+        <Checkbox.Item
+          label="Laundry"
+          status={laundry ? 'checked' : 'unchecked'}
+          onPress={() => setLaundry(!laundry)}
+        />
+        <Checkbox.Item
+          label="Solarium"
+          status={solarium ? 'checked' : 'unchecked'}
+          onPress={() => setSolarium(!solarium)}
+        />
+        <Checkbox.Item
+          label="Gimnasio"
+          status={gimnasio ? 'checked' : 'unchecked'}
+          onPress={() => setGimnasio(!gimnasio)}
+        />
+        <Checkbox.Item
+          label="Sauna"
+          status={sauna ? 'checked' : 'unchecked'}
+          onPress={() => setSauna(!sauna)}
+        />
+        <Checkbox.Item
+          label="Vigilancia"
+          status={vigilancia ? 'checked' : 'unchecked'}
+          onPress={() => setVigilancia(!vigilancia)}
+        />
+        <Checkbox.Item
+          label="Sala de juegos"
+          status={salaDeJuegos ? 'checked' : 'unchecked'}
+          onPress={() => setSalaDeJuegos(!salaDeJuegos)}
+        />
       </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
@@ -1252,7 +1383,7 @@ const StepFour = ({onPrevStep}) => {
             <View key={index}>
               <Image
                 source={{
-                  uri: 'file:///data/user/0/com.myhome/cache/rn_image_picker_lib_temp_d6814c9f-a9e5-4440-87e1-808bd9b9f40c.jpg',
+                  uri: item.uri,
                 }}
                 style={{width: 50, height: 50, borderRadius: 10}}
               />
@@ -1278,7 +1409,7 @@ const StepFour = ({onPrevStep}) => {
             backgroundColor: '#fff',
           }}
           mode="outlined"
-          onPress={selectImagesFromGallery}>
+          onPress={selectImagesFromCamera}>
           Abrir camara
         </Button>
         <Button
@@ -1337,7 +1468,7 @@ const StepFour = ({onPrevStep}) => {
             width: '50%',
           }}
           mode="contained"
-          onPress={publishPropiedad}>
+          onPress={publishPropiedadStepfour}>
           Publicar
         </Button>
       </View>
@@ -1356,7 +1487,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingTop: 5,
     alignItems: 'center',
-    backgroundColor: '#D6E4E5',
+    backgroundColor: '#fff',
   },
   stepContainer: {
     display: 'flex',

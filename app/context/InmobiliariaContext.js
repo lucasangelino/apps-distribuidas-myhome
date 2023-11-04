@@ -10,9 +10,10 @@ const initialState = {
 };
 
 const initialStatePublicacion = {
+  id: null,
   publicada: false,
-  tipoOperacion: 'temporada',
-  tipoPropiedad: 'casa',
+  tipoOperacion: 'Venta',
+  tipoPropiedad: 'Casa',
   titulo: 'Propiedad en venta',
   descripcion: 'Propiedad en venta',
   direccion: {
@@ -23,6 +24,7 @@ const initialStatePublicacion = {
     localidad: '',
     pisoDepto: '',
     fullAddress: '',
+    place_id: '',
     latitud: -34.603722,
     longitud: -58.381592,
   },
@@ -34,15 +36,15 @@ const initialStatePublicacion = {
   terrazas: 0,
   bauleras: 0,
   superficie: {
-    cubierta: '1m2',
-    semicubierta: '1m2',
-    descubierta: '1m2',
+    cubierta: 0,
+    semicubierta: 0,
+    descubierta: 0,
   },
-  antiguedad: '1',
-  precio: 1,
-  precioMoneda: 'usd',
+  antiguedad: 0,
+  precio: 0,
+  precioMoneda: 'US$',
   expensas: 0,
-  expensasMoneda: 'ars',
+  expensasMoneda: 'US$',
   amenities: [],
   orientacion: 'norte',
   disposcion: 'frente',
