@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text, Button, Avatar} from 'react-native-paper';
+import {Text, Button, Avatar, Divider} from 'react-native-paper';
 import {View, StyleSheet, TouchableHighlight} from 'react-native';
 import axios from 'axios';
 
@@ -32,20 +32,21 @@ const Login = ({navigation}) => {
         onPress={() => navigation.navigate('Home')}>
         Continuar con Google
       </Button>
-      {/* <TouchableHighlight
-        style={styles.button}
-        underlayColor="#fff"
-        onPress={handleButtonPress}>
-        <Avatar.Icon
-          size={40}
-          source={require('../assets/images/Logo-Google.png')}
-          marginTop={30}
-        />
-        <Text style={styles.buttonText}>Continuar con Google</Text>
-      </TouchableHighlight> */}
-      <Text variant="headlineSmall" style={{marginLeft: 10, marginTop: 30}}>
-        ó
-      </Text>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          marginTop: 30,
+          alignItems: 'center',
+        }}>
+        <Divider style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+        <Text
+          variant="headlineSmall"
+          style={{marginLeft: 8, marginRight: 8, marginBottom: 5}}>
+          o
+        </Text>
+        <Divider style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+      </View>
       <Text variant="headlineMedium" style={{marginTop: 30}}>
         Ingresar como Inmobiliaria
       </Text>

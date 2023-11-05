@@ -36,6 +36,7 @@ const RecuperarMail = ({navigation}) => {
         size={100}
         source={require('../assets/images/Logo.png')}
         marginTop={60}
+        backgroundColor="#eff5f5"
       />
       <Text variant="headlineMedium" style={{marginTop: 20}}>
         Recuperar tu Usuario

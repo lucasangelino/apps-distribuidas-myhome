@@ -7,6 +7,7 @@ const RecuperarContraseña = ({navigation}) => {
   const [repeatPassword, setRepeatPassword] = React.useState('');
   const [post, setPost] = React.useState(null);
   const [securityValue, setSecurityValue] = React.useState('');
+  const [errorSecurityValue, setErrorSecurityValue] = React.useState('');
   const [errorPasswordEmpty, setErrorPasswordEmpty] = React.useState('');
   const [errorPasswordLength, setErrorPasswordLength] = React.useState('');
   const [errorPasswordUpperCase, setErrorPasswordUpperCase] =
@@ -18,9 +19,53 @@ const RecuperarContraseña = ({navigation}) => {
   const handleButtonPress = () => {
     if (password === '') {
       setErrorPasswordEmpty('Completar con una contraseña.');
+    } else {
+      setErrorPasswordEmpty('');
+      if (password.length < 8) {
+        setErrorPasswordLength(
+          'La contraseña debe tener al menos 8 caracteres.',
+        );
+      } else {
+        setErrorPasswordLength('');
+        if (password === password.toLowerCase()) {
+          setErrorPasswordUpperCase(
+            'La contraseña debe tener al menos una mayúscula.',
+          );
+        } else {
+          setErrorPasswordUpperCase('');
+        }
+      }
+    }
+
+    if (repeatPassword === '') {
+      setErrorRepeatPasswordEmpty('Completar con una contraseña.');
+    } else {
+      setErrorRepeatPasswordEmpty('');
+      if (repeatPassword !== password) {
+        setErrorRepeatPassword('Las contraseñas no coinciden.');
+      } else {
+        setErrorRepeatPassword('');
+      }
+    }
+
+    if (securityValue === '') {
+      setErrorSecurityValue('Completar con un código de seguridad.');
+    } else {
+      setErrorSecurityValue('');
+    }
+
+    if (
+      errorPasswordEmpty === '' &&
+      errorPasswordLength === '' &&
+      errorPasswordUpperCase === '' &&
+      errorRepeatPasswordEmpty === '' &&
+      errorRepeatPassword === ''
+    ) {
+      handlePassword();
     }
   };
-  const handleRegistro = async () => {
+
+  const handlePassword = async () => {
     try {
       const formData = new FormData();
       formData.append('mail', 'ar.gabrielrojas@gmail.com');
@@ -40,6 +85,7 @@ const RecuperarContraseña = ({navigation}) => {
     } catch (error) {
       console.log(error);
     }
+    navigation.navigate('LoginInmobiliaria');
   };
   return (
     <View style={styles.container}>
@@ -47,7 +93,7 @@ const RecuperarContraseña = ({navigation}) => {
         size={100}
         source={require('../assets/images/Verificado.png')}
         marginTop={20}
-        marginLeft={15}
+        backgroundColor="#eff5f5"
       />
       <Text style={styles.text} variant="headlineSmall">
         Verificar si recibiste el mail en tu casilla con el link.
@@ -57,7 +103,7 @@ const RecuperarContraseña = ({navigation}) => {
       </TouchableOpacity>
       <Text
         variant="headlineSmall"
-        style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
+        style={{marginTop: 30, display: 'flex', alignSelf: 'flex-start'}}>
         Codigo de Seguridad
       </Text>
       <TextInput
@@ -66,6 +112,11 @@ const RecuperarContraseña = ({navigation}) => {
         onChangeText={securityValue => setSecurityValue(securityValue)}
         secureTextEntry={true}
       />
+      {errorSecurityValue ? (
+        <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+          {errorSecurityValue}
+        </Text>
+      ) : null}
       <Text
         variant="headlineSmall"
         style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
@@ -113,8 +164,11 @@ const RecuperarContraseña = ({navigation}) => {
           {errorRepeatPassword}
         </Text>
       ) : null}
-      <Button style={styles.button} mode="contained" onPress={handleRegistro}>
-        Volver
+      <Button
+        style={styles.button}
+        mode="contained"
+        onPress={handleButtonPress}>
+        Cambiar Contraseña
       </Button>
     </View>
   );
@@ -146,7 +200,7 @@ const styles = StyleSheet.create({
   },
   link: {
     color: '#0377ff',
-    marginTop: 50,
+    marginTop: 30,
   },
   button: {
     width: '50%',

@@ -6,9 +6,6 @@ import axios from 'axios';
 const LoginInmobiliaria = ({navigation}) => {
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
-  // axios({method: 'get', url: `${baseUrl}/api/users/1`}).then(response => {
-  //   console.log(response.data);
-  // });
   const [post, setPost] = useState(null);
   const [errorMailEmpty, setErrorMailEmpty] = useState('');
   const [errorWrongMail, setErrorWrongMail] = useState('');
@@ -54,7 +51,10 @@ const LoginInmobiliaria = ({navigation}) => {
       })
       .then(response => {
         console.log(response.data);
-        setPost(response.data);
+        setPost(response.data.ok);
+        if (response.data.ok === true) {
+          navigation.navigate('Home');
+        }
       })
       .catch(error => {
         console.log(error.message);

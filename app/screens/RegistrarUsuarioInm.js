@@ -161,6 +161,9 @@ const RegistrarUsuarioInm = ({navigation}) => {
     });
     const response = await request.json();
     console.log(response);
+    if (response.data.result === 'ok') {
+      navigation.navigate('Login');
+    }
   };
   return (
     <View style={styles.container}>
@@ -381,7 +384,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
     backgroundColor: '#fff',
-    keyboardType: 'numeric',
   },
   link: {
     color: '#0377ff',
