@@ -163,7 +163,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
     const response = await request.json();
     console.log('Register response: ', response);
     if (response.result === 'ok') {
-      navigation.navigate('Login');
+      navigation.navigate('ActivarCuenta');
     }
   };
   return (
@@ -222,6 +222,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
           CUIT
         </Text>
         <TextInput
+          keyboardType="numeric"
           style={styles.inputCuit}
           value={cuit}
           onChangeText={cuit => setCuit(cuit)}
@@ -246,7 +247,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
         <TextInput
           style={styles.input}
           value={phoneNumber}
-          onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+          onChangeText={phone => setPhoneNumber(phone)}
           secureTextEntry={false}
         />
         {errorPhoneNumberEmpty ? (

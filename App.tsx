@@ -10,6 +10,7 @@ import LoginInmobiliaria from './app/screens/auth/LoginInmobiliaria';
 import RegistrarUsuarioInm from './app/screens/auth/RegistrarUsuarioInm';
 import RecuperarMail from './app/screens/auth/RecuperarMail';
 import RecuperarContraseña from './app/screens/auth/RecuperarContraseña';
+import ActivarCuenta from './app/screens/auth/ActivarCuenta';
 
 const Stack = createNativeStackNavigator();
 
@@ -55,6 +56,11 @@ const AuthRouter = () => {
         <Stack.Screen
           name="RecuperarContraseña"
           component={RecuperarContraseña}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ActivarCuenta"
+          component={ActivarCuenta}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

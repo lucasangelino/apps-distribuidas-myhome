@@ -215,7 +215,6 @@ export const getPropiedades = async ({filters} = {}) => {
   const jsonValue = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(jsonValue);
   const token = userData.token;
-  const userId = userData.id;
 
   const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title`;
   console.log(token);
@@ -228,6 +227,7 @@ export const getPropiedades = async ({filters} = {}) => {
       },
     });
     const responseJson = await response.json();
+    console.log('get propiedades');
     console.log('responseJson', responseJson.data);
     return {
       status: response.status,
