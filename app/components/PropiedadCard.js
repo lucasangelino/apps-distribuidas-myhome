@@ -7,21 +7,23 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {priceFormater} from '../utils/utils';
 
 const PropiedadCard = ({propiedad}) => {
-  const {id, price, uri, location, description, expenses, propiedadType} =
+  const {id, description, contract_types, location, status, multimedia} =
     propiedad;
+  const {price, expPrice} = contract_types[0];
+  const uri = multimedia.length > 0 ? multimedia[0].url : '';
   return (
     <Card style={styles.cardContainer} key={id} mode="outlined" elevation={5}>
       <View style={styles.cardImageContainer}>
         <FavouriteIcon isFav={false} />
-        <PropiedadType>{propiedadType}</PropiedadType>
+        <PropiedadType>{status}</PropiedadType>
         <Card.Cover style={styles.cardCover} source={{uri: uri}} />
       </View>
       <Card.Content style={styles.Content}>
         <View style={styles.priceContainer}>
           <Price>{`${priceFormater({price})}`}</Price>
-          <Expenses>{`${priceFormater({price: expenses})}`}</Expenses>
+          <Expenses>{`${priceFormater({price: expPrice})}`}</Expenses>
         </View>
-        <Location>{location}</Location>
+        <Location>{location.country}</Location>
         <Amenities />
         <Description>{description}</Description>
       </Card.Content>

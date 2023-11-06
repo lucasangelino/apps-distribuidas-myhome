@@ -1,4 +1,4 @@
-import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BACKEND_URL = 'http://10.0.2.2:8080';
 const API_VERSION = 'v1';
@@ -6,7 +6,12 @@ const API_VERSION = 'v1';
 export const altaPropiedad = async ({payload}) => {
   const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
   const {tipoPropiedad, propiedadTitle, propiedadDes} = payload;
+
   try {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
+
     const response = await fetch(URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -17,7 +22,7 @@ export const altaPropiedad = async ({payload}) => {
       headers: {
         // TODO: remove token
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjk5OTksImlhdCI6MTY5OTIyMTg5MiwiZXhwIjoxNjk5MzA4MjkyfQ.3pws1e4Y3cHpUOMB1sKrIBBSb-Pv5D5ljR5bOfRWHiQ'}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -45,6 +50,10 @@ export const updatePropiedad = async ({payload}) => {
   } = payload;
 
   try {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
+
     const response = await fetch(URL, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -63,7 +72,7 @@ export const updatePropiedad = async ({payload}) => {
       }),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjk5OTksImlhdCI6MTY5OTIyMTg5MiwiZXhwIjoxNjk5MzA4MjkyfQ.3pws1e4Y3cHpUOMB1sKrIBBSb-Pv5D5ljR5bOfRWHiQ'}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     const responseJson = await response.json();
@@ -97,6 +106,10 @@ export const updatePropiedadStepThree = async ({payload}) => {
   console.log('payload', payload);
 
   try {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
+
     const response = await fetch(URL, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -116,7 +129,7 @@ export const updatePropiedadStepThree = async ({payload}) => {
       }),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjk5OTksImlhdCI6MTY5OTIyMTg5MiwiZXhwIjoxNjk5MzA4MjkyfQ.3pws1e4Y3cHpUOMB1sKrIBBSb-Pv5D5ljR5bOfRWHiQ'}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     const responseJson = await response.json();
@@ -166,13 +179,17 @@ export const updatePropiedadStepFour = async ({payload}) => {
   console.log('formData ::::::::::::', formData);
 
   try {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
+
     const response = await fetch(URL, {
       method: 'PATCH',
       body: formData,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjk5OTksImlhdCI6MTY5OTIyMTg5MiwiZXhwIjoxNjk5MzA4MjkyfQ.3pws1e4Y3cHpUOMB1sKrIBBSb-Pv5D5ljR5bOfRWHiQ'}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     const responseJson = await response.json();
@@ -192,17 +209,24 @@ export const updatePropiedadStepFour = async ({payload}) => {
   }
 };
 
-export const getPropiedades = async () => {
-  const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
+export const getPropiedades = async ({filters} = {}) => {
+  const jsonValue = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(jsonValue);
+  const token = userData.token;
+  const userId = userData.id;
+
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title&userId=${userId}`;
+
   try {
     const response = await fetch(URL, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjk5OTksImlhdCI6MTY5OTIyMTg5MiwiZXhwIjoxNjk5MzA4MjkyfQ.3pws1e4Y3cHpUOMB1sKrIBBSb-Pv5D5ljR5bOfRWHiQ'}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     const responseJson = await response.json();
+    console.log('responseJson', responseJson.data);
     return {
       status: response.status,
       data: responseJson.data,

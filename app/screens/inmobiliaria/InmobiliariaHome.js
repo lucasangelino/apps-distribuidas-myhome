@@ -1,13 +1,18 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useContext} from 'react';
 const {View, StyleSheet, SafeAreaView, FlatList} = require('react-native');
 import Heading from '../../components/Heading';
 import PropiedadCard from '../../components/PropiedadCard';
-import propiedades from '../../mocks/propiedadesList.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../context/AppContext';
+import {getPropiedades} from '../../services/API';
+import {Text} from 'react-native-paper';
 
 function InmobiliariaHome() {
   const {auth, setAuth} = useContext(AuthContext);
+  const [propiedades, setPropiedades] = React.useState([]);
+
   const getUser = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('userToken');
@@ -47,18 +52,28 @@ function InmobiliariaHome() {
     }
   };
 
+  const getUserPropiedades = async () => {
+    const userPropiedades = await getPropiedades();
+    setPropiedades(userPropiedades.data);
+  };
+
   useEffect(() => {
     getUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getUserPropiedades();
   }, []);
 
   const renderPropiedadCard = ({item}) => {
+    console.log('item', item);
     return <PropiedadCard propiedad={item} />;
   };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <Heading>Mis propiedades</Heading>
+
+        {propiedades.length > 0 ? (
+          <Text style={{color: '#000'}}>No hay propiedades</Text>
+        ) : null}
 
         <FlatList
           style={styles.propiedadesList}
@@ -73,6 +88,7 @@ function InmobiliariaHome() {
 
 const styles = StyleSheet.create({
   container: {
+    minHeight: '100%',
     paddingHorizontal: 2,
     backgroundColor: '#fff',
   },
