@@ -115,7 +115,7 @@ const StepOne = ({onNextStep}) => {
       </Text>
       <Dropdown
         onValueChange={itemValue => setTipoPropiedad(itemValue)}
-        placeholder="Elige una opcion"
+        placeholder="Elige una opción"
         options={[
           {label: 'Casa', value: 'Casa'},
           {label: 'PH', value: 'PH'},
@@ -149,7 +149,7 @@ const StepOne = ({onNextStep}) => {
         }
         listFooterComponent={
           <View style={styles.customComponentContainer}>
-            <Text>Solo puedes elegir una opcion</Text>
+            <Text>Solo puedes elegir una opción</Text>
           </View>
         }
         modalOptionsContainerStyle={{
@@ -169,10 +169,10 @@ const StepOne = ({onNextStep}) => {
         }}
       />
       <Text variant="titleLarge" style={{marginTop: 10}}>
-        Describi la propiedad
+        Describí la propiedad
       </Text>
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Titulo
+        Título
       </Text>
       <TextInput
         mode="outlined"
@@ -180,7 +180,7 @@ const StepOne = ({onNextStep}) => {
         onChangeText={title => setPropiedadTitle(title)}
       />
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Descripcion
+        Descripción
       </Text>
       <TextAreaInput
         editable
@@ -290,11 +290,11 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
   return (
     <View style={{display: 'flex', gap: 10}}>
       <Text variant="titleLarge" style={{marginBottom: 15}}>
-        ¿Donde esta ubicada la propiedad?
+        ¿Dónde está ubicada la propiedad?
       </Text>
 
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Calla y Altura
+        Calle y Altura
       </Text>
       <TextInput
         mode="outlined"
@@ -354,7 +354,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         onChangeText={title => setPiso(title)}
       />
       <Text variant="titleSmall" style={{marginTop: 10, marginBottom: 20}}>
-        Ubicacion
+        Ubicación
       </Text>
 
       <Button mode="outlined" onPress={showAddressInMap}>
@@ -504,7 +504,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
   return (
     <View style={{display: 'flex', gap: 10, width: '100%'}}>
       <Text variant="titleLarge" style={{marginBottom: 15}}>
-        Caracteristicas principales
+        Características principales
       </Text>
 
       <View
@@ -940,7 +940,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
       </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Antiguedad
+        Antiguedad (años)
       </Text>
       <TextInput
         mode="outlined"
@@ -952,7 +952,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
       />
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Tipo de operacion
+        Tipo de operación
       </Text>
 
       <View
@@ -974,7 +974,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
           mode={modoOperacion === 'Alquiler' ? 'contained' : 'outlined'}
           color="#EB6440"
           onPress={() => setModoOperacion('Alquiler')}>
-          Alguiler
+          Alquiler
         </Button>
         <Button
           mode={modoOperacion === 'Temporada' ? 'contained' : 'outlined'}
@@ -1257,11 +1257,11 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
       </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Orientacion
+        Orientación
       </Text>
       <Dropdown
         onValueChange={itemValue => setOrientacion(itemValue)}
-        placeholder="Elige una opcion"
+        placeholder="Elige una opción"
         options={[
           {label: 'N', value: 'N'},
           {label: 'S', value: 'S'},
@@ -1296,13 +1296,13 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
         listHeaderComponent={
           <View style={styles.customComponentContainer}>
             <Text style={styles.text}>
-              💡 Elige la orientacion de la propiedad
+              💡 Elige la orientación de la propiedad
             </Text>
           </View>
         }
         listFooterComponent={
           <View style={styles.customComponentContainer}>
-            <Text>Solo puedes elegir una opcion</Text>
+            <Text>Solo puedes elegir una opción</Text>
           </View>
         }
         modalOptionsContainerStyle={{
@@ -1322,11 +1322,11 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
         }}
       />
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Disposicion
+        Disposición
       </Text>
       <Dropdown
         onValueChange={itemValue => setDisposicion(itemValue)}
-        placeholder="Elige una opcion"
+        placeholder="Elige una opción"
         options={[
           {label: 'Frente', value: 'Frente'},
           {label: 'Contrafrente', value: 'Contrafrente'},
@@ -1355,13 +1355,13 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
         listHeaderComponent={
           <View style={styles.customComponentContainer}>
             <Text style={styles.text}>
-              💡 Elige la disposicion de la propiedad
+              💡 Elige la disposición de la propiedad
             </Text>
           </View>
         }
         listFooterComponent={
           <View style={styles.customComponentContainer}>
-            <Text>Solo puedes elegir una opcion</Text>
+            <Text>Solo puedes elegir una opción</Text>
           </View>
         }
         modalOptionsContainerStyle={{
@@ -1481,7 +1481,7 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
             saveStepFour();
             onPrevStep();
           }}>
-          Atras
+          Atrás
         </Button>
         <Button
           style={{

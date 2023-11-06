@@ -104,6 +104,7 @@ const LoginInmobiliaria = ({navigation}) => {
         size={100}
         source={require('../../assets/images/Logo.png')}
         marginTop={30}
+        backgroundColor="#eff5f5"
       />
       <Text variant="headlineMedium" style={{marginLeft: 5, marginTop: 50}}>
         Ingresar como Inmobiliaria

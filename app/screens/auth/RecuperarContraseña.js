@@ -1,7 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {Text, Button, Avatar} from 'react-native-paper';
+import React, {useState} from 'react';
+import {Text, Button, Avatar, Snackbar} from 'react-native-paper';
 import {View, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
+import axios from 'axios';
 
 const RecuperarContraseña = ({navigation, route}) => {
   const {email} = route.params;
@@ -17,6 +18,28 @@ const RecuperarContraseña = ({navigation, route}) => {
   const [errorRepeatPasswordEmpty, setErrorRepeatPasswordEmpty] =
     React.useState('');
   const [errorRepeatPassword, setErrorRepeatPassword] = React.useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [visible, setVisible] = React.useState(false);
+
+  const onToggleSnackBar = Message => {
+    setVisible(true);
+    setErrorMessage(Message);
+  };
+  const onDismissSnackBar = () => {
+    setVisible(false);
+  };
+
+  const handleRecuperar = () => {
+    axios
+      .post('http://10.0.2.2:8080/v1/auths/forgotPassword', {mail: email})
+      .then(response => {
+        console.log(response.data);
+        setPost(response.data);
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
+  };
 
   const handleButtonPress = () => {
     if (password === '') {
@@ -87,7 +110,7 @@ const RecuperarContraseña = ({navigation, route}) => {
       if (response.ok) {
         navigation.navigate('LoginInmobiliaria');
       } else {
-        setErrorSecurityValue('El código de seguridad es incorrecto.');
+        onToggleSnackBar(response.message);
       }
     } catch (error) {
       console.log(error);
@@ -95,6 +118,19 @@ const RecuperarContraseña = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
+      <Snackbar
+        wrapperStyle={{zIndex: 999, position: 'absolute'}}
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        duration={3000}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            setVisible(!visible);
+          },
+        }}>
+        {errorMessage}
+      </Snackbar>
       <Avatar.Image
         size={100}
         source={require('../../assets/images/Logo.png')}
@@ -105,7 +141,9 @@ const RecuperarContraseña = ({navigation, route}) => {
         Verificar si recibiste el mail en tu casilla con el link.
       </Text>
       <TouchableOpacity>
-        <Text style={styles.link}>Volver a enviar el mail</Text>
+        <Text style={styles.link} onPress={handleRecuperar}>
+          Volver a enviar el mail
+        </Text>
       </TouchableOpacity>
       <Text
         variant="headlineSmall"
@@ -115,6 +153,7 @@ const RecuperarContraseña = ({navigation, route}) => {
       <TextInput
         style={styles.input}
         value={securityValue}
+        keyboardType="numeric"
         onChangeText={securityValue => setSecurityValue(securityValue)}
         secureTextEntry={false}
       />
