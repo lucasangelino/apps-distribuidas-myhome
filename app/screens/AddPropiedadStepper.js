@@ -474,6 +474,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
     const payload = {
       propertyId: publicacion.id,
       propertyType: publicacion.tipoPropiedad,
+      numEnvironments: countDormitorios,
       numRooms: countDormitorios,
       numBathrooms: countBanos,
       numCars: countCocheras,

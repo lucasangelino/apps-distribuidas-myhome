@@ -116,7 +116,7 @@ const RecuperarContraseña = ({navigation, route}) => {
         style={styles.input}
         value={securityValue}
         onChangeText={securityValue => setSecurityValue(securityValue)}
-        secureTextEntry={true}
+        secureTextEntry={false}
       />
       {errorSecurityValue ? (
         <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   button: {
-    width: '50%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 100,

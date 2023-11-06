@@ -46,7 +46,7 @@ const ChangePassword = () => {
                 mode={'contained'}
                 color="#EB6440"
                 onPress={editPassword}>
-                Alguiler
+                Alquiler
             </Button>
         </View>
     )

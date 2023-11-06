@@ -11,7 +11,7 @@ const ChangeCuit = () => {
 
     return (
         <View style={styles.container}>
-            <Text>Cambiar Cuit</Text>
+            <Text>Cambiar CUIT</Text>
             <TextInput
                 mode="outlined"
                 value={newCuit}
@@ -22,7 +22,7 @@ const ChangeCuit = () => {
                 mode={'contained'}
                 color="#EB6440"
                 onPress={editCuit}>
-                Alguiler
+                CUIT
             </Button>
         </View>
     )

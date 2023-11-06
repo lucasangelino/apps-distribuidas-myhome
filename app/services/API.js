@@ -90,6 +90,7 @@ export const updatePropiedadStepThree = async ({payload}) => {
   const {
     propertyId,
     propertyType,
+    numEnvironments,
     numRooms,
     numBathrooms,
     numCars,
@@ -115,6 +116,7 @@ export const updatePropiedadStepThree = async ({payload}) => {
       body: JSON.stringify({
         propertyId: propertyId,
         propertyType: propertyType,
+        numEnvironments: numEnvironments,
         numRooms: numRooms,
         numBathrooms: numBathrooms,
         numCars: numCars,
@@ -215,8 +217,8 @@ export const getPropiedades = async ({filters} = {}) => {
   const token = userData.token;
   const userId = userData.id;
 
-  const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title&userId=${userId}`;
-
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title`;
+  console.log(token);
   try {
     const response = await fetch(URL, {
       method: 'GET',
