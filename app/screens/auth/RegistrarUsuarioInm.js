@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {Text, Button, Avatar, Checkbox} from 'react-native-paper';
+import {Text, Button, Avatar, Checkbox, Snackbar} from 'react-native-paper';
 import {
   View,
   TextInput,
@@ -8,7 +8,6 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import axios from 'axios';
 
 const RegistrarUsuarioInm = ({navigation}) => {
   const [cuit, setCuit] = useState('');
@@ -31,7 +30,17 @@ const RegistrarUsuarioInm = ({navigation}) => {
   const [errorPhoneNumberLength, setErrorPhoneNumberLength] = useState('');
   const [checked, setChecked] = React.useState(false);
   const [errorChecked, setErrorChecked] = useState('');
-  const [post, setPost] = useState(null);
+  const [visible, setVisible] = React.useState(false);
+
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const onToggleSnackBar = Message => {
+    setVisible(true);
+    setErrorMessage(Message);
+  };
+  const onDismissSnackBar = () => {
+    setVisible(false);
+  };
 
   const handleButtonPress = () => {
     if (cuit === '') {
@@ -115,9 +124,9 @@ const RegistrarUsuarioInm = ({navigation}) => {
       setErrorPhoneNumberEmpty('Completar con un número de teléfono.');
     } else {
       setErrorPhoneNumberEmpty('');
-      if (phoneNumber.length < 10) {
+      if (phoneNumber.length !== 10) {
         setErrorPhoneNumberLength(
-          'El número de teléfono debe tener al menos 8 dígitos.',
+          'El número de teléfono debe tener 10 dígitos.',
         );
       } else {
         setErrorPhoneNumberLength('');
@@ -153,7 +162,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
     formData.append('mail', email);
     formData.append('contactMail', email);
     formData.append('fantasyName', fantasyName);
-    formData.append('phone', phoneNumber);
+    formData.append('phone', `+549${phoneNumber}`);
     formData.append('cuit', cuit);
 
     const request = await fetch('http://10.0.2.2:8080/v1/users', {
@@ -164,14 +173,37 @@ const RegistrarUsuarioInm = ({navigation}) => {
     console.log('Register response: ', response);
     if (response.result === 'ok') {
       navigation.navigate('ActivarCuenta');
+    } else {
+      if (response.ok === false) {
+        if (response.errors) {
+          onToggleSnackBar(Object.values(response.errors)[0].msg);
+          console.log(Object.values(response.errors)[0].msg);
+        } else {
+          onToggleSnackBar(response.message);
+          console.log(response.message);
+        }
+      }
     }
   };
   return (
     <View style={styles.container}>
       <ScrollView>
+        <Snackbar
+          wrapperStyle={{zIndex: 999, position: 'absolute'}}
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          duration={3000}
+          action={{
+            label: 'OK',
+            onPress: () => {
+              setVisible(!visible);
+            },
+          }}>
+          {errorMessage}
+        </Snackbar>
         <Avatar.Image
           size={100}
-          style={{marginTop: 30}}
+          style={{marginTop: 30, alignContent: 'center', alignSelf: 'center'}}
           source={require('../../assets/images/Logo.png')}
           backgroundColor="#eff5f5"
         />
@@ -247,7 +279,8 @@ const RegistrarUsuarioInm = ({navigation}) => {
         <TextInput
           style={styles.input}
           value={phoneNumber}
-          onChangeText={phone => setPhoneNumber(phone)}
+          keyboardType="numeric"
+          onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
           secureTextEntry={false}
         />
         {errorPhoneNumberEmpty ? (
@@ -348,13 +381,15 @@ const RegistrarUsuarioInm = ({navigation}) => {
           onPress={() => handleButtonPress()}>
           Registrar
         </Button>
-        <TouchableOpacity>
-          <Text
-            style={styles.link}
-            onPress={() => navigation.navigate('RecuperarMail')}>
-            Olvidé mi contraseña
-          </Text>
-        </TouchableOpacity>
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity>
+            <Text
+              style={styles.link}
+              onPress={() => navigation.navigate('RecuperarMail')}>
+              Olvidé mi contraseña
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -391,7 +426,10 @@ const styles = StyleSheet.create({
   },
   link: {
     color: '#0377ff',
-    marginTop: 50,
+    marginTop: 35,
+    marginBottom: 20,
+    alignContent: 'center',
+    alignItems: 'center',
   },
   checkbox: {
     height: 100,

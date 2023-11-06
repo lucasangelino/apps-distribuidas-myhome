@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#eff5f5',
   },
   button: {
     width: '100%',

@@ -14,8 +14,8 @@ const initialStatePublicacion = {
   publicada: false,
   tipoOperacion: 'Venta',
   tipoPropiedad: 'Casa',
-  titulo: 'Propiedad en venta',
-  descripcion: 'Propiedad en venta',
+  titulo: 'Escribe un Titulo aquí',
+  descripcion: 'Escribe una Descripción aquí',
   direccion: {
     calleAltrura: '',
     ciudad: '',
