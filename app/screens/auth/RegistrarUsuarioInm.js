@@ -172,7 +172,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
     const response = await request.json();
     console.log('Register response: ', response);
     if (response.result === 'ok') {
-      navigation.navigate('Login');
+      navigation.navigate('ActivarCuenta');
     } else {
       if (response.ok === false) {
         if (response.errors) {
@@ -254,8 +254,8 @@ const RegistrarUsuarioInm = ({navigation}) => {
           CUIT
         </Text>
         <TextInput
-          style={styles.inputCuit}
           keyboardType="numeric"
+          style={styles.inputCuit}
           value={cuit}
           onChangeText={cuit => setCuit(cuit)}
         />

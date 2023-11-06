@@ -7,10 +7,9 @@ import PropiedadCard from '../../components/PropiedadCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../context/AppContext';
 import {getPropiedades} from '../../services/API';
-import {Text} from 'react-native-paper';
 import NoPropiedades from '../../components/NoPropiedades';
 
-function InmobiliariaHome() {
+function InmobiliariaHome({navigation}) {
   const {auth, setAuth} = useContext(AuthContext);
   const [propiedades, setPropiedades] = React.useState([]);
 
@@ -60,11 +59,13 @@ function InmobiliariaHome() {
 
   useEffect(() => {
     getUser();
-    getUserPropiedades();
-  }, []);
+    const loadPropertites = navigation.addListener('focus', () => {
+      getUserPropiedades();
+    });
+    return loadPropertites;
+  }, [navigation]);
 
   const renderPropiedadCard = ({item}) => {
-    console.log('item', item);
     return <PropiedadCard propiedad={item} />;
   };
   return (
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
   },
   propiedadesList: {
     marginTop: 0,
+    marginBottom: 150,
   },
   propiedadesItem: {
     padding: 20,
