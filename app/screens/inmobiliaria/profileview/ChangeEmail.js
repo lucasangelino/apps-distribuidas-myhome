@@ -21,7 +21,7 @@ const ChangeEmail = () => {
                 mode={'contained'}
                 color="#EB6440"
                 onPress={editEmail}>
-                Alguiler
+                Alquiler
             </Button>
         </View>
     )

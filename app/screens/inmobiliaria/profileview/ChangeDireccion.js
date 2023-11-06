@@ -15,7 +15,7 @@ const ChangeDireccion = () => {
 
     return (
         <View style={styles.container}>
-            <Text>Cambiar Direccion</Text>
+            <Text>Cambiar Dirección</Text>
 
             <TextInput
                 mode="outlined"
@@ -51,7 +51,7 @@ const ChangeDireccion = () => {
                 mode={'contained'}
                 color="#EB6440"
                 onPress={editDireccion}>
-                Alguiler
+                Alquiler
             </Button>
         </View>
     )

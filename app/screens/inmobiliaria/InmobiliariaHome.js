@@ -72,7 +72,7 @@ function InmobiliariaHome() {
       <View style={styles.container}>
         <Heading>Mis propiedades</Heading>
 
-        {true ? (
+        {propiedades.length === 0 ? (
           <NoPropiedades />
         ) : (
           <FlatList

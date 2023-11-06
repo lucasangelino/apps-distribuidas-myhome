@@ -24,7 +24,7 @@ const PropiedadCard = ({propiedad}) => {
           <Price>{`${priceFormater({price})}`}</Price>
           <Expenses>{`${priceFormater({price: expPrice})}`}</Expenses>
         </View>
-        <Location>{location.country}</Location>
+        <Location>{location?.country}</Location>
         <Amenities />
         <Description>{description}</Description>
       </Card.Content>
