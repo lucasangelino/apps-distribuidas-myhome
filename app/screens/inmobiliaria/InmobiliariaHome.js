@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../context/AppContext';
 import {getPropiedades} from '../../services/API';
 import {Text} from 'react-native-paper';
+import NoPropiedades from '../../components/NoPropiedades';
 
 function InmobiliariaHome() {
   const {auth, setAuth} = useContext(AuthContext);
@@ -71,16 +72,16 @@ function InmobiliariaHome() {
       <View style={styles.container}>
         <Heading>Mis propiedades</Heading>
 
-        {propiedades.length > 0 ? (
-          <Text style={{color: '#000'}}>No hay propiedades</Text>
-        ) : null}
-
-        <FlatList
-          style={styles.propiedadesList}
-          data={propiedades}
-          renderItem={({item}) => renderPropiedadCard({item})}
-          keyExtractor={item => item.id}
-        />
+        {true ? (
+          <NoPropiedades />
+        ) : (
+          <FlatList
+            style={styles.propiedadesList}
+            data={propiedades}
+            renderItem={({item}) => renderPropiedadCard({item})}
+            keyExtractor={item => item.id}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

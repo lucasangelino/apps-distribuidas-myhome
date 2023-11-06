@@ -10,7 +10,8 @@ const PropiedadCard = ({propiedad}) => {
   const {id, description, contract_types, location, status, multimedia} =
     propiedad;
   const {price, expPrice} = contract_types[0];
-  const uri = multimedia.length > 0 ? multimedia[0].url : '';
+  const uri =
+    multimedia.length > 0 ? multimedia[0].url : 'https://picsum.photos/700';
   return (
     <Card style={styles.cardContainer} key={id} mode="outlined" elevation={5}>
       <View style={styles.cardImageContainer}>
@@ -30,7 +31,7 @@ const PropiedadCard = ({propiedad}) => {
       <Card.Actions>
         <ActionButton
           disable={true}
-          label="EDITAR (2da entrega)"
+          label="EDITAR (disponible en 2da entrega)"
           fullWith
           onClick={() => console.log(id)}
         />
