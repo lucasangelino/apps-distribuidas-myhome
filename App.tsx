@@ -20,7 +20,10 @@ function App() {
     return <AuthRouter />;
   }
 
-  if (auth.user.isInmobiliaria) {
+  console.log('auth.user.userType', auth.user.userType);
+  console.log('auth.user.userType', auth.user);
+
+  if (auth.user.userType === 'Inmobiliaria') {
     return <InmobiliariaApp />;
   }
 

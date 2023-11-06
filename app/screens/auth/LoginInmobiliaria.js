@@ -2,15 +2,14 @@
 import React, {useState, useContext} from 'react';
 import {Text, Button, Avatar} from 'react-native-paper';
 import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
-import axios from 'axios';
 import {AuthContext} from '../../context/AppContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginInmobiliaria = ({navigation}) => {
   const {auth, setAuth} = useContext(AuthContext);
 
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
-  const [post, setPost] = useState(null);
   const [errorMailEmpty, setErrorMailEmpty] = useState('');
   const [errorWrongMail, setErrorWrongMail] = useState('');
   const [errorPasswordEmpty, setErrorPasswordEmpty] = useState('');
@@ -63,16 +62,31 @@ const LoginInmobiliaria = ({navigation}) => {
       });
       const res = await req.json();
       if (res.ok) {
+        const jsonValue = JSON.stringify({
+          id: 1,
+          isInmobiliaria: true,
+          name: '',
+          email: 'res.mail',
+          photoUrl: '',
+          token: res.token,
+        });
+        await AsyncStorage.setItem('userToken', jsonValue);
         setAuth({
           hasUser: true,
           loggedIn: true,
           user: {
-            id: 1,
-            isInmobiliaria: true,
+            contactMail: '',
+            cuit: '',
+            fantasyName: '',
+            firstName: '',
+            id: '',
+            mail: '',
+            phone: '',
+            photo: '',
+            status: '',
+            userType: 'Inmobiliaria',
             name: '',
-            email: 'res.mail',
-            photoUrl: '',
-            idToken: res.token,
+            email: '',
           },
         });
       } else {

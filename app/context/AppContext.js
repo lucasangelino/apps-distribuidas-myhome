@@ -5,11 +5,18 @@ const initialAuthState = {
   hasUser: false,
   loggedIn: false,
   user: {
-    isInmobiliaria: false,
+    contactMail: '',
+    cuit: '',
+    fantasyName: '',
+    firstName: '',
+    id: '',
+    mail: '',
+    phone: '',
+    photo: '',
+    status: '',
+    userType: '',
     name: '',
     email: '',
-    photoUrl: '',
-    idToken: '',
   },
 };
 

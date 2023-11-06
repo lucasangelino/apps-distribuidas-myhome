@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import Heading from '../../components/Heading';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import uuid from 'react-native-uuid';
+import {AuthContext} from '../../context/AppContext';
 
 const Comentarios = () => {
+  const {auth, _} = React.useContext(AuthContext);
+  console.log(auth);
   const fetchedPoints = 4.5;
   const fetchedComments = [
     {
@@ -42,7 +45,7 @@ const Comentarios = () => {
       <View style={styles.commentContainer}>
         {fetchedComments.map(comment => (
           <>
-            <Comment key={comment.id} {...comment} />
+            <Comment {...comment} />
             <Divider key={uuid.v4()} />
           </>
         ))}
@@ -53,7 +56,7 @@ const Comentarios = () => {
 
 const Comment = ({id, stars, text, date, author}) => {
   return (
-    <View style={styles.comment} key={id}>
+    <View style={styles.comment} key={uuid.v4()}>
       <Stars stars={stars} />
       <Text style={{marginVertical: 10}}>{text}</Text>
       <View style={styles.commentFooter}>
@@ -82,7 +85,11 @@ const Stars = ({stars}) => {
   for (let i = 0; i < emptyStars; i++) {
     starsArray.push(<Ionicons key={uuid.v4()} name="star-outline" size={20} />);
   }
-  return <View style={styles.starContainer}>{starsArray}</View>;
+  return (
+    <View key={uuid.v4()} style={styles.starContainer}>
+      {starsArray}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
