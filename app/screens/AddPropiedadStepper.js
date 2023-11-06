@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   StyleSheet,
   View,
   TextInput as TextAreaInput,
   Image,
 } from 'react-native';
-import {Text, Button, TextInput, Chip, Checkbox} from 'react-native-paper';
+import {Text, Button, TextInput, Checkbox} from 'react-native-paper';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import Dropdown from 'react-native-input-select';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -1100,7 +1100,6 @@ const StepThree = ({onNextStep, onPrevStep}) => {
 const StepFour = ({onPrevStep, onSubmitSteps}) => {
   const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
 
-  const [amenitie, setAmenitie] = useState('');
   const [amenitiesList, setAmenitiesList] = useState(publicacion.amenities);
   const [orientacion, setOrientacion] = useState(publicacion.orientacion);
   const [disposicion, setDisposicion] = useState(publicacion.disposicion);
@@ -1183,7 +1182,9 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
       photos: images,
     };
     const data = await updatePropiedadStepFour({payload}); // TODO: error hanlder si se rompio
-    onSubmitSteps();
+    if (data.success) {
+      onSubmitSteps();
+    }
   };
 
   const saveStepFour = () => {
@@ -1261,14 +1262,14 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
         onValueChange={itemValue => setOrientacion(itemValue)}
         placeholder="Elige una opcion"
         options={[
-          {label: 'N', value: 'norte'},
-          {label: 'S', value: 'sur'},
-          {label: 'E', value: 'este'},
-          {label: 'O', value: 'oeste'},
-          {label: 'SE', value: 'sureste'},
-          {label: 'SO', value: 'suroeste'},
-          {label: 'NE', value: 'noreste'},
-          {label: 'NO', value: 'noroeste'},
+          {label: 'N', value: 'N'},
+          {label: 'S', value: 'S'},
+          {label: 'E', value: 'E'},
+          {label: 'O', value: 'O'},
+          {label: 'NE', value: 'NE'},
+          {label: 'NO', value: 'NO'},
+          {label: 'SE', value: 'SE'},
+          {label: 'SO', value: 'SO'},
         ]}
         selectedValue={orientacion}
         primaryColor={'#EB6440'}
@@ -1326,8 +1327,8 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
         onValueChange={itemValue => setDisposicion(itemValue)}
         placeholder="Elige una opcion"
         options={[
-          {label: 'Frente', value: 'frente'},
-          {label: 'Contrafrente', value: 'contrafrente'},
+          {label: 'Frente', value: 'Frente'},
+          {label: 'Contrafrente', value: 'Contrafrente'},
         ]}
         selectedValue={disposicion}
         primaryColor={'#EB6440'}

@@ -3,10 +3,13 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import InmobiliariaRoutesFromBottomNav from './app/components/navigation/InmobiliariaRoutesFromBottomNav';
 import UserBottomNav from './app/components/navigation/userBottomNav';
-import Login from './app/screens/LoginWithGoogle';
 import {AddPropiedadStepper} from './app/screens/AddPropiedadStepper';
 import {AuthContext} from './app/context/AppContext';
-import AppBar from './app/components/appbar/AppBar';
+import Login from './app/screens/auth/Login';
+import LoginInmobiliaria from './app/screens/auth/LoginInmobiliaria';
+import RegistrarUsuarioInm from './app/screens/auth/RegistrarUsuarioInm';
+import RecuperarMail from './app/screens/auth/RecuperarMail';
+import RecuperarContraseña from './app/screens/auth/RecuperarContraseña';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,7 +20,7 @@ function App() {
     return <AuthRouter />;
   }
 
-  if (true) {
+  if (auth.user.isInmobiliaria) {
     return <InmobiliariaApp />;
   }
 
@@ -32,6 +35,26 @@ const AuthRouter = () => {
         <Stack.Screen
           name="Login"
           component={Login}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="LoginInmobiliaria"
+          component={LoginInmobiliaria}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="RegistrarUsuarioInm"
+          component={RegistrarUsuarioInm}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="RecuperarMail"
+          component={RecuperarMail}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="RecuperarContraseña"
+          component={RecuperarContraseña}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

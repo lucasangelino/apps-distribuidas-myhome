@@ -3,7 +3,6 @@ const {View, StyleSheet, SafeAreaView, FlatList} = require('react-native');
 import PropiedadCard from '../components/PropiedadCard';
 import Heading from '../components/Heading';
 import propiedades from '../mocks/propiedadesList.json';
-import AppBar from '../components/appbar/AppBar';
 
 function Home() {
   const renderPropiedadCard = ({item}) => {

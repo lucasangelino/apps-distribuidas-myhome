@@ -46,8 +46,8 @@ const initialStatePublicacion = {
   expensas: 0,
   expensasMoneda: 'US$',
   amenities: [],
-  orientacion: 'norte',
-  disposcion: 'frente',
+  orientacion: 'N',
+  disposcion: 'Frente',
   images: [],
   videoUrl: '',
 };
