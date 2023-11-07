@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {Text, Button, Avatar, Snackbar} from 'react-native-paper';
 import {View, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 import axios from 'axios';
+import {BACKEND_URL, API_VERSION} from '@env';
 
 const RecuperarContraseña = ({navigation, route}) => {
   const {email} = route.params;
@@ -31,7 +32,7 @@ const RecuperarContraseña = ({navigation, route}) => {
 
   const handleRecuperar = () => {
     axios
-      .post('http://10.0.2.2:8080/v1/auths/forgotPassword', {mail: email})
+      .post(`${BACKEND_URL}/${API_VERSION}/auths/forgotPassword`, {mail: email})
       .then(response => {
         console.log(response.data);
         setPost(response.data);
@@ -99,7 +100,7 @@ const RecuperarContraseña = ({navigation, route}) => {
       formData.append('repeatPassword', repeatPassword);
 
       const request = await fetch(
-        'http://10.0.2.2:8080/v1/auths/resetPassword',
+        `${BACKEND_URL}/${API_VERSION}/auths/resetPassword`,
         {
           method: 'POST',
           body: formData,

@@ -1,7 +1,6 @@
+/* eslint-disable prettier/prettier */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const BACKEND_URL = 'http://10.0.2.2:8080';
-const API_VERSION = 'v1';
+import {BACKEND_URL, API_VERSION} from '@env';
 
 export const altaPropiedad = async ({payload}) => {
   const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
@@ -18,15 +17,15 @@ export const altaPropiedad = async ({payload}) => {
         propertyType: tipoPropiedad,
         title: propiedadTitle,
         description: propiedadDes,
+        token: token,
       }),
       headers: {
-        // TODO: remove token
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
     });
 
     const responseJson = await response.json();
+    console.log('responseJson', responseJson);
     return {
       status: response.status,
       id: responseJson.data.id,
@@ -72,7 +71,7 @@ export const updatePropiedad = async ({payload}) => {
       }),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: 'Bearer ' + token,
       },
     });
     const responseJson = await response.json();
@@ -131,7 +130,7 @@ export const updatePropiedadStepThree = async ({payload}) => {
       }),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: 'Bearer ' + token,
       },
     });
     const responseJson = await response.json();
@@ -161,29 +160,28 @@ export const updatePropiedadStepFour = async ({payload}) => {
     photos,
   } = payload;
 
-  const formData = new FormData();
-  formData.append('propertyId', propertyId);
-  formData.append('sum', sum);
-  formData.append('swimming_pool', swimming_pool);
-  formData.append('gym', gym);
-  formData.append('sport_field', sport_field);
-  formData.append('laundry', laundry);
-  formData.append('sauna', sauna);
-  formData.append('security', security);
-  formData.append('game_room', game_room);
-  formData.append('position', position);
-  formData.append('orientation', orientation);
-
-  photos.forEach((element, idx) => {
-    formData.append('photos[' + idx + ']', element);
-  });
-
-  console.log('formData ::::::::::::', formData);
-
   try {
     const jsonValue = await AsyncStorage.getItem('userToken');
     const userData = JSON.parse(jsonValue);
     const token = userData.token;
+
+    const formData = new FormData();
+    formData.append('propertyId', propertyId);
+    formData.append('sum', sum);
+    formData.append('swimming_pool', swimming_pool);
+    formData.append('gym', gym);
+    formData.append('sport_field', sport_field);
+    formData.append('laundry', laundry);
+    formData.append('sauna', sauna);
+    formData.append('security', security);
+    formData.append('game_room', game_room);
+    formData.append('position', position);
+    formData.append('orientation', orientation);
+    photos.forEach((element, idx) => {
+      formData.append('photos[' + idx + ']', element);
+    });
+    console.log('formData ::::::::::::', formData);
+    console.log('URL ::::::::::::', photos);
 
     const response = await fetch(URL, {
       method: 'PATCH',
@@ -191,12 +189,13 @@ export const updatePropiedadStepFour = async ({payload}) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
+        Authorization: 'Bearer ' + token,
       },
     });
     const responseJson = await response.json();
     console.log('responseJson ::::::::::::', responseJson);
     const status = response.status;
+    console.log('status ::::::::::::', status);
     return {
       success: status === 200,
       status: status,
@@ -216,19 +215,17 @@ export const getPropiedades = async ({filters} = {}) => {
   const userData = JSON.parse(jsonValue);
   const token = userData.token;
 
-  const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title`;
-  console.log(token);
+  // TODO: FIX THIS. Token should be in body, not in URL
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title&token=${token}`;
   try {
     const response = await fetch(URL, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
       },
     });
     const responseJson = await response.json();
-    console.log('get propiedades');
-    console.log('responseJson', responseJson.data);
+    console.log('responseJson', responseJson);
     return {
       status: response.status,
       data: responseJson.data,

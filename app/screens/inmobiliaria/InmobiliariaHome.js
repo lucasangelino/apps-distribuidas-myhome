@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../context/AppContext';
 import {getPropiedades} from '../../services/API';
 import NoPropiedades from '../../components/NoPropiedades';
+import {BACKEND_URL, API_VERSION} from '@env';
 
 function InmobiliariaHome({navigation}) {
   const {auth, setAuth} = useContext(AuthContext);
@@ -20,7 +21,7 @@ function InmobiliariaHome({navigation}) {
       const userData = JSON.parse(jsonValue);
       const token = userData.token;
       const id = userData.id;
-      const req = await fetch(`http://10.0.2.2:8080/v1/users/id/${id}`, {
+      const req = await fetch(`${BACKEND_URL}/${API_VERSION}/users/id/${id}`, {
         method: 'GET',
         headers: {
           Accept: 'application/json',

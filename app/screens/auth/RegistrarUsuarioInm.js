@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
+import {BACKEND_URL, API_VERSION} from '@env';
 
 const RegistrarUsuarioInm = ({navigation}) => {
   const [cuit, setCuit] = useState('');
@@ -165,7 +166,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
     formData.append('phone', `+549${phoneNumber}`);
     formData.append('cuit', cuit);
 
-    const request = await fetch('http://10.0.2.2:8080/v1/users', {
+    const request = await fetch(`${BACKEND_URL}/${API_VERSION}/users`, {
       method: 'POST',
       body: formData,
     });

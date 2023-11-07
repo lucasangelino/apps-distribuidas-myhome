@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {Text, Button, Avatar} from 'react-native-paper';
 import {View, TextInput, StyleSheet} from 'react-native';
 import axios from 'axios';
+import {BACKEND_URL, API_VERSION} from '@env';
 
 const RecuperarMail = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -21,7 +22,7 @@ const RecuperarMail = ({navigation}) => {
   };
   const handleRecuperar = () => {
     axios
-      .post('http://10.0.2.2:8080/v1/auths/forgotPassword', {mail: email})
+      .post(`${BACKEND_URL}/${API_VERSION}/auths/forgotPassword`, {mail: email})
       .then(response => {
         console.log(response.data);
         setPost(response.data);

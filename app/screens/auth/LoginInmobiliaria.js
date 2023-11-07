@@ -4,6 +4,7 @@ import {Text, Button, Avatar} from 'react-native-paper';
 import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import {AuthContext} from '../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BACKEND_URL, API_VERSION} from '@env';
 
 const LoginInmobiliaria = ({navigation}) => {
   const {auth, setAuth} = useContext(AuthContext);
@@ -50,7 +51,7 @@ const LoginInmobiliaria = ({navigation}) => {
   const handleLogin = async () => {
     setWrongCredentials(false);
     try {
-      const req = await fetch('http://10.0.2.2:8080/v1/auths', {
+      const req = await fetch(`${BACKEND_URL}/${API_VERSION}/auths`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,6 +63,7 @@ const LoginInmobiliaria = ({navigation}) => {
       });
       const res = await req.json();
       if (res.ok) {
+        console.log('res: >>>>>>>>>>' + res.ok);
         const jsonValue = JSON.stringify({
           id: 1,
           isInmobiliaria: true,
@@ -71,6 +73,7 @@ const LoginInmobiliaria = ({navigation}) => {
           token: res.token,
         });
         await AsyncStorage.setItem('userToken', jsonValue);
+
         setAuth({
           hasUser: true,
           loggedIn: true,
