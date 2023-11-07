@@ -29,9 +29,9 @@ npm run ios
 
 # Equipo:
 
-| Nombre         | LU      |
-| -------------- | ------- |
-| Lucas Angelino | 1083708 |
-| Axel Lacuesta  | 0000000 |
-| Gabriel        | 0000000 |
-| Agustina       | 0000000 |
+| Nombre           | LU      |
+| -----------------| ------- |
+| Lucas Angelino   | 1083708 |
+| Axel Lacuesta    | 1117695 |
+| Gabriel Rojas    | 1099809 |
+| Agustina Streule | 1110159 |
