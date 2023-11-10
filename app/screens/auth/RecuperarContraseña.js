@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Text, Button, Avatar, Snackbar} from 'react-native-paper';
 import {View, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 import axios from 'axios';
-import {BACKEND_URL, API_VERSION} from '@env';
+import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 const RecuperarContraseña = ({navigation, route}) => {
   const {email} = route.params;

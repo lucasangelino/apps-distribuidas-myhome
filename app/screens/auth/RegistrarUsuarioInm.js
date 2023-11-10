@@ -8,7 +8,7 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import {BACKEND_URL, API_VERSION} from '@env';
+import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 const RegistrarUsuarioInm = ({navigation}) => {
   const [cuit, setCuit] = useState('');

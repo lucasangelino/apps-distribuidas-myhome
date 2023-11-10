@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Text, Button, Avatar} from 'react-native-paper';
 import {View, TextInput, StyleSheet} from 'react-native';
 import axios from 'axios';
-import {BACKEND_URL, API_VERSION} from '@env';
+import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 const RecuperarMail = ({navigation}) => {
   const [email, setEmail] = useState('');

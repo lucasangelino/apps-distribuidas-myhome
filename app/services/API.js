@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BACKEND_URL, API_VERSION} from '@env';
+import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 export const altaPropiedad = async ({payload}) => {
   const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
@@ -216,12 +216,14 @@ export const getPropiedades = async ({filters} = {}) => {
   const token = userData.token;
 
   // TODO: FIX THIS. Token should be in body, not in URL
-  const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title&token=${token}`;
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title`;
+  console.log(URL + " token " + token)
   try {
     const response = await fetch(URL, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
+        Authorization:'Bearer ' + token
       },
     });
     const responseJson = await response.json();
