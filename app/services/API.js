@@ -215,9 +215,8 @@ export const getPropiedades = async ({filters} = {}) => {
   const userData = JSON.parse(jsonValue);
   const token = userData.token;
 
-  // TODO: FIX THIS. Token should be in body, not in URL
   const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title`;
-  console.log(URL + " token " + token)
+
   try {
     const response = await fetch(URL, {
       method: 'GET',
