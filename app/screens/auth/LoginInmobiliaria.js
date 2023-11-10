@@ -72,7 +72,7 @@ const LoginInmobiliaria = ({navigation}) => {
           photoUrl: '',
           token: res.token,
         });
-        console.log(jsonValue)
+
         await AsyncStorage.setItem('userToken', jsonValue);
 
         setAuth({
