@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../context/AppContext';
 import {getPropiedades} from '../../services/API';
 import NoPropiedades from '../../components/NoPropiedades';
-import {BACKEND_URL, API_VERSION} from '@env';
+import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 function InmobiliariaHome({navigation}) {
   const {auth, setAuth} = useContext(AuthContext);

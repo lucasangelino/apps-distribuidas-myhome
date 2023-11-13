@@ -4,7 +4,7 @@ import {Text, Button, Avatar} from 'react-native-paper';
 import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import {AuthContext} from '../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BACKEND_URL, API_VERSION} from '@env';
+import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 const LoginInmobiliaria = ({navigation}) => {
   const {auth, setAuth} = useContext(AuthContext);
@@ -72,6 +72,7 @@ const LoginInmobiliaria = ({navigation}) => {
           photoUrl: '',
           token: res.token,
         });
+
         await AsyncStorage.setItem('userToken', jsonValue);
 
         setAuth({
