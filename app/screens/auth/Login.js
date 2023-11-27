@@ -19,12 +19,9 @@ const Login = ({navigation}) => {
   const {setAuth} = React.useContext(AuthContext);
 
   const handleLoginWithGoogle = async () => {
-    console.log('login');
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-
-      console.log('userInfo.idToken', userInfo.idToken);
 
       const backLogin = await fetch(
         `${BACKEND_URL}/${API_VERSION}/authGoogle`,
@@ -38,7 +35,16 @@ const Login = ({navigation}) => {
         },
       );
       const backLoginJson = await backLogin.json();
-      await AsyncStorage.setItem('userToken', backLoginJson.tokenSend);
+
+      const auth = JSON.stringify({
+        id: 1,
+        isInmobiliaria: false,
+        name: '',
+        email: 'res.mail',
+        photoUrl: '',
+        token: backLoginJson.tokenSend,
+      });
+      await AsyncStorage.setItem('userToken', auth);
 
       setAuth({
         hasUser: true,
@@ -53,7 +59,7 @@ const Login = ({navigation}) => {
           mail: '',
           phone: '',
           status: '',
-          userType: 'User',
+          userType: 'Usuario',
           name: '',
           email: userInfo.user.email,
           photo: userInfo.user.photo,

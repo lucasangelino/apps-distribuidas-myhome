@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useContext} from 'react';
+// remove modeule import and change it
 const {View, StyleSheet, SafeAreaView, FlatList} = require('react-native');
 import Heading from '../../components/Heading';
 import PropiedadCard from '../../components/PropiedadCard';
