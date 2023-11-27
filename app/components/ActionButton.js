@@ -2,8 +2,9 @@ import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
 
-const ActionButton = ({label, onClick, fullWith = false}) => (
+const ActionButton = ({label, onClick, fullWith = false, disable}) => (
   <Button
+    disabled={disable}
     style={fullWith ? styles.actionButtonFullWith : ''}
     uppercase={true}
     mode="contained"
