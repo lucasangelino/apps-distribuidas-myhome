@@ -9,7 +9,8 @@ import {priceFormater} from '../utils/utils';
 const PropiedadCard = ({propiedad}) => {
   const {id, description, contract_types, location, status, multimedia} =
     propiedad;
-  const { price = 0, expPrice = 0 } = contract_types.length > 0 ? contract_types[0] : {};
+  const {price = 0, expPrice = 0} =
+    contract_types.length > 0 ? contract_types[0] : {};
   const uri =
     multimedia.length > 0 ? multimedia[0].url : 'https://picsum.photos/700';
   return (

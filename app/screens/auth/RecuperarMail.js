@@ -21,6 +21,7 @@ const RecuperarMail = ({navigation}) => {
     }
   };
   const handleRecuperar = () => {
+    console.log('BACK: ', BACKEND_URL);
     axios
       .post(`${BACKEND_URL}/${API_VERSION}/auths/forgotPassword`, {mail: email})
       .then(response => {

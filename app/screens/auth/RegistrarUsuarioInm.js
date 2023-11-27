@@ -165,17 +165,22 @@ const RegistrarUsuarioInm = ({navigation}) => {
     formData.append('fantasyName', fantasyName);
     formData.append('phone', `+549${phoneNumber}`);
     formData.append('cuit', cuit);
+    console.log('API_VERSION: ', API_VERSION);
 
-    const request = await fetch(`${BACKEND_URL}/${API_VERSION}/users`, {
-      method: 'POST',
-      body: formData,
-    });
+    const request = await fetch(
+      `${'http://10.0.2.2:8080'}/${API_VERSION}/users`,
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
     const response = await request.json();
     console.log('Register response: ', response);
     if (response.result === 'ok') {
       navigation.navigate('ActivarCuenta');
     } else {
       if (response.ok === false) {
+        console.log('response.message ', response.message);
         if (response.errors) {
           onToggleSnackBar(Object.values(response.errors)[0].msg);
           console.log(Object.values(response.errors)[0].msg);

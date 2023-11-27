@@ -1,9 +1,51 @@
 /* eslint-disable react-native/no-inline-styles */
-import * as React from 'react';
+import React, {useContext} from 'react';
 import {Text, Button, Avatar, Divider} from 'react-native-paper';
 import {View, StyleSheet} from 'react-native';
+import {AuthContext} from '../../context/AppContext';
+
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+GoogleSignin.configure({
+  webClientId:
+    '177948603328-jv1f0k27kgu2578hkc9pofv2hvcpritv.apps.googleusercontent.com',
+});
 
 const Login = ({navigation}) => {
+  const {setAuth} = React.useContext(AuthContext);
+
+  const handleLoginWithGoogle = async () => {
+    console.log('login');
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log('userInfo', userInfo);
+      setAuth({
+        hasUser: true,
+        loggedIn: true,
+        user: {
+          isInmobiliaria: false,
+          name: userInfo.user.name,
+          email: userInfo.user.email,
+          photoUrl: userInfo.user.photo,
+          idToken: userInfo.idToken,
+        },
+      });
+    } catch (error) {
+      console.log('error', error.code);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
   return (
     <View style={styles.container}>
       <Avatar.Image
@@ -26,7 +68,7 @@ const Login = ({navigation}) => {
           borderRadius: 10,
         }}
         mode="contained"
-        onPress={() => navigation.navigate('Hffffome')}>
+        onPress={handleLoginWithGoogle}>
         Continuar con Google
       </Button>
       <View
