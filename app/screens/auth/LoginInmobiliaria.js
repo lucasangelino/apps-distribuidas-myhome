@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 const LoginInmobiliaria = ({navigation}) => {
-  const {auth, setAuth} = useContext(AuthContext);
+  const {_, setAuth} = useContext(AuthContext);
 
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
@@ -63,7 +63,6 @@ const LoginInmobiliaria = ({navigation}) => {
       });
       const res = await req.json();
       if (res.ok) {
-        console.log('res: >>>>>>>>>>' + res.ok);
         const jsonValue = JSON.stringify({
           id: 1,
           isInmobiliaria: true,
