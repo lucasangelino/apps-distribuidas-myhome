@@ -21,20 +21,20 @@ const UserBottomNav = () => {
           let iconName;
           if (route.name === 'UserHome') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'UserMisAlquileres') {
+          } else if (route.name === 'Mis Alquileres') {
             iconName = focused ? 'chatbubble' : 'chatbubble-outline';
-          } else if (route.name === 'UserFavoritos') {
+          } else if (route.name === 'Favoritos') {
             iconName = focused ? 'heart' : 'heart-outline';
-          } else if (route.name === 'UserProfile') {
+          } else if (route.name === 'Perfil') {
             iconName = focused ? 'person' : 'person-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}>
       <Tab.Screen name="UserHome" component={UserHome} />
-      <Tab.Screen name="UserMisAlquileres" component={UserMisAlquileres} />
-      <Tab.Screen name="UserFavoritos" component={UserFavoritos} />
-      <Tab.Screen name="UserProfile" component={UserProfile} />
+      <Tab.Screen name="Mis Alquileres" component={UserMisAlquileres} />
+      <Tab.Screen name="Favoritos" component={UserFavoritos} />
+      <Tab.Screen name="Perfil" component={UserProfile} />
     </Tab.Navigator>
   );
 };

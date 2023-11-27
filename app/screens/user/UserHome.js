@@ -4,6 +4,7 @@ import Heading from '../../components/Heading';
 import NoPropiedades from '../../components/NoPropiedades';
 import PropiedadCard from '../../components/PropiedadCard';
 import {getNearestProperties} from '../../services/API';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const UserHome = () => {
   const [propiedades, setPropiedades] = useState([]);
@@ -12,7 +13,6 @@ const UserHome = () => {
   }, []);
 
   const getUserPropiedades = async () => {
-    console.log('getUserPropiedades');
     const userPropiedades = await getNearestProperties();
     setPropiedades(userPropiedades.data);
   };
@@ -24,7 +24,10 @@ const UserHome = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        <Heading>Propiedades cercanas a ti</Heading>
+        <View style={styles.filterContainer}>
+          <Heading>Propiedades cercanas a ti</Heading>
+          <Ionicons name="search-outline" size={20} color={'#393939'} />
+        </View>
 
         {propiedades.length === 0 ? (
           <NoPropiedades />
@@ -46,6 +49,13 @@ const styles = StyleSheet.create({
     minHeight: '100%',
     paddingHorizontal: 2,
     backgroundColor: '#fff',
+  },
+  filterContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
   },
   propiedadesList: {
     marginTop: 0,
