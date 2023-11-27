@@ -5,10 +5,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BACKEND_URL, API_VERSION } from 'react-native-dotenv';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../context/AppContext';
-import { launchCamera } from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { updateUser, getUserProfile } from '../../services/API';
 
 const InmobiliariaProfile = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [isModalImageVisible, setIsModalImageVisible] = React.useState(false);
   const [fetchedInmobiliaria, setFetchedInmobiliaria] = React.useState([]);
   const [editedValues, setEditedValues] = React.useState({});
   const [editingField, setEditingField] = React.useState(null);
@@ -22,14 +24,7 @@ const InmobiliariaProfile = ({ navigation }) => {
       const userData = JSON.parse(jsonValue);
       const token = userData.token;
       const id = userData.id;
-      const req = await fetch(`${BACKEND_URL}/${API_VERSION}/users/me`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const res = await req.json();
+      const res = await getUserProfile();
       const user = res.data;
       setFetchedInmobiliaria(user);
 
@@ -139,7 +134,6 @@ const InmobiliariaProfile = ({ navigation }) => {
   };
 
   const isValidEmail = (email) => {
-    // Validación básica de dirección de correo electrónico
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
@@ -152,11 +146,14 @@ const InmobiliariaProfile = ({ navigation }) => {
     setEditedValues({ ...editedValues, [field]: editedValue });
   };
 
+  const handleImagePicker = (field, modalTitle) => {
+    setIsModalImageVisible(true);
+  };
+
   const handleSave = async () => {
     try {
       validateField()
       if (error != '') {
-        // Mostrar el error en el modal o realizar la acción correspondiente
         console.log('Error:', error);
         return;
       }
@@ -168,19 +165,10 @@ const InmobiliariaProfile = ({ navigation }) => {
         ? `+549${editedValues[editingField]}`
         : editedValues[editingField];
 
-      const response = await fetch(`${BACKEND_URL}/${API_VERSION}/users`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          [editingField]: editedValue
-        }),
-      });
+      const formData = new FormData();
+      formData.append(editingField, editedValue);
 
-      const res = await response.json();
+      const res = await updateUser({ formData });
       const user = res.data;
       setFetchedInmobiliaria(user);
 
@@ -189,51 +177,57 @@ const InmobiliariaProfile = ({ navigation }) => {
       console.error('Error al realizar la solicitud PATCH:', error);
     }
   };
-  const handleImagePicker = async () => {
-    const options = {
-      title: 'Seleccionar imagen de perfil'
-    };
 
-    const response = await launchCamera({
-      mediaType: 'photo',
-      selectionLimit: 0,
-    });
+  const handleImageSelection = async (response) => {
     if (response.cancelled) {
       console.log('Selección de imagen cancelada');
-    } else if (response.error) {
-      console.log('Error al seleccionar la imagen:', response.error);
-    } else {
-      try {
-        const jsonValue = await AsyncStorage.getItem('userToken');
-        const userData = JSON.parse(jsonValue);
-        const token = userData.token;
-
-        const formData = new FormData();
-        formData.append('photo', {
-          uri: response.uri,
-          type: response.type,
-          name: 'profile.jpg',
-        });
-
-        const responseImage = await fetch(`${BACKEND_URL}/${API_VERSION}/users/photo`, {
-          method: 'PATCH',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-          body: formData,
-        });
-
-        const resImage = await responseImage.json();
-        const updatedUser = resImage.data;
-        setFetchedInmobiliaria(updatedUser);
-
-        // También podrías actualizar la imagen localmente para que se refleje de inmediato
-        setSelectedImage(response);
-      } catch (error) {
-        console.error('Error al enviar la imagen:', error);
-      }
+      return;
     }
+
+    if (response.error) {
+      console.log('Error al seleccionar la imagen:', response.error);
+      return;
+    }
+
+    try {
+      const selectedAssets = response.assets;
+      const selectedUris = selectedAssets.map(i => ({
+        name: i.fileName,
+        originalFilename: i.fileName,
+        size: i.fileSize,
+        type: i.type,
+        path: i.originalPath,
+        uri: i.uri,
+      }));
+
+      const formData = new FormData();
+      formData.append('photo', selectedUris[0]);
+
+      const resImage = await updateUser({ formData });
+      const updatedUser = resImage.data;
+      setFetchedInmobiliaria(updatedUser);
+      if (!response.fromGallery) {
+        setIsModalImageVisible(false);
+      }
+    } catch (error) {
+      console.error('Error al enviar la imagen:', error);
+    }
+  };
+
+  const selectImagesFromGallery = async () => {
+    const response = await launchImageLibrary({
+      mediaType: 'photo',
+      selectionLimit: 1,
+    });
+    handleImageSelection(response);
+  };
+
+  const selectImagesFromCamera = async () => {
+    const response = await launchCamera({
+      mediaType: 'photo',
+      selectionLimit: 1,
+    });
+    handleImageSelection(response);
   };
 
   useEffect(() => {
@@ -256,7 +250,9 @@ const InmobiliariaProfile = ({ navigation }) => {
         ) : (
           <Text>Foto no disponible</Text>
         )}
-        <Button mode="contained" onPress={handleImagePicker}>
+        <Button style={{
+          marginTop: 5
+        }} mode="contained" onPress={handleImagePicker}>
           <Text>Editar imagen</Text>
         </Button>
       </View>
@@ -367,7 +363,9 @@ const InmobiliariaProfile = ({ navigation }) => {
         <Text>Cerrar sesión</Text>
       </Button>
 
-      <Button mode="contained" onPress={deleteAccount}>
+      <Button style={{
+        marginTop: 5
+      }} mode="contained" onPress={deleteAccount}>
         <Text>Eliminar cuenta</Text>
       </Button>
 
@@ -383,9 +381,45 @@ const InmobiliariaProfile = ({ navigation }) => {
           <Button mode="contained" onPress={handleSave}>
             <Text>Guardar</Text>
           </Button>
-          <Button mode="outlined" onPress={() => setIsModalVisible(false)}>
+          <Button style={{
+            marginTop: 5
+          }} mode="outlined" onPress={() => setIsModalVisible(false)}>
             <Text>Cancelar</Text>
           </Button>
+        </View>
+      </Modal>
+      <Modal visible={isModalImageVisible} animationType="slide">
+        <View style={styles.modalContainer}>
+          <Button
+            style={{
+              width: '50%',
+              backgroundColor: '#fff',
+            }}
+            mode="outlined"
+            onPress={selectImagesFromCamera}>
+            Abrir camara
+          </Button>
+          <Button
+            style={{
+              width: '50%',
+              backgroundColor: '#fff',
+              marginTop: 5
+            }}
+            mode="outlined"
+            onPress={selectImagesFromGallery}>
+            {' '}
+            Abrir galeria
+          </Button>
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              top: 20,
+              left: 20,
+              zIndex: 1,
+            }}
+            onPress={() => setIsModalImageVisible(false)}>
+            <Ionicons name="arrow-back" size={30} color="#EB6440" />
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>
@@ -414,7 +448,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 20,
+    marginVertical: 10,
   },
   imageContainer: {
     alignItems: 'center',
@@ -429,7 +463,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 30,
-    marginBottom: 10,
+    marginBottom: 5,
     fontWeight: 'bold',
     color: '#EB6440',
   },
@@ -437,11 +471,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo oscuro semi-transparente
+    backgroundColor: 'white',
   },
 
   modalContent: {
-    backgroundColor: '#fff', // Fondo blanco
+    backgroundColor: '#fff',  
     padding: 20,
     borderRadius: 10,
     width: '80%',
