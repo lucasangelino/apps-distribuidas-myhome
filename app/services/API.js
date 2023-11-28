@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import { BACKEND_URL, API_VERSION } from 'react-native-dotenv';
 
-export const altaPropiedad = async ({payload}) => {
+export const altaPropiedad = async ({ payload }) => {
   const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
-  const {tipoPropiedad, propiedadTitle, propiedadDes} = payload;
+  const { tipoPropiedad, propiedadTitle, propiedadDes } = payload;
 
   try {
     const jsonValue = await AsyncStorage.getItem('userToken');
@@ -35,7 +35,7 @@ export const altaPropiedad = async ({payload}) => {
   }
 };
 
-export const updatePropiedad = async ({payload}) => {
+export const updatePropiedad = async ({ payload }) => {
   const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
   const {
     propertyId,
@@ -84,7 +84,7 @@ export const updatePropiedad = async ({payload}) => {
   }
 };
 
-export const updatePropiedadStepThree = async ({payload}) => {
+export const updatePropiedadStepThree = async ({ payload }) => {
   const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
   const {
     propertyId,
@@ -143,7 +143,7 @@ export const updatePropiedadStepThree = async ({payload}) => {
   }
 };
 
-export const updatePropiedadStepFour = async ({payload}) => {
+export const updatePropiedadStepFour = async ({ payload }) => {
   const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
   const {
     propertyId,
@@ -210,7 +210,7 @@ export const updatePropiedadStepFour = async ({payload}) => {
   }
 };
 
-export const getPropiedades = async ({filters} = {}) => {
+export const getPropiedades = async ({ filters } = {}) => {
   const jsonValue = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(jsonValue);
   const token = userData.token;
@@ -236,7 +236,7 @@ export const getPropiedades = async ({filters} = {}) => {
   }
 };
 
-export const updateUser = async ({formData} = {}) => {
+export const updateUser = async ({ formData } = {}) => {
   const jsonValue = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(jsonValue);
   const token = userData.token;
@@ -287,11 +287,10 @@ export const getUserProfile = async () => {
   }
 };
 
-export const getNearestProperties = async ({filters} = {}) => {
+export const getNearestProperties = async ({ filters } = {}) => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
   const token = userData.token;
-  console.log('userData ', userData);
 
   const URL = `${BACKEND_URL}/${API_VERSION}/properties?orderBy=id&orderType=DESC`;
   console.log('URL ', URL);
@@ -305,7 +304,54 @@ export const getNearestProperties = async ({filters} = {}) => {
       },
     });
     const responseJson = await response.json();
-    console.log('responseJson', responseJson);
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserFavorites = async () => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/favorites`;
+
+  try {
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const responseJson = await response.json();
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserAlquileres = async () => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/mis-alquileres`;
+
+  try {
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const responseJson = await response.json();
     return {
       status: response.status,
       data: responseJson.data,
