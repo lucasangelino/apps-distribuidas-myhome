@@ -291,11 +291,12 @@ export const getNearestProperties = async ({filters} = {}) => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
   const token = userData.token;
-  console.log('userData ', userData);
 
-  const URL = `${BACKEND_URL}/${API_VERSION}/properties?orderBy=id&orderType=DESC`;
-  console.log('URL ', URL);
+  // &contractType=${filters.contractType}
+  // &currency=${filters.currency}
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties?numRooms=1&propertyType=Casa&numEnvironments=1&numBathrooms=1&sum=${filters.sum}&swimming_pool=${filters.swimming_pool}&sport_field=${filters.sport_field}&laundry=${filters.laundry}&solarium=${filters.solarium}&gym=${filters.gym}&vault=${filters.vault}&security=${filters.security}&game_room=${filters.game_room}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`;
 
+  console.log('URL', URL);
   try {
     const response = await fetch(URL, {
       method: 'GET',
@@ -304,13 +305,14 @@ export const getNearestProperties = async ({filters} = {}) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log('response ', response);
     const responseJson = await response.json();
-    console.log('responseJson', responseJson);
+    console.log('filtered properties', responseJson);
     return {
       status: response.status,
       data: responseJson.data,
     };
   } catch (error) {
-    console.log(error);
+    console.log('Error ', error);
   }
 };

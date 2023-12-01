@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
@@ -23,10 +24,33 @@ import {
   Checkbox,
 } from 'react-native-paper';
 
+const initialFilters = {
+  contractType: '',
+  propertyType: '',
+  numEnvironments: 0,
+  numRooms: 0,
+  numBathrooms: 0,
+  cocheras: 0,
+  antiguedad: 0,
+  sum: false,
+  swimming_pool: false,
+  sport_field: false,
+  laundry: false,
+  solarium: false,
+  gym: false,
+  vault: false,
+  security: false,
+  game_room: false,
+  currency: '',
+  minPrice: 0,
+  maxPrice: 0,
+};
+
 const UserHome = () => {
   const [propiedades, setPropiedades] = useState([]);
   const [visible, setVisible] = React.useState(false);
-  const [tipoOperacion, setTipoOperacion] = React.useState('');
+  const [filters, setFilters] = React.useState(initialFilters);
+  const [countFilters, setCountFilters] = React.useState(0);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -35,20 +59,23 @@ const UserHome = () => {
     getUserPropiedades();
   }, []);
 
+  useEffect(() => {
+    const count = Object.values(filters).filter(filter => filter).length;
+    setCountFilters(count);
+  }, [filters]);
+
   const getUserPropiedades = async () => {
-    const userPropiedades = await getNearestProperties();
+    const userPropiedades = await getNearestProperties({filters});
     setPropiedades(userPropiedades.data);
+  };
+
+  const handleAplyFilters = async () => {
+    const filteredNearestProperties = await getNearestProperties({filters});
+    setPropiedades(filteredNearestProperties.data);
   };
 
   const renderPropiedadCard = ({item}) => {
     return <PropiedadCard propiedad={item} />;
-  };
-  const containerStyle = {
-    backgroundColor: 'white',
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    position: 'relative',
   };
 
   return (
@@ -58,23 +85,37 @@ const UserHome = () => {
           <Modal
             visible={visible}
             onDismiss={hideModal}
-            contentContainerStyle={containerStyle}>
+            contentContainerStyle={styles.containerStyle}>
             <ScrollView style={{marginBottom: 20}}>
               <View
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
                   justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}>
-                <Text>Filtros</Text>
+                <Text
+                  style={{
+                    backgroundColor: '#EB6440',
+                    color: '#fff',
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                    borderRadius: 50,
+                  }}>{`Filtros (${countFilters})`}</Text>
+                <Text onPress={() => setFilters(initialFilters)}>Limpiar</Text>
                 <Text onPress={hideModal}>Cerrar</Text>
               </View>
               <Divider style={{marginVertical: 10}} />
 
               <View style={{display: 'flex', gap: 20}}>
                 <SegmentedButtons
-                  value={tipoOperacion}
-                  onValueChange={setTipoOperacion}
+                  value={filters.contractType}
+                  onValueChange={operacion => {
+                    setFilters({
+                      ...filters,
+                      contractType: operacion,
+                    });
+                  }}
                   checkColor="#EB6440"
                   buttons={[
                     {
@@ -90,19 +131,19 @@ const UserHome = () => {
                 />
 
                 <SegmentedButtons
-                  value={tipoOperacion}
-                  onValueChange={setTipoOperacion}
+                  value={filters.propertyType}
+                  onValueChange={e => setFilters({...filters, propertyType: e})}
                   checkColor="#EB6440"
                   buttons={[
                     {
-                      value: 'departamento',
+                      value: 'Departamento',
                       label: 'Departamento',
                     },
                     {
-                      value: 'casa',
+                      value: 'Casa',
                       label: 'Casa',
                     },
-                    {value: 'ph', label: 'PH'},
+                    {value: 'Ph', label: 'PH'},
                   ]}
                 />
 
@@ -116,9 +157,28 @@ const UserHome = () => {
                       <Text>Ambientes</Text>
                     </View>
                     <View style={styles.buttons}>
-                      <Ionicons name="add-circle-outline" size={20} />
-                      <Text>{'0'}</Text>
-                      <Ionicons name="remove-circle-outline" size={20} />
+                      <Ionicons
+                        name="add-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          setFilters({
+                            ...filters,
+                            numEnvironments: filters.numEnvironments + 1,
+                          })
+                        }
+                      />
+                      <Text>{filters.numEnvironments}</Text>
+                      <Ionicons
+                        name="remove-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          filters.numEnvironments > 0 &&
+                          setFilters({
+                            ...filters,
+                            numEnvironments: filters.numEnvironments - 1,
+                          })
+                        }
+                      />
                     </View>
                   </View>
 
@@ -130,9 +190,28 @@ const UserHome = () => {
                       <Text>Dormitorio</Text>
                     </View>
                     <View style={styles.buttons}>
-                      <Ionicons name="add-circle-outline" size={20} />
-                      <Text>{'0'}</Text>
-                      <Ionicons name="remove-circle-outline" size={20} />
+                      <Ionicons
+                        name="add-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          setFilters({
+                            ...filters,
+                            numRooms: filters.numRooms + 1,
+                          })
+                        }
+                      />
+                      <Text>{filters.numRooms}</Text>
+                      <Ionicons
+                        name="remove-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          filters.numRooms > 0 &&
+                          setFilters({
+                            ...filters,
+                            numRooms: filters.numRooms - 1,
+                          })
+                        }
+                      />
                     </View>
                   </View>
 
@@ -144,9 +223,28 @@ const UserHome = () => {
                       <Text>Baños</Text>
                     </View>
                     <View style={styles.buttons}>
-                      <Ionicons name="add-circle-outline" size={20} />
-                      <Text>{'0'}</Text>
-                      <Ionicons name="remove-circle-outline" size={20} />
+                      <Ionicons
+                        name="add-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          setFilters({
+                            ...filters,
+                            numBathrooms: filters.numBathrooms + 1,
+                          })
+                        }
+                      />
+                      <Text>{filters.numBathrooms}</Text>
+                      <Ionicons
+                        name="remove-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          filters.numBathrooms > 0 &&
+                          setFilters({
+                            ...filters,
+                            numBathrooms: filters.numBathrooms - 1,
+                          })
+                        }
+                      />
                     </View>
                   </View>
 
@@ -158,9 +256,28 @@ const UserHome = () => {
                       <Text>Cocheras</Text>
                     </View>
                     <View style={styles.buttons}>
-                      <Ionicons name="add-circle-outline" size={20} />
-                      <Text>{'0'}</Text>
-                      <Ionicons name="remove-circle-outline" size={20} />
+                      <Ionicons
+                        name="add-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          setFilters({
+                            ...filters,
+                            cocheras: filters.cocheras + 1,
+                          })
+                        }
+                      />
+                      <Text>{filters.cocheras}</Text>
+                      <Ionicons
+                        name="remove-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          filters.cocheras > 0 &&
+                          setFilters({
+                            ...filters,
+                            cocheras: filters.cocheras - 1,
+                          })
+                        }
+                      />
                     </View>
                   </View>
 
@@ -172,9 +289,28 @@ const UserHome = () => {
                       <Text>Antiguedad</Text>
                     </View>
                     <View style={styles.buttons}>
-                      <Ionicons name="add-circle-outline" size={20} />
-                      <Text>{'0'}</Text>
-                      <Ionicons name="remove-circle-outline" size={20} />
+                      <Ionicons
+                        name="add-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          setFilters({
+                            ...filters,
+                            antiguedad: filters.antiguedad + 1,
+                          })
+                        }
+                      />
+                      <Text>{filters.antiguedad}</Text>
+                      <Ionicons
+                        name="remove-circle-outline"
+                        size={20}
+                        onPress={() =>
+                          filters.antiguedad > 0 &&
+                          setFilters({
+                            ...filters,
+                            antiguedad: filters.antiguedad - 1,
+                          })
+                        }
+                      />
                     </View>
                   </View>
 
@@ -188,55 +324,87 @@ const UserHome = () => {
                     }}>
                     <Checkbox.Item
                       label="Sum"
-                      status={true ? 'checked' : 'unchecked'}
-                      onPress={() => {}}
+                      status={filters.sum ? 'checked' : 'unchecked'}
+                      onPress={() =>
+                        setFilters({...filters, sum: !filters.sum})
+                      }
                     />
                     <Checkbox.Item
                       label="Pileta"
-                      status={true ? 'checked' : 'unchecked'}
-                      onPress={() => {}}
+                      status={filters.swimming_pool ? 'checked' : 'unchecked'}
+                      onPress={() =>
+                        setFilters({
+                          ...filters,
+                          swimming_pool: !filters.swimming_pool,
+                        })
+                      }
                     />
                     <Checkbox.Item
                       label="Cancha de deportes"
-                      status={true ? 'checked' : 'unchecked'}
-                      onPress={() => {}}
+                      status={filters.sport_field ? 'checked' : 'unchecked'}
+                      onPress={() =>
+                        setFilters({
+                          ...filters,
+                          sport_field: !filters.sport_field,
+                        })
+                      }
                     />
                     <Checkbox.Item
                       label="Laundry"
-                      status={true ? 'checked' : 'unchecked'}
-                      onPress={() => {}}
+                      status={filters.laundry ? 'checked' : 'unchecked'}
+                      onPress={() =>
+                        setFilters({...filters, laundry: !filters.laundry})
+                      }
                     />
                     <Checkbox.Item
                       label="Solarium"
-                      status={true ? 'checked' : 'unchecked'}
-                      onPress={() => {}}
+                      status={filters.solarium ? 'checked' : 'unchecked'}
+                      onPress={() =>
+                        setFilters({...filters, solarium: !filters.solarium})
+                      }
                     />
                     <Checkbox.Item
                       label="Gimnasio"
-                      status={true ? 'checked' : 'unchecked'}
-                      onPress={() => {}}
+                      status={filters.gym ? 'checked' : 'unchecked'}
+                      onPress={() =>
+                        setFilters({...filters, gym: !filters.gym})
+                      }
                     />
                     <Checkbox.Item
-                      label="Sauna"
-                      status={true ? 'checked' : 'unchecked'}
-                      onPress={() => {}}
+                      label="Baulera"
+                      status={filters.vault ? 'checked' : 'unchecked'}
+                      onPress={() =>
+                        setFilters({...filters, vault: !filters.vault})
+                      }
                     />
                     <Checkbox.Item
-                      label="Vigilancia"
-                      status={true ? 'checked' : 'unchecked'}
-                      onPress={() => {}}
+                      label="Seguridad"
+                      status={filters.security ? 'checked' : 'unchecked'}
+                      onPress={() =>
+                        setFilters({
+                          ...filters,
+                          security: !filters.security,
+                        })
+                      }
                     />
                     <Checkbox.Item
                       label="Sala de juegos"
-                      status={true ? 'checked' : 'unchecked'}
-                      onPress={() => {}}
+                      status={filters.game_room ? 'checked' : 'unchecked'}
+                      onPress={() =>
+                        setFilters({
+                          ...filters,
+                          game_room: !filters.game_room,
+                        })
+                      }
                     />
                   </View>
 
                   <Text style={{fontSize: 20}}>Precio</Text>
                   <SegmentedButtons
-                    value={tipoOperacion}
-                    onValueChange={setTipoOperacion}
+                    value={filters.currency}
+                    onValueChange={currency =>
+                      setFilters({...filters, currency})
+                    }
                     checkColor="#EB6440"
                     buttons={[
                       {
@@ -268,9 +436,11 @@ const UserHome = () => {
                         keyboardType="numeric"
                         mode="outlined"
                         label=""
-                        value={0}
+                        value={filters.minPrice.toString()}
                         style={{height: 40, width: '50%'}}
-                        onChangeText={() => {}}
+                        onChangeText={minPrice =>
+                          setFilters({...filters, minPrice: minPrice})
+                        }
                       />
                     </View>
 
@@ -286,9 +456,11 @@ const UserHome = () => {
                         keyboardType="numeric"
                         mode="outlined"
                         label=""
-                        value={0}
+                        value={filters.maxPrice.toString()}
                         style={{height: 40, width: '50%'}}
-                        onChangeText={() => {}}
+                        onChangeText={maxPrice =>
+                          setFilters({...filters, maxPrice: maxPrice})
+                        }
                       />
                     </View>
                   </View>
@@ -305,7 +477,10 @@ const UserHome = () => {
                       textAlign: 'center',
                       marginTop: 20,
                     }}
-                    onPress={() => {}}>
+                    onPress={() => {
+                      handleAplyFilters();
+                      hideModal();
+                    }}>
                     <Text style={{color: '#fff', fontSize: 18}}>Aplicar</Text>
                   </Button>
                 </View>
@@ -316,7 +491,7 @@ const UserHome = () => {
 
         <View style={styles.filterContainer}>
           <Heading>Propiedades cercanas a ti</Heading>
-          <Text onPress={showModal}>Filtrar</Text>
+          <Text onPress={showModal}>{`Filtrar (${countFilters})`}</Text>
         </View>
 
         {propiedades.length === 0 ? (
@@ -335,6 +510,13 @@ const UserHome = () => {
 };
 
 const styles = StyleSheet.create({
+  containerStyle: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    position: 'relative',
+  },
   container: {
     minHeight: '100%',
     paddingHorizontal: 2,

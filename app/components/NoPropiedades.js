@@ -6,6 +6,9 @@ const NoPropiedades = () => {
   return (
     <View style={styles.container}>
       <Text variant="headlineSmall">No hay propiedades 😢</Text>
+      <Text variant="titleSmall">
+        Modifica los filtros para ver otros resultados
+      </Text>
     </View>
   );
 };
@@ -13,6 +16,7 @@ const NoPropiedades = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap: 10,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
