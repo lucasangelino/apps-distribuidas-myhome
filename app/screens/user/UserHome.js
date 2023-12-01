@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
+import i18n from '../../i18n';
+import {useTranslation} from 'react-i18next';
 import {
   SafeAreaView,
   StyleSheet,
@@ -51,6 +53,8 @@ const UserHome = () => {
   const [visible, setVisible] = React.useState(false);
   const [filters, setFilters] = React.useState(initialFilters);
   const [countFilters, setCountFilters] = React.useState(0);
+
+  const {t, i18n} = useTranslation();
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -490,8 +494,8 @@ const UserHome = () => {
         </Portal>
 
         <View style={styles.filterContainer}>
-          <Heading>Propiedades cercanas a ti</Heading>
-          <Text onPress={showModal}>{`Filtrar (${countFilters})`}</Text>
+          <Heading>{t('user-home-title')}</Heading>
+          <Text onPress={showModal}>{`${t('filtrar')} (${countFilters})`}</Text>
         </View>
 
         {propiedades.length === 0 ? (
