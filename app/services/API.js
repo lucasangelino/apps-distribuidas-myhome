@@ -316,3 +316,51 @@ export const getNearestProperties = async ({filters} = {}) => {
     console.log('Error ', error);
   }
 };
+
+export const getUserFavorites = async () => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/favorites`;
+
+  try {
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const responseJson = await response.json();
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserAlquileres = async () => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/mis-alquileres`;
+
+  try {
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const responseJson = await response.json();
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
