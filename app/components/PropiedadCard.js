@@ -6,7 +6,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {priceFormater} from '../utils/utils';
 
-const PropiedadCard = ({propiedad}) => {
+const PropiedadCard = ({
+  propiedad,
+  actionButtonText = 'TEXT',
+  onActionButtonPress,
+}) => {
   const {id, description, contract_types, location, status, multimedia} =
     propiedad;
   const {price = 0, expPrice = 0} =
@@ -31,10 +35,9 @@ const PropiedadCard = ({propiedad}) => {
       </Card.Content>
       <Card.Actions>
         <ActionButton
-          disable={true}
-          label="EDITAR (disponible en 2da entrega)"
+          label={actionButtonText}
           fullWith
-          onClick={() => console.log(id)}
+          onClick={onActionButtonPress}
         />
       </Card.Actions>
     </Card>

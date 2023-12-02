@@ -29,7 +29,6 @@ function App() {
 }
 
 const AuthRouter = () => {
-  console.log('AuthRouter');
   return (
     <NavigationContainer>
       <Stack.Navigator>

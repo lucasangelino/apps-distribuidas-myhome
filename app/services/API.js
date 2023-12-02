@@ -345,7 +345,7 @@ export const getUserAlquileres = async () => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
   const token = userData.token;
-  const URL = `${BACKEND_URL}/${API_VERSION}/mis-alquileres`;
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
 
   try {
     const response = await fetch(URL, {
@@ -359,6 +359,42 @@ export const getUserAlquileres = async () => {
     return {
       status: response.status,
       data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const postUserComment = async ({
+  contractTypeId,
+  reviewType,
+  commentMessage,
+}) => {
+  const URL = `${BACKEND_URL}/${API_VERSION}/contracts`;
+
+  try {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
+
+    const response = await fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        contractTypeId: contractTypeId,
+        reviewType: reviewType,
+        commentMessage: commentMessage,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    });
+
+    const responseJson = await response.json();
+    console.log('responseJson', responseJson);
+    return {
+      ok: responseJson.ok,
+      id: responseJson.data.id,
     };
   } catch (error) {
     console.log(error);
