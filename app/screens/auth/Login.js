@@ -3,6 +3,8 @@ import React, {useContext} from 'react';
 import {Text, Button, Avatar, Divider} from 'react-native-paper';
 import {View, StyleSheet} from 'react-native';
 import {AuthContext} from '../../context/AppContext';
+import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   GoogleSignin,
@@ -17,20 +19,50 @@ const Login = ({navigation}) => {
   const {setAuth} = React.useContext(AuthContext);
 
   const handleLoginWithGoogle = async () => {
-    console.log('login');
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('userInfo', userInfo);
+
+      const backLogin = await fetch(
+        `${BACKEND_URL}/${API_VERSION}/authGoogle`,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `${userInfo.idToken}`,
+          },
+        },
+      );
+      const backLoginJson = await backLogin.json();
+
+      const auth = JSON.stringify({
+        id: 1,
+        isInmobiliaria: false,
+        name: '',
+        email: 'res.mail',
+        photoUrl: '',
+        token: backLoginJson.tokenSend,
+      });
+      await AsyncStorage.setItem('userToken', auth);
+
       setAuth({
         hasUser: true,
         loggedIn: true,
         user: {
           isInmobiliaria: false,
-          name: userInfo.user.name,
+          contactMail: '',
+          cuit: '',
+          fantasyName: userInfo.user.name,
+          firstName: userInfo.user.name,
+          id: '',
+          mail: '',
+          phone: '',
+          status: '',
+          userType: 'Usuario',
+          name: '',
           email: userInfo.user.email,
-          photoUrl: userInfo.user.photo,
-          idToken: userInfo.idToken,
+          photo: userInfo.user.photo,
         },
       });
     } catch (error) {

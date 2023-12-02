@@ -548,22 +548,6 @@ const StepThree = ({onNextStep, onPrevStep}) => {
                 onPress={() => setCountAmenities(countAmenities - 1)}>
                 <Text style={{color: '#000', fontSize: 18}}>-</Text>
               </Button>
-              <Text>{countAmenities}</Text>
-              <Button
-                style={{
-                  backgroundColor: '#fff',
-                  borderWidth: 1,
-                  borderColor: '#EB6440',
-                  alignContent: 'center',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 50,
-                  textAlign: 'center',
-                }}
-                onPress={() => setCountAmenities(countAmenities + 1)}>
-                <Text style={{color: '#000', fontSize: 18}}>+</Text>
-              </Button>
             </View>
           </View>
         </View>

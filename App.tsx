@@ -21,8 +21,6 @@ function App() {
     return <AuthRouter />;
   }
 
-  console.log('auth ', auth);
-
   if (auth.user.userType === 'Inmobiliaria') {
     return <InmobiliariaApp />;
   }
