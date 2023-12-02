@@ -18,7 +18,7 @@ const UserComentarAlquiler = ({route, navigation}) => {
       commentMessage,
     });
     if (ok) {
-      navigation.goBack();
+      navigation.navigate('UserComentarioExito', {alquilerId: contractTypeId});
     } else {
       console.log('error');
     }
