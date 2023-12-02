@@ -6,6 +6,7 @@ import UserHome from '../../screens/user/UserHome';
 import UserMisAlquileres from '../../screens/user/UserMisAlquileres';
 import UserFavoritos from '../../screens/user/UserFavoritos';
 import UserProfile from '../../screens/user/UserProfile';
+import AppBar from '../appbar/AppBar';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +17,8 @@ const UserBottomNav = () => {
       screenOptions={({route}) => ({
         tabBarActiveTintColor: '#EB6440',
         tabBarInactiveTintColor: '#ccc',
-        headerShown: false,
+        headerShown: true,
+        header: props => <AppBar {...props} />,
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
           if (route.name === 'UserHome') {
