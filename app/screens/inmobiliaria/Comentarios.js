@@ -34,7 +34,6 @@ const Comentarios = ({ navigation }) => {
             date: formattedDate,
             text: comment.message,
             id: comment.commentId,
-            stars: 4.5,
             status: comment.reviewType,
             photo: comment.authorPhoto
           };
