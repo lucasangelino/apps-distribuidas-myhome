@@ -1,33 +1,90 @@
-import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useContext}  from 'react';
+import {StyleSheet, View, Alert} from 'react-native';
 import {Card, Text} from 'react-native-paper';
 import ActionButton from './ActionButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { InmobiliariaContext } from '../context/InmobiliariaContext';
+import { UsuarioContext } from '../context/UsuarioContext';
+import { deletePropiedad, addUserFavorite, deleteUserFavorite } from '../services/API';
 import {priceFormater} from '../utils/utils';
+import {AuthContext} from '../context/AppContext';
+
 
 const PropiedadCard = ({
   propiedad,
   actionButtonText = 'TEXT',
   onActionButtonPress,
 }) => {
-  const {id, description, contract_types, location, status, multimedia} =
+  const { auth } = useContext(AuthContext);
+  const { id, description, contract_types, location, status, multimedia, isFav, favoriteId } =
     propiedad;
-  const {price = 0, expPrice = 0} =
+  const [fav, setFav] = React.useState(isFav);
+  const [favId, setFavId] = React.useState(favoriteId);
+  const { propiedades, setPropiedades } = useContext(InmobiliariaContext);
+  const { favorites, setFavorites } = useContext(UsuarioContext);
+
+  const { price = 0, expPrice = 0 } =
     contract_types.length > 0 ? contract_types[0] : {};
   const uri =
     multimedia.length > 0 ? multimedia[0].url : 'https://picsum.photos/700';
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Confirmación',
+      '¿Estás seguro de que quieres eliminar esta propiedad?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          onPress: async () => {
+            try {
+              const res = await deletePropiedad({ id });
+              setPropiedades(() => propiedades.filter(propiedad => propiedad.id !== id))
+            } catch (error) {
+              console.error('Error al eliminar propiedad:', error);
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const handleFavorite = async () => {
+    try {
+      if (!fav) {
+        const res = await addUserFavorite({ id });
+        setFav(true)
+        setFavId(res.data.favoriteId)
+      } else {
+        const res = await deleteUserFavorite({ favId });
+        setFav(false)
+        setFavorites(() => favorites.filter(favorite => favorite.favoriteId !== favId))
+      }
+    } catch (error) {
+      console.error('Error al manejar favorito:', error);
+    }
+  };
+
   return (
     <Card style={styles.cardContainer} key={id} mode="outlined" elevation={5}>
       <View style={styles.cardImageContainer}>
-        <FavouriteIcon isFav={false} />
+        {auth.user.userType === 'Inmobiliaria' && status === 'Publicada' && (
+          <DeleteIcon onDelete={() => handleDelete(id)} />
+        )}
+        {auth.user.userType === 'Usuario' && (
+          <FavouriteIcon isFav={isFav} onFavorite={() => handleFavorite(id)} />
+        )}
         <PropiedadType>{status}</PropiedadType>
-        <Card.Cover style={styles.cardCover} source={{uri: uri}} />
+        <Card.Cover style={styles.cardCover} source={{ uri: uri }} />
       </View>
       <Card.Content style={styles.Content}>
         <View style={styles.priceContainer}>
-          <Price>{`${priceFormater({price})}`}</Price>
-          <Expenses>{`${priceFormater({price: expPrice})}`}</Expenses>
+          <Price>{`${priceFormater({ price })}`}</Price>
+          <Expenses>{`${priceFormater({ price: expPrice })}`}</Expenses>
         </View>
         <Location>{location?.country}</Location>
         <Amenities />
@@ -55,7 +112,7 @@ const Expenses = ({children}) => {
     </View>
   );
 };
-const Location = ({children}) => {
+const Location = ({ children }) => {
   return (
     <View style={styles.smallDesc}>
       <Ionicons name="location-outline" size={20} color={'#393939'} />
@@ -63,12 +120,12 @@ const Location = ({children}) => {
     </View>
   );
 };
-const Description = ({children}) => (
-  <Text variant="bodySmall" style={{marginVertical: 10}}>
+const Description = ({ children }) => (
+  <Text variant="bodySmall" style={{ marginVertical: 10 }}>
     {children}
   </Text>
 );
-const FavouriteIcon = ({isFav}) => {
+const FavouriteIcon = ({ isFav, onFavorite }) => {
   const [fav, setFav] = React.useState(isFav);
   return (
     <View style={styles.cardFavourite}>
@@ -76,11 +133,28 @@ const FavouriteIcon = ({isFav}) => {
         name={fav ? 'bookmark' : 'bookmark-outline'}
         size={20}
         color={fav ? '#EB6440' : '#757474'}
-        onPress={() => setFav(!fav)}
+        onPress={() => {
+          setFav(!fav);
+          onFavorite();
+        }}
       />
     </View>
   );
 };
+
+const DeleteIcon = ({ onDelete }) => {
+  return (
+    <View style={styles.cardFavourite}>
+      <Ionicons
+        name="trash-bin-outline"
+        size={20}
+        color="#EB6440"
+        onPress={onDelete}
+      />
+    </View>
+  );
+};
+
 const PropiedadType = ({children}) => (
   <View style={styles.cardPropiedadType}>
     <Text style={styles.cardPropiedadTypeText}>

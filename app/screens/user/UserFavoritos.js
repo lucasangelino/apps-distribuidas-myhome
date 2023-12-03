@@ -1,18 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext} from 'react';
 import { getUserFavorites } from '../../services/API';
-import NoPropiedades from '../../components/NoPropiedades';
-import { View, SafeAreaView, FlatList } from 'react-native';
+import NoFavoritos from '../../components/NoFavoritos';
+import { View, SafeAreaView, FlatList, StyleSheet } from 'react-native';
 import Heading from '../../components/Heading';
 import PropiedadCard from '../../components/PropiedadCard';
+import {UsuarioContext} from '../../context/UsuarioContext';
 
+const UserFavoritos = ({navigation}) => {
 
-const UserFavoritos = () => {
-
-  const [favorites, setFavorites] = useState([]);
+  const {favorites, setFavorites} = useContext(UsuarioContext);
 
   const getFavorites = async () => {
     const userFavorites = await getUserFavorites();
-    setFavorites(userFavorites.data);
+    const properties = userFavorites.data.map(item =>  {
+      const property = item.property;
+      return {
+        ...property,
+        isFav: true,
+        favoriteId: item.favoriteId
+      };
+    });
+    console.log(properties);
+    setFavorites(properties);
 
   }
 
@@ -33,7 +42,7 @@ const UserFavoritos = () => {
         <Heading>Mis favoritos</Heading>
 
         {favorites.length === 0 ? (
-          <NoPropiedades />
+          <NoFavoritos />
         ) : (
           <FlatList
             style={styles.propiedadesList}
@@ -46,5 +55,22 @@ const UserFavoritos = () => {
     </SafeAreaView>
   )
 };
+
+const styles = StyleSheet.create({
+  container: {
+    minHeight: '100%',
+    paddingHorizontal: 2,
+    backgroundColor: '#fff',
+  },
+  propiedadesList: {
+    marginTop: 0,
+    marginBottom: 150,
+  },
+  propiedadesItem: {
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+});
 
 export default UserFavoritos;
