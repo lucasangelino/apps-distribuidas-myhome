@@ -47,6 +47,7 @@ function InmobiliariaHome({navigation}) {
           userType: user.userType,
           name: user.name,
           email: user.email,
+          userType: 'Inmobiliaria'
         },
       });
     } catch (error) {

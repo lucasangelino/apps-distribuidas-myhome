@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { StyleSheet, View, Image, Modal, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BACKEND_URL, API_VERSION } from 'react-native-dotenv';
@@ -45,18 +45,36 @@ const InmobiliariaProfile = ({ navigation }) => {
     }
   };
 
-  const deleteAccount = async () => {
-    try {
-      //TODO Agregar endpoint para eliminar cuenta
-      await AsyncStorage.clear();
-      setAuth({
-        hasUser: false,
-        user: null,
-      });
-    } catch (error) {
-      console.log('Error logging out: ' + error);
-    }
-  };
+const deleteAccount = () => {
+  Alert.alert(
+    'Eliminar Cuenta',
+    '¿Estás seguro de que quieres eliminar tu cuenta?',
+    [
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+      },
+      {
+        text: 'Eliminar',
+        onPress: async () => {
+          try {
+           const formData = new FormData();
+            formData.append('status', 'Deactivated');
+            const res = await updateUser({ formData });
+            await AsyncStorage.clear();
+            setAuth({
+              hasUser: false,
+              user: null,
+            });
+          } catch (error) {
+            console.log('Error al eliminar cuenta:', error);
+          }
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+};
 
   const validateField = () => {
     switch (editingField) {
@@ -289,19 +307,6 @@ const InmobiliariaProfile = ({ navigation }) => {
             size={20}
             color={'#ccc'}
             onPress={() => handleEdit('contactMail', "Email de Contacto")}
-          />
-        </View>
-      </View>
-
-      <View style={styles.fieldName}>
-        <Text>Contraseña</Text>
-        <View style={styles.fieldValue}>
-          <Text>{fetchedInmobiliaria.password}</Text>
-          <Ionicons
-            name="pencil"
-            size={20}
-            color={'#ccc'}
-            onPress={() => handleEdit('password', "Password")}
           />
         </View>
       </View>

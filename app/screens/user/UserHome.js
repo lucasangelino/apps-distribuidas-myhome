@@ -13,7 +13,7 @@ import {
 import Heading from '../../components/Heading';
 import NoPropiedades from '../../components/NoPropiedades';
 import PropiedadCard from '../../components/PropiedadCard';
-import {getNearestProperties} from '../../services/API';
+import {getNearestProperties, getUserFavorites} from '../../services/API';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   Divider,
@@ -69,8 +69,20 @@ const UserHome = () => {
   }, [filters]);
 
   const getUserPropiedades = async () => {
-    const userPropiedades = await getNearestProperties({filters});
-    setPropiedades(userPropiedades.data);
+        const userPropiedades = await getNearestProperties({ filters });
+        const userFavorites = await getUserFavorites();
+
+        const favoritosIds = userFavorites.data.map(fav => fav.propertyId);
+
+        const propiedades = userPropiedades.data.map(propiedad => ({
+          ...propiedad,
+          isFav: favoritosIds.includes(propiedad.id),
+          favoriteId : favoritosIds.includes(propiedad.id) ? userFavorites.data.find(fav => fav.propertyId === propiedad.id).favoriteId : null
+        }));
+
+        console.log(propiedades)
+
+        setPropiedades(propiedades);
   };
 
   const handleAplyFilters = async () => {

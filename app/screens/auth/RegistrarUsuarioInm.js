@@ -168,7 +168,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
     console.log('API_VERSION: ', API_VERSION);
 
     const request = await fetch(
-      `${'http://10.0.2.2:8080'}/${API_VERSION}/users`,
+      `${BACKEND_URL}/${API_VERSION}/users`,
       {
         method: 'POST',
         body: formData,
