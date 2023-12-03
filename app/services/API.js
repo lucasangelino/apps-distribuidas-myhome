@@ -287,6 +287,32 @@ export const getUserProfile = async () => {
   }
 };
 
+export const deletePropiedad = async ({ id }) => {
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties?propertyId=${id}`;
+
+  try {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
+
+    const response = await fetch(URL, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    });
+    const responseJson = await response.json();
+    console.log("Delete Property: ", responseJson)
+    return {
+      status: response.status,
+      message: responseJson.message,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getNearestProperties = async ({filters} = {}) => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
@@ -307,7 +333,7 @@ export const getNearestProperties = async ({filters} = {}) => {
       },
     });
     const responseJson = await response.json();
-    // console.log('filtered properties', responseJson);
+    console.log('filtered properties', responseJson);
     return {
       status: response.status,
       data: responseJson.data,
@@ -321,7 +347,7 @@ export const getUserFavorites = async () => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
   const token = userData.token;
-  const URL = `${BACKEND_URL}/${API_VERSION}/favorites`;
+  const URL = `${BACKEND_URL}/${API_VERSION}/users/favs`;
 
   try {
     const response = await fetch(URL, {
@@ -332,6 +358,65 @@ export const getUserFavorites = async () => {
       },
     });
     const responseJson = await response.json();
+    console.log("Get User Favorites: " , responseJson)
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addUserFavorite = async (propertyId) => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/users/favs`;
+
+  try {
+    const response = await fetch(URL, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                propertyId: propertyId.id,
+              }),
+            });
+    const responseJson = await response.json();
+    console.log("Add favorite", responseJson)
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteUserFavorite = async (favoriteId) => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/users/favs`;
+
+  try {
+    const response = await fetch(URL, {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            favoriteId: favoriteId.favId,
+          }),
+        });
+    const responseJson = await response.json();
+    console.log("Delete User Favorite", responseJson)
     return {
       status: response.status,
       data: responseJson.data,

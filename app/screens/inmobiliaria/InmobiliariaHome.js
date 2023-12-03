@@ -7,13 +7,14 @@ import Heading from '../../components/Heading';
 import PropiedadCard from '../../components/PropiedadCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../context/AppContext';
+import {InmobiliariaContext} from '../../context/InmobiliariaContext';
 import {getPropiedades} from '../../services/API';
 import NoPropiedades from '../../components/NoPropiedades';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 function InmobiliariaHome({navigation}) {
   const {auth, setAuth} = useContext(AuthContext);
-  const [propiedades, setPropiedades] = React.useState([]);
+  const {propiedades, setPropiedades} = useContext(InmobiliariaContext);
 
   const getUser = async () => {
     try {
@@ -43,7 +44,6 @@ function InmobiliariaHome({navigation}) {
           phone: user.phone,
           photo: user.photo,
           status: user.status,
-          userType: user.userType,
           name: user.name,
           email: user.email,
           userType: 'Inmobiliaria'
