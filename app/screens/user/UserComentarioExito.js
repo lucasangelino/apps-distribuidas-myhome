@@ -1,10 +1,10 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text} from 'react-native';
 import {Button} from 'react-native-paper';
 
 const UserComentarioExito = ({navigation, route}) => {
-  console.log('addrf');
-  const {alquilerId: contractTypeId} = route.params;
+  console.log('comentario con exito');
   return (
     <View
       style={{

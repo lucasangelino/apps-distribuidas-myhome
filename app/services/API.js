@@ -345,7 +345,7 @@ export const getUserAlquileres = async () => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
   const token = userData.token;
-  const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
+  const URL = `${BACKEND_URL}/${API_VERSION}/contracts`;
 
   try {
     const response = await fetch(URL, {
@@ -356,6 +356,7 @@ export const getUserAlquileres = async () => {
       },
     });
     const responseJson = await response.json();
+    console.log('responseJson', responseJson);
     return {
       status: response.status,
       data: responseJson.data,

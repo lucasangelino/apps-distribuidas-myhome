@@ -30,7 +30,7 @@ function InmobiliariaHome({navigation}) {
         },
       });
       const res = await req.json();
-      const user = res.data;ç
+      const user = res.data;
       setAuth({
         ...auth,
         user: {
@@ -43,10 +43,9 @@ function InmobiliariaHome({navigation}) {
           phone: user.phone,
           photo: user.photo,
           status: user.status,
-          userType: user.userType,
           name: user.name,
           email: user.email,
-          userType: 'Inmobiliaria'
+          userType: 'Inmobiliaria',
         },
       });
     } catch (error) {
