@@ -11,6 +11,10 @@ import RegistrarUsuarioInm from './app/screens/auth/RegistrarUsuarioInm';
 import RecuperarMail from './app/screens/auth/RecuperarMail';
 import RecuperarContraseña from './app/screens/auth/RecuperarContraseña';
 import ActivarCuenta from './app/screens/auth/ActivarCuenta';
+import PropiedadDetail from './app/components/PropiedadDetail';
+import ReservarPropiedad from './app/components/ReservarPropiedad';
+import Contactar from './app/components/Contactar';
+import ReservarPropiedadExito from './app/components/ReservarPropiedadExito';
 
 const Stack = createNativeStackNavigator();
 
@@ -91,6 +95,26 @@ const InmobiliariaApp = () => {
           // options={{
           //   header: () => <AppBar />,
           // }}
+        />
+        <Stack.Screen
+          name="PropiedadDetail"
+          component={PropiedadDetail}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ReservarPropiedad"
+          component={ReservarPropiedad}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Contactar"
+          component={Contactar}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ReservaExitosa"
+          component={ReservarPropiedadExito}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>

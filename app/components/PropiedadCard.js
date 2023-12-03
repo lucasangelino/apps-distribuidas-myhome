@@ -1,12 +1,14 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Card, Text} from 'react-native-paper';
+import {Button, Card, Text} from 'react-native-paper';
 import ActionButton from './ActionButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
 
 import {priceFormater} from '../utils/utils';
 
 const PropiedadCard = ({propiedad}) => {
+  const navigation = useNavigation();
   const {id, description, contract_types, location, status, multimedia} =
     propiedad;
   const {price = 0, expPrice = 0} =
@@ -30,12 +32,19 @@ const PropiedadCard = ({propiedad}) => {
         <Description>{description}</Description>
       </Card.Content>
       <Card.Actions>
-        <ActionButton
-          disable={true}
-          label="EDITAR (disponible en 2da entrega)"
-          fullWith
-          onClick={() => console.log(id)}
-        />
+        <Button
+          mode="contained"
+          style={{
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}
+          onPress={() =>
+            navigation.navigate('PropiedadDetail', {property: propiedad})
+          }>
+          VER MÁS
+        </Button>
       </Card.Actions>
     </Card>
   );

@@ -71,7 +71,7 @@ const Stars = ({stars}) => {
   const starsArray = [];
   const fullStars = Math.floor(stars);
   const halfStar = stars % 1;
-  const emptyStars = 5 - fullStars - halfStar;
+  const emptyStars = 4 - fullStars - halfStar;
   for (let i = 0; i < fullStars; i++) {
     starsArray.push(
       <Ionicons key={uuid.v4()} name="star" size={20} color="#FFC107" />,
