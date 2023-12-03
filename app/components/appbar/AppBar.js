@@ -1,9 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Appbar, Text} from 'react-native-paper';
+import {AuthContext} from '../../context/AppContext';
 
 const AppBar = ({navigation}) => {
+ const {auth} = useContext(AuthContext);
   return (
     <Appbar.Header>
       <View style={styles.appBarContaier}>
@@ -13,10 +15,12 @@ const AppBar = ({navigation}) => {
             Home
           </Text>
         </Text>
-        <Appbar.Action
-          icon="plus-circle"
-          onPress={() => navigation.navigate('AddPropiedadStepper')}
-        />
+        {auth.user.userType === 'Inmobiliaria' && (
+                  <Appbar.Action
+                    icon="plus-circle"
+                    onPress={() => navigation.navigate('AddPropiedadStepper')}
+                  />
+         )}
       </View>
     </Appbar.Header>
   );
