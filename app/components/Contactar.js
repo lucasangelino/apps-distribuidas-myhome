@@ -1,80 +1,79 @@
 import * as React from 'react';
-import {View, StyleSheet, ScrollView, TextInput} from 'react-native';
+import {View, StyleSheet, SafeAreaView, TextInput} from 'react-native';
 import {Text, Button, Avatar} from 'react-native-paper';
-import uuid from 'react-native-uuid';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {priceFormater} from '../utils/utils';
 
 const Contactar = ({route, navigation}) => {
   const {propiedad} = route.params;
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          marginTop: 20,
-          alignSelf: 'center',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 5,
-        }}>
-        <Ionicons
-          name="arrow-back-outline"
-          size={20}
-          color={'#212121'}
-          onPress={() =>
-            navigation.navigate('PropiedadDetail', {property: propiedad})
-          }
-        />
-        <Avatar.Image
-          size={50}
-          source={require('../assets/images/Logo.png')}
-          backgroundColor="#eff5f5"
-          style={{marginRight: 5}}
-        />
-        <Text style={{fontSize: 20}}>MyHome</Text>
-      </View>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          marginLeft: 10,
-          marginRight: 10,
-          marginTop: 10,
-          width: '100%',
-        }}>
-        <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-          Contactar Inmobiliaria
-        </Text>
-        <View style={{marginTop: 20}}>
-          <Text variant="bodyLarge" style={{marginBottom: 7}}>
-            Nombre
-          </Text>
-          <TextInput keyboardType="numeric" style={styles.input} />
+    <SafeAreaView>
+      <View style={StyleSheet.container}>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginTop: 20,
+            alignItems: 'center',
+            gap: 5,
+          }}>
+          <Ionicons
+            name="arrow-back-outline"
+            size={28}
+            color={'#212121'}
+            marginLeft={10}
+            onPress={() =>
+              navigation.navigate('PropiedadDetail', {property: propiedad})
+            }
+          />
+          <Avatar.Image
+            size={50}
+            source={require('../assets/images/Logo.png')}
+            backgroundColor="#eff5f5"
+            style={{marginLeft: 80}}
+          />
+          <Text style={{fontSize: 20}}>MyHome</Text>
         </View>
-        <View style={{marginTop: 20}}>
-          <Text variant="bodyLarge" style={{marginBottom: 7}}>
-            Teléfono
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            marginLeft: 10,
+            marginRight: 10,
+            marginTop: 30,
+            width: '95%',
+          }}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+            Contactar Inmobiliaria
           </Text>
-          <TextInput keyboardType="numeric" style={styles.input} />
+          <View style={{marginTop: 20}}>
+            <Text variant="bodyLarge" style={{marginBottom: 7}}>
+              Nombre
+            </Text>
+            <TextInput style={styles.input} />
+          </View>
+          <View style={{marginTop: 20}}>
+            <Text variant="bodyLarge" style={{marginBottom: 7}}>
+              Teléfono
+            </Text>
+            <TextInput keyboardType="numeric" style={styles.input} />
+          </View>
+          <View style={{marginTop: 20}}>
+            <Text variant="bodyLarge" style={{marginBottom: 7}}>
+              Mensaje
+            </Text>
+            <TextInput style={styles.input} />
+          </View>
         </View>
-        <View style={{marginTop: 20}}>
-          <Text variant="bodyLarge" style={{marginBottom: 7}}>
-            Mensaje
-          </Text>
-          <TextInput keyboardType="numeric" style={styles.input} />
+        <View style={{width: '90%', marginTop: 50, alignSelf: 'center'}}>
+          <Button
+            mode="contained"
+            style={styles.button}
+            onPress={() => navigation.navigate('ContactarExito')}>
+            Contactar
+          </Button>
         </View>
       </View>
-      <View style={{width: '100%', marginTop: 50}}>
-        <Button
-          mode="contained"
-          style={styles.button}
-          onPress={() => navigation.navigate('ReservaExitosa')}>
-          Reservar
-        </Button>
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

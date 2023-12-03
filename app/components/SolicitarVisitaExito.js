@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View, StyleSheet, SafeAreaView} from 'react-native';
 import {Text, Button, Avatar} from 'react-native-paper';
 
-const ReservarPropiedadExito = ({navigation}) => {
+const SolicitarVisitaExito = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={StyleSheet.container}>
@@ -23,7 +23,7 @@ const ReservarPropiedadExito = ({navigation}) => {
           />
           <Text style={{fontSize: 20}}>MyHome</Text>
         </View>
-        <View style={{marginTop: 20, alignSelf: 'center'}}>
+        <View style={{marginTop: 20, alignItems: 'center'}}>
           <Avatar.Image
             size={100}
             source={require('../assets/images/FotoExito.png')}
@@ -40,12 +40,12 @@ const ReservarPropiedadExito = ({navigation}) => {
             width: '100%',
           }}>
           <Text style={{fontSize: 20, fontWeight: 'bold', alignSelf: 'center'}}>
-            Reserva Exitosa
+            Solicitud de Visita Exitosa
           </Text>
           <View style={{marginTop: 20}}>
             <Text variant="bodyLarge" style={{marginBottom: 7}}>
-              ¡Felicidades! Tu reserva se ha realizado con exito. La
-              Inmobiliaria se estará poniendo en contacto lo antes posible.
+              ¡Felicidades! Tu solicitud de visita ha sido exitosa. Pronto nos
+              pondremos en contacto contigo.
             </Text>
           </View>
           <View style={{marginTop: 20}}>
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReservarPropiedadExito;
+export default SolicitarVisitaExito;

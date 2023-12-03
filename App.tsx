@@ -15,6 +15,9 @@ import PropiedadDetail from './app/components/PropiedadDetail';
 import ReservarPropiedad from './app/components/ReservarPropiedad';
 import Contactar from './app/components/Contactar';
 import ReservarPropiedadExito from './app/components/ReservarPropiedadExito';
+import SolicitarVisita from './app/components/SolicitarVisita';
+import SolicitarVisitaExito from './app/components/SolicitarVisitaExito';
+import ContactarExito from './app/components/ContactarExito';
 
 const Stack = createNativeStackNavigator();
 
@@ -102,18 +105,33 @@ const InmobiliariaApp = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="ReservarPropiedad"
-          component={ReservarPropiedad}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
           name="Contactar"
           component={Contactar}
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="ContactarExito"
+          component={ContactarExito}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ReservarPropiedad"
+          component={ReservarPropiedad}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="ReservaExitosa"
           component={ReservarPropiedadExito}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SolicitarVisita"
+          component={SolicitarVisita}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SolicitarVisitaExito"
+          component={SolicitarVisitaExito}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

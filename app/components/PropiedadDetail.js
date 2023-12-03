@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, StyleSheet, ScrollView, Image} from 'react-native';
+import {View, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
 import {
   Divider,
   Text,
@@ -29,6 +29,7 @@ const PropiedadDetail = ({route, navigation}) => {
 
   const handleSolicitarVisita = () => {
     hideModalContactar();
+    navigation.navigate('SolicitarVisita', {propiedad: property});
   };
 
   const handleReserva = () => {
@@ -44,220 +45,227 @@ const PropiedadDetail = ({route, navigation}) => {
   const uri =
     multimedia.length > 0 ? multimedia[0].url : 'https://picsum.photos/700';
   return (
-    <View style={StyleSheet.container}>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          marginTop: 20,
-          alignSelf: 'center',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 5,
-        }}>
-        <Ionicons
-          name="arrow-back-outline"
-          size={20}
-          color={'#212121'}
-          onPress={() => navigation.navigate('Home')}
-        />
-        <Avatar.Image
-          size={50}
-          source={require('../assets/images/Logo.png')}
-          backgroundColor="#eff5f5"
-          style={{marginRight: 5}}
-        />
-        <Text variant="titleLarge">Detalles de Propiedad</Text>
-        <Ionicons name="share-social-outline" size={20} color={'#212121'} />
-      </View>
-      <ScrollView style={{minHeight: '100%'}}>
+    <SafeAreaView style={styles.container}>
+      <View style={StyleSheet.container}>
         <View
           style={{
-            backgroundColor: '#FFFFFF',
-            minHeight: '100%',
-            borderRadius: 30,
+            display: 'flex',
+            flexDirection: 'row',
+            marginTop: 20,
+            alignSelf: 'flex-start',
+            alignItems: 'center',
           }}>
-          <View style={styles.cardImageContainer}>
-            <FavouriteIcon isFav={false} />
-            <Card.Cover style={styles.cardCover} source={{uri: uri}} />
+          <Ionicons
+            name="arrow-back-outline"
+            size={20}
+            color={'#212121'}
+            onPress={() => navigation.navigate('Home')}
+          />
+          <Avatar.Image
+            size={50}
+            source={require('../assets/images/Logo.png')}
+            backgroundColor="#eff5f5"
+            style={{marginLeft: 10}}
+          />
+          <Text variant="titleLarge" style={{marginLeft: 18}}>
+            Detalles de Propiedad
+          </Text>
+          <Ionicons
+            name="share-social-outline"
+            size={20}
+            color={'#212121'}
+            style={{marginLeft: 25}}
+          />
+        </View>
+        <ScrollView style={{minHeight: '100%'}}>
+          <View
+            style={{
+              backgroundColor: '#FFFFFF',
+              minHeight: '100%',
+              borderRadius: 30,
+            }}>
+            <View style={styles.cardImageContainer}>
+              <FavouriteIcon isFav={false} />
+              <Card.Cover style={styles.cardCover} source={{uri: uri}} />
+            </View>
+            <Card.Content style={styles.Content}>
+              <View style={styles.priceContainer}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 10,
+                    alignItems: 'center',
+                  }}>
+                  <Price>{`${priceFormater({price})}`}</Price>
+                  <Text variant="bodyMedium">Precio</Text>
+                </View>
+                <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
+                  <Expenses>{`${priceFormater({price: expPrice})}`}</Expenses>
+                  <Text variant="bodyMedium">Expensas</Text>
+                </View>
+              </View>
+              <Location>
+                {location?.street +
+                  ' ' +
+                  location?.streetNumber +
+                  ', ' +
+                  location?.district +
+                  ', ' +
+                  location?.province}
+              </Location>
+              <Amenities />
+              <Description>{description}</Description>
+            </Card.Content>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Avatar.Image
+                size={70}
+                source={{uri: user.photo}}
+                backgroundColor="#eff5f5"
+                style={{marginRight: 5}}
+              />
+              <Text variant="titleLarge">{user.fantasyName}</Text>
+              <Stars stars={user.rating} />
+            </View>
+            <View style={{alignItems: 'center'}}>
+              <View style={{shadowOpacity: 0}}>
+                <Text>Comentarios de la Inmobiliaria</Text>
+              </View>
+              {user.comments.length < 1 ? (
+                <View
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#fff',
+                  }}>
+                  <Text variant="bodyMedium">
+                    La Inmobiliaria no posee comentarios 😢
+                  </Text>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    width: '95%',
+                    backgroundColor: '#e5e5e5',
+                    borderRadius: 5,
+                  }}>
+                  {user.comments.map(comment => (
+                    <>
+                      <Comment {...comment} />
+                      <Divider key={uuid.v4()} />
+                    </>
+                  ))}
+                </View>
+              )}
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                gap: 10,
+                marginBottom: 10,
+              }}>
+              <Button
+                style={styles.button}
+                mode="outlined"
+                onPress={showModalContactar}>
+                Contactar
+              </Button>
+              {status === 'Publicada' ? (
+                <Button
+                  style={styles.button}
+                  disabled={false}
+                  mode="contained"
+                  onPress={showModalReservar}>
+                  Reservar
+                </Button>
+              ) : (
+                <Button style={styles.button} disabled={true} mode="contained">
+                  Reservar
+                </Button>
+              )}
+            </View>
           </View>
-          <Card.Content style={styles.Content}>
-            <View style={styles.priceContainer}>
+          <Portal style={styles.container}>
+            <Modal
+              visible={visibleContactar}
+              onDismiss={hideModalContactar}
+              contentContainerStyle={{
+                display: 'flex',
+                alignSelf: 'center',
+                alignItems: 'center',
+                backgroundColor: '#FFFFFF',
+              }}>
+              <Text>
+                ¿Desea contactar a la propiedad o solicitar visita programada?
+              </Text>
               <View
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
-                  gap: 10,
                   alignItems: 'center',
+                  gap: 10,
                 }}>
-                <Price>{`${priceFormater({price})}`}</Price>
-                <Text variant="bodyMedium">Precio</Text>
+                <Button
+                  style={styles.button}
+                  mode="contained"
+                  onPress={handleContactar}>
+                  Contactar
+                </Button>
+                <Button
+                  style={styles.button}
+                  mode="contained"
+                  onPress={handleSolicitarVisita}>
+                  Solicitar Visita
+                </Button>
               </View>
-              <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
-                <Expenses>{`${priceFormater({price: expPrice})}`}</Expenses>
-                <Text variant="bodyMedium">Expensas</Text>
-              </View>
-            </View>
-            <Location>
-              {location?.street +
-                ' ' +
-                location?.streetNumber +
-                ', ' +
-                location?.district +
-                ', ' +
-                location?.province}
-            </Location>
-            <Amenities />
-            <Description>{description}</Description>
-          </Card.Content>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Avatar.Image
-              size={70}
-              source={{uri: user.photo}}
-              backgroundColor="#eff5f5"
-              style={{marginRight: 5}}
-            />
-            <Text variant="titleLarge">{user.fantasyName}</Text>
-            <Stars stars={user.rating} />
-          </View>
-          <View style={{alignItems: 'center'}}>
-            <View style={{shadowOpacity: 0}}>
-              <Text>Comentarios de la Inmobiliaria</Text>
-            </View>
-            {user.comments.length < 1 ? (
+            </Modal>
+          </Portal>
+          <Portal style={styles.container}>
+            <Modal
+              visible={visibleReservar}
+              onDismiss={hideModalReservar}
+              contentContainerStyle={{
+                display: 'flex',
+                alignSelf: 'center',
+                alignItems: 'center',
+                backgroundColor: '#FFFFFF',
+              }}>
+              <Text>
+                ¿Desea reservar la propiedad? Deberá abonar el 50% del monto.
+              </Text>
               <View
                 style={{
                   display: 'flex',
-                  justifyContent: 'center',
+                  flexDirection: 'row',
                   alignItems: 'center',
-                  backgroundColor: '#fff',
+                  gap: 10,
                 }}>
-                <Text variant="bodyMedium">
-                  La Inmobiliaria no posee comentarios 😢
-                </Text>
+                <Button
+                  style={styles.button}
+                  mode="contained"
+                  onPress={hideModalReservar}>
+                  Cancelar
+                </Button>
+                <Button
+                  style={styles.button}
+                  mode="contained"
+                  onPress={handleReserva}>
+                  Continuar
+                </Button>
               </View>
-            ) : (
-              <View
-                style={{
-                  width: '95%',
-                  backgroundColor: '#e5e5e5',
-                  borderRadius: 5,
-                }}>
-                {user.comments.map(comment => (
-                  <>
-                    <Comment {...comment} />
-                    <Divider key={uuid.v4()} />
-                  </>
-                ))}
-              </View>
-            )}
-          </View>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              gap: 10,
-              marginBottom: 10,
-            }}>
-            <Button
-              style={styles.button}
-              mode="outlined"
-              onPress={showModalContactar}>
-              Contactar
-            </Button>
-            {status === 'Publicada' ? (
-              <Button
-                style={styles.button}
-                disabled={false}
-                mode="contained"
-                onPress={showModalReservar}>
-                Reservar
-              </Button>
-            ) : (
-              <Button style={styles.button} disabled={true} mode="contained">
-                Reservar
-              </Button>
-            )}
-          </View>
-        </View>
-        <Portal style={styles.container}>
-          <Modal
-            visible={visibleContactar}
-            onDismiss={hideModalContactar}
-            contentContainerStyle={{
-              display: 'flex',
-              alignSelf: 'center',
-              alignItems: 'center',
-              backgroundColor: '#FFFFFF',
-            }}>
-            <Text>
-              ¿Desea contactar a la propiedad o solicitar visita programada?
-            </Text>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 10,
-              }}>
-              <Button
-                style={styles.button}
-                mode="contained"
-                onPress={handleContactar}>
-                Contactar
-              </Button>
-              <Button
-                style={styles.button}
-                mode="contained"
-                onPress={handleSolicitarVisita}>
-                Solicitar Visita
-              </Button>
-            </View>
-          </Modal>
-        </Portal>
-        <Portal style={styles.container}>
-          <Modal
-            visible={visibleReservar}
-            onDismiss={hideModalReservar}
-            contentContainerStyle={{
-              display: 'flex',
-              alignSelf: 'center',
-              alignItems: 'center',
-              backgroundColor: '#FFFFFF',
-            }}>
-            <Text>
-              ¿Desea reservar la propiedad? Deberá abonar el 50% del monto.
-            </Text>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 10,
-              }}>
-              <Button
-                style={styles.button}
-                mode="contained"
-                onPress={hideModalReservar}>
-                Cancelar
-              </Button>
-              <Button
-                style={styles.button}
-                mode="contained"
-                onPress={handleReserva}>
-                Continuar
-              </Button>
-            </View>
-          </Modal>
-        </Portal>
-      </ScrollView>
-    </View>
+            </Modal>
+          </Portal>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 const Price = ({children}) => <Text variant="headlineMedium">{children}</Text>;
@@ -344,11 +352,11 @@ const Amenities = () => {
 const Comment = ({id, stars, text, date, author}) => {
   return (
     <View style={styles.comment} key={uuid.v4()}>
-      <Stars stars={'stars'} />
-      <Text style={{marginVertical: 10}}>{'text'}</Text>
+      <Stars stars={stars} />
+      <Text style={{marginVertical: 10}}>{text}</Text>
       <View style={styles.commentFooter}>
-        <Text>{'author'}</Text>
-        <Text>{'date'}</Text>
+        <Text>{author}</Text>
+        <Text>{date}</Text>
       </View>
     </View>
   );
