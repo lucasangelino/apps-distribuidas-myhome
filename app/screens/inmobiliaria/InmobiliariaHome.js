@@ -31,8 +31,7 @@ function InmobiliariaHome({navigation}) {
         },
       });
       const res = await req.json();
-      const user = res.data;
-
+      const user = res.data;ç
       setAuth({
         ...auth,
         user: {

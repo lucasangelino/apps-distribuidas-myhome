@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import UserHome from '../../screens/user/UserHome';
 import UserFavoritos from '../../screens/user/UserFavoritos';
 import UserProfile from '../../screens/user/UserProfile';
+import AppBar from '../appbar/AppBar';
 import UserMisAlquileresNavigation from './UserAlquileresNav';
 
 const Tab = createBottomTabNavigator();
@@ -16,7 +17,8 @@ const UserBottomNav = () => {
       screenOptions={({route}) => ({
         tabBarActiveTintColor: '#EB6440',
         tabBarInactiveTintColor: '#ccc',
-        headerShown: false,
+        headerShown: true,
+        header: props => <AppBar {...props} />,
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
           if (route.name === 'UserHome') {
