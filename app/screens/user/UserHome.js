@@ -48,7 +48,7 @@ const initialFilters = {
   maxPrice: 0,
 };
 
-const UserHome = () => {
+const UserHome = ({navigation}) => {
   const [propiedades, setPropiedades] = useState([]);
   const [visible, setVisible] = React.useState(false);
   const [filters, setFilters] = React.useState(initialFilters);
@@ -60,8 +60,11 @@ const UserHome = () => {
   const hideModal = () => setVisible(false);
 
   useEffect(() => {
-    getUserPropiedades();
-  }, []);
+        const loadPropertites = navigation.addListener('focus', () => {
+          getUserPropiedades();
+        });
+        return loadPropertites;
+  }, [navigation]);
 
   useEffect(() => {
     const count = Object.values(filters).filter(filter => filter).length;
@@ -79,8 +82,6 @@ const UserHome = () => {
           isFav: favoritosIds.includes(propiedad.id),
           favoriteId : favoritosIds.includes(propiedad.id) ? userFavorites.data.find(fav => fav.propertyId === propiedad.id).favoriteId : null
         }));
-
-        console.log(propiedades)
 
         setPropiedades(propiedades);
   };

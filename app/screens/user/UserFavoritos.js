@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext} from 'react';
 import { getUserFavorites } from '../../services/API';
 import NoFavoritos from '../../components/NoFavoritos';
 import { View, SafeAreaView, FlatList, StyleSheet } from 'react-native';
 import Heading from '../../components/Heading';
 import PropiedadCard from '../../components/PropiedadCard';
+import {UsuarioContext} from '../../context/UsuarioContext';
 
 const UserFavoritos = ({navigation}) => {
 
-  const [favorites, setFavorites] = useState([]);
+  const {favorites, setFavorites} = useContext(UsuarioContext);
 
   const getFavorites = async () => {
     const userFavorites = await getUserFavorites();
