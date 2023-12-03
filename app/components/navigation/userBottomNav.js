@@ -3,10 +3,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import UserHome from '../../screens/user/UserHome';
-import UserMisAlquileres from '../../screens/user/UserMisAlquileres';
 import UserFavoritos from '../../screens/user/UserFavoritos';
 import UserProfile from '../../screens/user/UserProfile';
 import AppBar from '../appbar/AppBar';
+import UserMisAlquileresNavigation from './UserAlquileresNav';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +34,10 @@ const UserBottomNav = () => {
         },
       })}>
       <Tab.Screen name="UserHome" component={UserHome} />
-      <Tab.Screen name="Mis Alquileres" component={UserMisAlquileres} />
+      <Tab.Screen
+        name="Mis Alquileres"
+        component={UserMisAlquileresNavigation}
+      />
       <Tab.Screen name="Favoritos" component={UserFavoritos} />
       <Tab.Screen name="Perfil" component={UserProfile} />
     </Tab.Navigator>
