@@ -3,6 +3,7 @@ import {View, SafeAreaView, StyleSheet, TextInput} from 'react-native';
 import {Text, Button, Avatar, SegmentedButtons} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SolicitarVisita = ({route, navigation}) => {
   const {propiedad} = route.params;
@@ -37,10 +38,15 @@ const SolicitarVisita = ({route, navigation}) => {
 
   const handleSolicitar = async () => {
     try {
+      const jsonValue = await AsyncStorage.getItem('userToken');
+      const userData = JSON.parse(jsonValue);
+      const token = userData.token;
+
       const req = await fetch(`${BACKEND_URL}/${API_VERSION}/contacts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
         },
         body: JSON.stringify({
           statusMessage: 'Me gustaria hacer una visita en esa fecha.',
@@ -53,8 +59,10 @@ const SolicitarVisita = ({route, navigation}) => {
       const res = await req.json();
       if (res.ok) {
         navigation.navigate('ContactarExito');
+        console.log(res);
       } else {
         console.log('Error al contactar');
+        console.log(res);
       }
     } catch (error) {
       console.log(error);
@@ -96,11 +104,11 @@ const SolicitarVisita = ({route, navigation}) => {
             onValueChange={setHorario}
             buttons={[
               {
-                horario: 'AM',
+                value: 'AM',
                 label: 'AM',
               },
               {
-                horario: 'PM',
+                value: 'PM',
                 label: 'PM',
               },
             ]}
@@ -150,7 +158,7 @@ const SolicitarVisita = ({route, navigation}) => {
             <Button
               mode="contained"
               style={styles.button}
-              onPress={() => handleButtonPress}>
+              onPress={() => handleButtonPress()}>
               Solicitar
             </Button>
           </View>

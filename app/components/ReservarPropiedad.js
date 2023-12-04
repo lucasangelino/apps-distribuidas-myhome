@@ -4,6 +4,7 @@ import {Text, Button, Avatar} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {priceFormater} from '../utils/utils';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ReservarPropiedad = ({route, navigation}) => {
   const {propiedad} = route.params;
@@ -90,19 +91,25 @@ const ReservarPropiedad = ({route, navigation}) => {
   };
 
   const handleReservar = async () => {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
+
     try {
       const req = await fetch(`${BACKEND_URL}/${API_VERSION}/contracts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
         },
         body: JSON.stringify({
-          contractTypeId: propiedad.id,
+          contractTypeId: propiedad.contract_types[0].id,
         }),
       });
       const res = await req.json();
       if (res.ok) {
         navigation.navigate('ReservaExitosa');
+        console.log(res);
       } else {
         console.log('Error al contactar');
       }
@@ -328,7 +335,7 @@ const ReservarPropiedad = ({route, navigation}) => {
           <Button
             mode="contained"
             style={styles.button}
-            onPress={() => handleButtonPress}>
+            onPress={() => handleButtonPress()}>
             Reservar
           </Button>
         </View>

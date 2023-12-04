@@ -3,6 +3,7 @@ import {View, StyleSheet, SafeAreaView, TextInput} from 'react-native';
 import {Text, Button, Avatar} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Contactar = ({route, navigation}) => {
   const {propiedad} = route.params;
@@ -48,11 +49,15 @@ const Contactar = ({route, navigation}) => {
   };
 
   const handleContactar = async () => {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
     try {
       const req = await fetch(`${BACKEND_URL}/${API_VERSION}/contacts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
         },
         body: JSON.stringify({
           statusMessage: message,
@@ -63,6 +68,7 @@ const Contactar = ({route, navigation}) => {
       const res = await req.json();
       if (res.ok) {
         navigation.navigate('ContactarExito');
+        console.log(res);
       } else {
         console.log('Error al contactar');
       }
