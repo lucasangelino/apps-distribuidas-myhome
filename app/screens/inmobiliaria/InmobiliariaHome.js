@@ -14,7 +14,8 @@ import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 function InmobiliariaHome({navigation}) {
   const {auth, setAuth} = useContext(AuthContext);
-  const {propiedades, setPropiedades} = useContext(InmobiliariaContext);
+  const {propiedades, setPropiedades, setPublicacion} =
+    useContext(InmobiliariaContext);
 
   const getUser = async () => {
     try {
@@ -68,7 +69,62 @@ function InmobiliariaHome({navigation}) {
   }, [navigation]);
 
   const renderPropiedadCard = ({item}) => {
-    return <PropiedadCard propiedad={item} />;
+    return (
+      <PropiedadCard
+        propiedad={item}
+        actionButtonText="editar"
+        onActionButtonPress={() => {
+          console.log('item', JSON.stringify(item, null, 2));
+          console.log(
+            ' aaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+            item.contract_types[0].contractType,
+          );
+          setPublicacion({
+            id: item.id,
+            publicada: 'publicada',
+            tipoOperacion: item.contract_types[0].contractType,
+            tipoPropiedad: item.propertyType,
+            titulo: item.title,
+            descripcion: item.description,
+            direccion: {
+              calleAltura: 'Pedro Moran 2430',
+              ciudad: 'CABA',
+              provincia: 'Buenos Aires',
+              barrio: 'Agronomia',
+              localidad: 'CABA',
+              pisoDepto: '0',
+              fullAddress: 'Pedro Moran 2430, CABA, Buenos Aires, Argentina',
+              place_id: 'ChIJq6qq6QvKvJURhZwMkZq7CZM',
+              latitud: '-34.603722',
+              longitud: '-58.381592',
+            },
+            ambientes: item.numEnvironments,
+            dormitorios: item.numRooms,
+            banios: item.numBathrooms,
+            cocheras: item.numCars,
+            balcones: item.balcony,
+            terrazas: item.roofTop,
+            bauleras: item.vault,
+            superficie: {
+              cubierta: item.mtsCovered,
+              semicubierta: item.mtsHalfCovered,
+              descubierta: item.mtsUncovered,
+            },
+            antiguedad: item.antiquity,
+            precio: item.contract_types[0].price,
+            precioMoneda: item.contract_types[0].currency,
+            expensas: item.contract_types[0].expPrice,
+            expensasMoneda: item.contract_types[0].currency,
+            amenities: [],
+            orientacion: 'N',
+            disposcion: 'Frente',
+            images: item.multimedia,
+            videoUrl: '',
+          });
+          navigation.navigate('AddPropiedadStepper');
+        }}
+      />
+    );
   };
   return (
     <SafeAreaView style={styles.container}>

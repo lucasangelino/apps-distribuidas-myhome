@@ -59,7 +59,14 @@ function InmobiliariaProvider({children}) {
 
   return (
     <InmobiliariaContext.Provider
-      value={{inmobiliaria, publicacion, setInmobiliaria, setPublicacion, propiedades, setPropiedades}}>
+      value={{
+        inmobiliaria,
+        publicacion,
+        setInmobiliaria,
+        setPublicacion,
+        propiedades,
+        setPropiedades,
+      }}>
       {children}
     </InmobiliariaContext.Provider>
   );
