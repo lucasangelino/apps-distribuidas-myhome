@@ -11,11 +11,13 @@ import {InmobiliariaContext} from '../../context/InmobiliariaContext';
 import {getPropiedades} from '../../services/API';
 import NoPropiedades from '../../components/NoPropiedades';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import {useTranslation} from 'react-i18next';
 
 function InmobiliariaHome({navigation}) {
   const {auth, setAuth} = useContext(AuthContext);
   const {propiedades, setPropiedades, setPublicacion} =
     useContext(InmobiliariaContext);
+  const {t} = useTranslation();
 
   const getUser = async () => {
     try {
@@ -129,7 +131,7 @@ function InmobiliariaHome({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        <Heading>Mis propiedades</Heading>
+        <Heading>{t('Mis propiedades')}</Heading>
 
         {propiedades.length === 0 ? (
           <NoPropiedades />

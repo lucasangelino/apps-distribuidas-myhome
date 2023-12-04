@@ -4,6 +4,7 @@ import {Text, Button, Avatar, Snackbar} from 'react-native-paper';
 import {View, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 import axios from 'axios';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import {useTranslation} from 'react-i18next';
 
 const RecuperarContraseña = ({navigation, route}) => {
   const {email} = route.params;
@@ -21,6 +22,7 @@ const RecuperarContraseña = ({navigation, route}) => {
   const [errorRepeatPassword, setErrorRepeatPassword] = React.useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [visible, setVisible] = React.useState(false);
+  const {t} = useTranslation();
 
   const onToggleSnackBar = Message => {
     setVisible(true);
@@ -44,18 +46,18 @@ const RecuperarContraseña = ({navigation, route}) => {
 
   const handleButtonPress = () => {
     if (password === '') {
-      setErrorPasswordEmpty('Completar con una contraseña.');
+      setErrorPasswordEmpty(`${t('Completar con una contraseña.')}`);
     } else {
       setErrorPasswordEmpty('');
       if (password.length < 8) {
         setErrorPasswordLength(
-          'La contraseña debe tener al menos 8 caracteres.',
+          `${t('La contraseña debe tener al menos 8 caracteres.')}`,
         );
       } else {
         setErrorPasswordLength('');
         if (password === password.toLowerCase()) {
           setErrorPasswordUpperCase(
-            'La contraseña debe tener al menos una mayúscula.',
+            `${t('La contraseña debe tener al menos una letra mayúscula.')}`,
           );
         } else {
           setErrorPasswordUpperCase('');
@@ -64,18 +66,18 @@ const RecuperarContraseña = ({navigation, route}) => {
     }
 
     if (repeatPassword === '') {
-      setErrorRepeatPasswordEmpty('Completar con una contraseña.');
+      setErrorRepeatPasswordEmpty(`${t('Completar con una contraseña.')}`);
     } else {
       setErrorRepeatPasswordEmpty('');
       if (repeatPassword !== password) {
-        setErrorRepeatPassword('Las contraseñas no coinciden.');
+        setErrorRepeatPassword(`${t('Las contraseñas no coinciden.')}`);
       } else {
         setErrorRepeatPassword('');
       }
     }
 
     if (securityValue === '') {
-      setErrorSecurityValue('Completar con un código de seguridad.');
+      setErrorSecurityValue(`${t('Completar con el código de seguridad.')}`);
     } else {
       setErrorSecurityValue('');
     }
@@ -139,17 +141,17 @@ const RecuperarContraseña = ({navigation, route}) => {
         backgroundColor="#eff5f5"
       />
       <Text style={styles.text} variant="headlineSmall">
-        Verificar si recibiste el mail en tu casilla con el link.
+        {t('Verificar si recibiste el mail en tu casilla con el link.')}
       </Text>
       <TouchableOpacity>
         <Text style={styles.link} onPress={handleRecuperar}>
-          Volver a enviar el mail
+          {t('Volver a enviar el mail')}
         </Text>
       </TouchableOpacity>
       <Text
         variant="headlineSmall"
         style={{marginTop: 30, display: 'flex', alignSelf: 'flex-start'}}>
-        Codigo de Seguridad
+        {t('Codigo de Seguridad')}
       </Text>
       <TextInput
         style={styles.input}
@@ -166,7 +168,7 @@ const RecuperarContraseña = ({navigation, route}) => {
       <Text
         variant="headlineSmall"
         style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-        Contraseña
+        {t('Contraseña')}
       </Text>
       <TextInput
         style={styles.input}
@@ -192,7 +194,7 @@ const RecuperarContraseña = ({navigation, route}) => {
       <Text
         variant="headlineSmall"
         style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-        Repetir Contraseña
+        {t('Repetir Contraseña')}
       </Text>
       <TextInput
         style={styles.input}
@@ -214,7 +216,7 @@ const RecuperarContraseña = ({navigation, route}) => {
         style={styles.button}
         mode="contained"
         onPress={handleButtonPress}>
-        Cambiar Contraseña
+        {t('Cambiar Contraseña')}
       </Button>
     </View>
   );

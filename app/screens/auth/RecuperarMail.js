@@ -4,15 +4,17 @@ import {Text, Button, Avatar} from 'react-native-paper';
 import {View, TextInput, StyleSheet} from 'react-native';
 import axios from 'axios';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import {useTranslation} from 'react-i18next';
 
 const RecuperarMail = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [errorEmailEmpty, setErrorEmailEmpty] = useState('');
   const [post, setPost] = useState(null);
+  const {t} = useTranslation();
 
   const handleButtonPress = () => {
     if (email === '') {
-      setErrorEmailEmpty('Completar con un email.');
+      setErrorEmailEmpty(`${'Completar con un email.'}`);
     } else {
       setErrorEmailEmpty('');
     }
@@ -44,12 +46,12 @@ const RecuperarMail = ({navigation}) => {
         backgroundColor="#eff5f5"
       />
       <Text variant="headlineMedium" style={{marginTop: 20}}>
-        Recuperar tu Usuario
+        {t('Recuperar tu Usuario')}
       </Text>
       <Text
         variant="headlineMedium"
         style={{marginTop: 135, display: 'flex', alignSelf: 'flex-start'}}>
-        Email
+        {t('Email')}
       </Text>
       <TextInput
         style={styles.input}
@@ -65,7 +67,7 @@ const RecuperarMail = ({navigation}) => {
         style={styles.button}
         mode="contained"
         onPress={handleButtonPress}>
-        Recuperar
+        {t('Recuperar')}
       </Button>
     </View>
   );

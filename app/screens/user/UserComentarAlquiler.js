@@ -4,12 +4,14 @@ import {View} from 'react-native';
 import Heading from '../../components/Heading';
 import {SegmentedButtons, TextInput, Button} from 'react-native-paper';
 import {postUserComment} from '../../services/API';
+import {useTranslation} from 'react-i18next';
 
 const UserComentarAlquiler = ({route, navigation}) => {
   const {alquilerId: contractTypeId} = route.params;
 
   const [reviewType, setReviewType] = React.useState(false);
   const [commentMessage, setCommentMessage] = useState('');
+  const {t} = useTranslation();
 
   const handlePostComments = async () => {
     const {ok} = await postUserComment({
@@ -32,7 +34,7 @@ const UserComentarAlquiler = ({route, navigation}) => {
         display: 'flex',
         flexDirection: 'column',
       }}>
-      <Heading>Comentar Alquiler</Heading>
+      <Heading>{t('Comentar Alquiler')}</Heading>
       <SegmentedButtons
         style={{marginTop: 30}}
         value={reviewType}
@@ -62,7 +64,7 @@ const UserComentarAlquiler = ({route, navigation}) => {
         style={{marginTop: 30}}
         mode="contained"
         onPress={handlePostComments}>
-        Guardar
+        {t('Guardar')}
       </Button>
     </View>
   );

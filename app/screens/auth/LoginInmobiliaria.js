@@ -5,6 +5,7 @@ import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import {AuthContext} from '../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import {useTranslation} from 'react-i18next';
 
 const LoginInmobiliaria = ({navigation}) => {
   const {_, setAuth} = useContext(AuthContext);
@@ -15,6 +16,7 @@ const LoginInmobiliaria = ({navigation}) => {
   const [errorWrongMail, setErrorWrongMail] = useState('');
   const [errorPasswordEmpty, setErrorPasswordEmpty] = useState('');
   const [wrongCredentials, setWrongCredentials] = useState(false);
+  const {t} = useTranslation();
 
   const handleButtonPress = () => {
     if (mail === '') {
@@ -110,12 +112,12 @@ const LoginInmobiliaria = ({navigation}) => {
         backgroundColor="#eff5f5"
       />
       <Text variant="headlineMedium" style={{marginLeft: 5, marginTop: 50}}>
-        Ingresar como Inmobiliaria
+        {t('Ingresar como Inmobiliaria')}
       </Text>
       <Text
         variant="headlineMedium"
         style={{marginTop: 30, display: 'flex', alignSelf: 'flex-start'}}>
-        Usuario
+        {t('Usuario')}
       </Text>
       <TextInput
         style={styles.input}
@@ -139,7 +141,7 @@ const LoginInmobiliaria = ({navigation}) => {
           display: 'flex',
           alignSelf: 'flex-start',
         }}>
-        Contraseña
+        {t('Contraseña')}
       </Text>
       <TextInput
         style={styles.input}
@@ -155,14 +157,14 @@ const LoginInmobiliaria = ({navigation}) => {
 
       {wrongCredentials ? (
         <Text style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
-          Usuario o contraseña incorrectos.
+          {t('Usuario o contraseña incorrectos.')}
         </Text>
       ) : null}
       <Button
         style={styles.button}
         mode="contained"
         onPress={handleButtonPress}>
-        Ingresar
+        {t('Ingresar')}
       </Button>
       <View style={{display: 'flex', flexDirection: 'row'}}>
         <TouchableOpacity>
@@ -173,14 +175,14 @@ const LoginInmobiliaria = ({navigation}) => {
               marginRight: 110,
             }}
             onPress={() => navigation.navigate('RegistrarUsuarioInm')}>
-            No tengo cuenta
+            {t('No tengo cuenta')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity>
           <Text
             style={{color: '#0377ff', marginTop: 10}}
             onPress={() => navigation.navigate('RecuperarMail')}>
-            Olvidé mi contraseña
+            {t('Olvidé mi contraseña')}
           </Text>
         </TouchableOpacity>
       </View>

@@ -5,6 +5,7 @@ import {View, StyleSheet} from 'react-native';
 import {AuthContext} from '../../context/AppContext';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useTranslation} from 'react-i18next';
 
 import {
   GoogleSignin,
@@ -16,6 +17,7 @@ GoogleSignin.configure({
 });
 
 const Login = ({navigation}) => {
+  const {t} = useTranslation();
   const {setAuth} = React.useContext(AuthContext);
 
   const handleLoginWithGoogle = async () => {
@@ -88,7 +90,7 @@ const Login = ({navigation}) => {
         backgroundColor="#eff5f5"
       />
       <Text variant="headlineMedium" style={{marginTop: 140}}>
-        Ingresar como Usuario
+        {t('Ingresar como Usuario')}
       </Text>
       <Button
         textColor="#fff"
@@ -102,7 +104,7 @@ const Login = ({navigation}) => {
         }}
         mode="contained"
         onPress={handleLoginWithGoogle}>
-        Continuar con Google
+        {t('Continuar con Google')}
       </Button>
       <View
         style={{
@@ -115,18 +117,18 @@ const Login = ({navigation}) => {
         <Text
           variant="headlineSmall"
           style={{marginLeft: 8, marginRight: 8, marginBottom: 5}}>
-          o
+          {t('o')}
         </Text>
         <Divider style={{flex: 1, height: 1, backgroundColor: 'black'}} />
       </View>
       <Text variant="headlineMedium" style={{marginTop: 30}}>
-        Ingresar como Inmobiliaria
+        {t('Ingresar como Inmobiliaria')}
       </Text>
       <Button
         style={styles.button}
         mode="contained"
         onPress={() => navigation.navigate('LoginInmobiliaria')}>
-        Ingresar
+        {t('Ingresar')}
       </Button>
     </View>
   );

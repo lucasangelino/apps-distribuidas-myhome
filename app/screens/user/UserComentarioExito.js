@@ -2,8 +2,10 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {Button} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 
 const UserComentarioExito = ({navigation, route}) => {
+  const {t} = useTranslation();
   console.log('comentario con exito');
   return (
     <View
@@ -15,11 +17,11 @@ const UserComentarioExito = ({navigation, route}) => {
         alignItems: 'center',
         gap: 20,
       }}>
-      <Text style={{fontSize: 20}}>Comentario guardado con exito</Text>
+      <Text style={{fontSize: 20}}>{t('Comentario guardado con exito')}</Text>
       <Button
         mode="contained"
         onPress={() => navigation.navigate('UserAlquileres')}>
-        Volver
+        {t('Volver')}
       </Button>
     </View>
   );

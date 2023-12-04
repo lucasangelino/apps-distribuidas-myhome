@@ -1,29 +1,29 @@
-import React, { useEffect, useContext} from 'react';
-import { getUserFavorites } from '../../services/API';
+import React, {useEffect, useContext} from 'react';
+import {getUserFavorites} from '../../services/API';
 import NoFavoritos from '../../components/NoFavoritos';
-import { View, SafeAreaView, FlatList, StyleSheet } from 'react-native';
+import {View, SafeAreaView, FlatList, StyleSheet} from 'react-native';
 import Heading from '../../components/Heading';
 import PropiedadCard from '../../components/PropiedadCard';
 import {UsuarioContext} from '../../context/UsuarioContext';
+import {useTranslation} from 'react-i18next';
 
 const UserFavoritos = ({navigation}) => {
-
   const {favorites, setFavorites} = useContext(UsuarioContext);
+  const {t} = useTranslation();
 
   const getFavorites = async () => {
     const userFavorites = await getUserFavorites();
-    const properties = userFavorites.data.map(item =>  {
+    const properties = userFavorites.data.map(item => {
       const property = item.property;
       return {
         ...property,
         isFav: true,
-        favoriteId: item.favoriteId
+        favoriteId: item.favoriteId,
       };
     });
     console.log(properties);
     setFavorites(properties);
-
-  }
+  };
 
   useEffect(() => {
     const loadFavorites = navigation.addListener('focus', () => {
@@ -32,14 +32,14 @@ const UserFavoritos = ({navigation}) => {
     return loadFavorites;
   }, [navigation]);
 
-  const renderPropiedadCard = ({ item }) => {
+  const renderPropiedadCard = ({item}) => {
     return <PropiedadCard propiedad={item} />;
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        <Heading>Mis favoritos</Heading>
+        <Heading>{t('Mis favoritos')}</Heading>
 
         {favorites.length === 0 ? (
           <NoFavoritos />
@@ -47,13 +47,13 @@ const UserFavoritos = ({navigation}) => {
           <FlatList
             style={styles.propiedadesList}
             data={favorites}
-            renderItem={({ item }) => renderPropiedadCard({ item })}
+            renderItem={({item}) => renderPropiedadCard({item})}
             keyExtractor={item => item.id}
           />
         )}
       </View>
     </SafeAreaView>
-  )
+  );
 };
 
 const styles = StyleSheet.create({

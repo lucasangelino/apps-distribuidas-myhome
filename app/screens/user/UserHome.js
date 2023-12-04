@@ -60,10 +60,10 @@ const UserHome = ({navigation}) => {
   const hideModal = () => setVisible(false);
 
   useEffect(() => {
-        const loadPropertites = navigation.addListener('focus', () => {
-          getUserPropiedades();
-        });
-        return loadPropertites;
+    const loadPropertites = navigation.addListener('focus', () => {
+      getUserPropiedades();
+    });
+    return loadPropertites;
   }, [navigation]);
 
   useEffect(() => {
@@ -72,18 +72,21 @@ const UserHome = ({navigation}) => {
   }, [filters]);
 
   const getUserPropiedades = async () => {
-        const userPropiedades = await getNearestProperties({ filters });
-        const userFavorites = await getUserFavorites();
+    const userPropiedades = await getNearestProperties({filters});
+    const userFavorites = await getUserFavorites();
 
-        const favoritosIds = userFavorites.data.map(fav => fav.propertyId);
+    const favoritosIds = userFavorites.data.map(fav => fav.propertyId);
 
-        const propiedades = userPropiedades.data.map(propiedad => ({
-          ...propiedad,
-          isFav: favoritosIds.includes(propiedad.id),
-          favoriteId : favoritosIds.includes(propiedad.id) ? userFavorites.data.find(fav => fav.propertyId === propiedad.id).favoriteId : null
-        }));
+    const propiedades = userPropiedades.data.map(propiedad => ({
+      ...propiedad,
+      isFav: favoritosIds.includes(propiedad.id),
+      favoriteId: favoritosIds.includes(propiedad.id)
+        ? userFavorites.data.find(fav => fav.propertyId === propiedad.id)
+            .favoriteId
+        : null,
+    }));
 
-        setPropiedades(propiedades);
+    setPropiedades(propiedades);
   };
 
   const handleAplyFilters = async () => {
@@ -119,8 +122,10 @@ const UserHome = ({navigation}) => {
                     paddingVertical: 5,
                     borderRadius: 50,
                   }}>{`Filtros (${countFilters})`}</Text>
-                <Text onPress={() => setFilters(initialFilters)}>Limpiar</Text>
-                <Text onPress={hideModal}>Cerrar</Text>
+                <Text onPress={() => setFilters(initialFilters)}>
+                  {t('Limpiar')}
+                </Text>
+                <Text onPress={hideModal}>{t('Cerrar')}</Text>
               </View>
               <Divider style={{marginVertical: 10}} />
 
@@ -165,13 +170,13 @@ const UserHome = ({navigation}) => {
                 />
 
                 <View style={styles.amenitiesContainer}>
-                  <Text style={{fontSize: 20}}>Caracteristicas</Text>
+                  <Text style={{fontSize: 20}}>{t('Caracteristicas')}</Text>
                   {/* Ambientes */}
                   <View style={styles.amenitie}>
                     <View
                       style={{display: 'flex', flexDirection: 'row', gap: 10}}>
                       <Ionicons name="home-outline" size={20} />
-                      <Text>Ambientes</Text>
+                      <Text>{t('Ambientes')}</Text>
                     </View>
                     <View style={styles.buttons}>
                       <Ionicons
@@ -204,7 +209,7 @@ const UserHome = ({navigation}) => {
                     <View
                       style={{display: 'flex', flexDirection: 'row', gap: 10}}>
                       <Ionicons name="bed-outline" size={20} />
-                      <Text>Dormitorio</Text>
+                      <Text>{t('Dormitorio')}</Text>
                     </View>
                     <View style={styles.buttons}>
                       <Ionicons
@@ -237,7 +242,7 @@ const UserHome = ({navigation}) => {
                     <View
                       style={{display: 'flex', flexDirection: 'row', gap: 10}}>
                       <Ionicons name="water-outline" size={20} />
-                      <Text>Baños</Text>
+                      <Text>{t('Baños')}</Text>
                     </View>
                     <View style={styles.buttons}>
                       <Ionicons
@@ -270,7 +275,7 @@ const UserHome = ({navigation}) => {
                     <View
                       style={{display: 'flex', flexDirection: 'row', gap: 10}}>
                       <Ionicons name="car-outline" size={20} />
-                      <Text>Cocheras</Text>
+                      <Text>{t('Cocheras')}</Text>
                     </View>
                     <View style={styles.buttons}>
                       <Ionicons
@@ -303,7 +308,7 @@ const UserHome = ({navigation}) => {
                     <View
                       style={{display: 'flex', flexDirection: 'row', gap: 10}}>
                       <Ionicons name="calendar-outline" size={20} />
-                      <Text>Antiguedad</Text>
+                      <Text>{t('Antiguedad')}</Text>
                     </View>
                     <View style={styles.buttons}>
                       <Ionicons
@@ -416,7 +421,7 @@ const UserHome = ({navigation}) => {
                     />
                   </View>
 
-                  <Text style={{fontSize: 20}}>Precio</Text>
+                  <Text style={{fontSize: 20}}>{t('Precio')}</Text>
                   <SegmentedButtons
                     value={filters.currency}
                     onValueChange={currency =>
@@ -448,7 +453,7 @@ const UserHome = ({navigation}) => {
                         gap: 10,
                         width: '40%',
                       }}>
-                      <Text>Minimo</Text>
+                      <Text>{t('Minimo')}</Text>
                       <TextInput
                         keyboardType="numeric"
                         mode="outlined"
@@ -468,7 +473,7 @@ const UserHome = ({navigation}) => {
                         gap: 10,
                         width: '40%',
                       }}>
-                      <Text>Maximo</Text>
+                      <Text>{t('Maximo')}</Text>
                       <TextInput
                         keyboardType="numeric"
                         mode="outlined"
@@ -498,7 +503,9 @@ const UserHome = ({navigation}) => {
                       handleAplyFilters();
                       hideModal();
                     }}>
-                    <Text style={{color: '#fff', fontSize: 18}}>Aplicar</Text>
+                    <Text style={{color: '#fff', fontSize: 18}}>
+                      {t('Aplicar')}
+                    </Text>
                   </Button>
                 </View>
               </View>

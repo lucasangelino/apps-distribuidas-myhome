@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
+import {useTranslation} from 'react-i18next';
 
 const RegistrarUsuarioInm = ({navigation}) => {
   const [cuit, setCuit] = useState('');
@@ -32,6 +33,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
   const [checked, setChecked] = React.useState(false);
   const [errorChecked, setErrorChecked] = useState('');
   const [visible, setVisible] = React.useState(false);
+  const {t} = useTranslation();
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -45,18 +47,18 @@ const RegistrarUsuarioInm = ({navigation}) => {
 
   const handleButtonPress = () => {
     if (cuit === '') {
-      setErrorCuitEmpty('Completar con un número de CUIT.');
+      setErrorCuitEmpty(`${t('Completar con un número de CUIT.')}`);
     } else {
       setErrorCuitEmpty('');
       if (cuit.length < 11) {
-        setErrorCuitLength('El CUIT debe tener 11 dígitos.');
+        setErrorCuitLength(`${t('El CUIT debe tener 11 dígitos.')}`);
       } else {
         setErrorCuitLength('');
       }
     }
 
     if (email === '') {
-      setErrorEmailEmpty('Completar con un email.');
+      setErrorEmailEmpty(`${t('Completar con un email.')}`);
     } else {
       setErrorEmailEmpty('');
       var checkEmail = 0;
@@ -66,25 +68,25 @@ const RegistrarUsuarioInm = ({navigation}) => {
         }
       }
       if (checkEmail !== 1) {
-        setErrorNotEmail('El email ingresado no es válido.');
+        setErrorNotEmail(`${t('El email ingresado no es válido.')}`);
       } else {
         setErrorNotEmail('');
       }
     }
 
     if (fantasyName === '') {
-      setErrorFantasyNameEmpty('Completar con un nombre de Inmobiliaria.');
+      setErrorFantasyNameEmpty(`${t('Completar con un nombre de fantasía.')}`);
     } else {
       setErrorFantasyNameEmpty('');
     }
 
     if (password === '') {
-      setErrorPasswordEmpty('Completar con una contraseña.');
+      setErrorPasswordEmpty(`${t('Completar con una contraseña.')}`);
     } else {
       setErrorPasswordEmpty('');
       if (password.length < 8) {
         setErrorPasswordLength(
-          'La contraseña debe tener al menos 8 caracteres.',
+          `${t('La contraseña debe tener al menos 8 caracteres.')}`,
         );
       } else {
         setErrorPasswordLength('');
@@ -96,7 +98,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
         }
         if (validateUpperCase === 0) {
           setErrorPasswordUpperCase(
-            'La contraseña debe tener al menos una letra mayúscula.',
+            `${t('La contraseña debe tener al menos una mayúscula.')}`,
           );
         } else {
           setErrorPasswordUpperCase('');
@@ -105,29 +107,29 @@ const RegistrarUsuarioInm = ({navigation}) => {
     }
 
     if (repeatPassword === '') {
-      setErrorRepeatPasswordEmpty('Completar con una contraseña.');
+      setErrorRepeatPasswordEmpty(`${t('Completar con una contraseña.')}`);
     } else {
       setErrorRepeatPasswordEmpty('');
       if (repeatPassword !== password) {
-        setErrorRepeatPassword('Las contraseñas no coinciden.');
+        setErrorRepeatPassword(`${t('Las contraseñas no coinciden.')}`);
       } else {
         setErrorRepeatPassword('');
       }
     }
 
     if (checked === false) {
-      setErrorChecked('Debe aceptar los Términos y Condiciones de Uso.');
+      setErrorChecked(`${t('Debe aceptar los términos y condiciones.')}`);
     } else {
       setErrorChecked('');
     }
 
     if (phoneNumber === '') {
-      setErrorPhoneNumberEmpty('Completar con un número de teléfono.');
+      setErrorPhoneNumberEmpty(`${t('Completar con un número de teléfono.')}`);
     } else {
       setErrorPhoneNumberEmpty('');
       if (phoneNumber.length !== 10) {
         setErrorPhoneNumberLength(
-          'El número de teléfono debe tener 10 dígitos.',
+          `${t(`El número de teléfono debe tener 10 dígitos.`)}`,
         );
       } else {
         setErrorPhoneNumberLength('');
@@ -167,13 +169,10 @@ const RegistrarUsuarioInm = ({navigation}) => {
     formData.append('cuit', cuit);
     console.log('API_VERSION: ', API_VERSION);
 
-    const request = await fetch(
-      `${BACKEND_URL}/${API_VERSION}/users`,
-      {
-        method: 'POST',
-        body: formData,
-      },
-    );
+    const request = await fetch(`${BACKEND_URL}/${API_VERSION}/users`, {
+      method: 'POST',
+      body: formData,
+    });
     const response = await request.json();
     console.log('Register response: ', response);
     if (response.result === 'ok') {
@@ -214,12 +213,12 @@ const RegistrarUsuarioInm = ({navigation}) => {
           backgroundColor="#eff5f5"
         />
         <Text variant="headlineSmall" style={{marginLeft: 5}}>
-          Registrate como Inmobiliaria
+          {t('Registrate como Inmobiliaria')}
         </Text>
         <Text
           variant="headlineSmall"
           style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-          Email
+          {t('Email')}
         </Text>
         <TextInput
           style={styles.input}
@@ -241,7 +240,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
         <Text
           variant="headlineSmall"
           style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-          Nombre de la Inmobiliaria
+          {t('Nombre de la Inmobiliaria')}
         </Text>
         <TextInput
           style={styles.input}
@@ -257,7 +256,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
         <Text
           variant="headlineSmall"
           style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-          CUIT
+          {t('CUIT')}
         </Text>
         <TextInput
           keyboardType="numeric"
@@ -280,7 +279,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
         <Text
           variant="headlineSmall"
           style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-          Teléfono
+          {t('Teléfono')}
         </Text>
         <TextInput
           style={styles.input}
@@ -304,7 +303,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
         <Text
           variant="headlineSmall"
           style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-          Contraseña
+          {t('Contraseña')}
         </Text>
         <TextInput
           style={styles.input}
@@ -333,7 +332,7 @@ const RegistrarUsuarioInm = ({navigation}) => {
         <Text
           variant="headlineSmall"
           style={{marginTop: 10, display: 'flex', alignSelf: 'flex-start'}}>
-          Repetir Contraseña
+          {t('Repetir Contraseña')}
         </Text>
         <TextInput
           style={styles.input}
@@ -367,10 +366,10 @@ const RegistrarUsuarioInm = ({navigation}) => {
             }}
             style={styles.checkbox}
           />
-          <Text style={{marginRight: 3.3}}>Acepto los</Text>
+          <Text style={{marginRight: 3.3}}>{t('Acepto los ')}</Text>
           <TouchableOpacity>
             <Text style={{color: '#0377ff'}}>
-              Términos y Condiciones de Uso
+              {t('Términos y Condiciones de Uso')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -385,14 +384,14 @@ const RegistrarUsuarioInm = ({navigation}) => {
           style={styles.button}
           mode="contained"
           onPress={() => handleButtonPress()}>
-          Registrar
+          {t('Registrarme')}
         </Button>
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity>
             <Text
               style={styles.link}
               onPress={() => navigation.navigate('RecuperarMail')}>
-              Olvidé mi contraseña
+              {t('Olvidé mi contraseña')}
             </Text>
           </TouchableOpacity>
         </View>

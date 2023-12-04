@@ -1,30 +1,40 @@
-import React, { useEffect, useContext } from 'react';
-import { StyleSheet, View, Image, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { Text, Button } from 'react-native-paper';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect, useContext} from 'react';
+import {
+  StyleSheet,
+  View,
+  Image,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import {Text, Button} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthContext } from '../../context/AppContext';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { updateUser, getUserProfile } from '../../services/API';
-import { userValidation } from '../../utils/utils';
+import {AuthContext} from '../../context/AppContext';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {updateUser, getUserProfile} from '../../services/API';
+import {userValidation} from '../../utils/utils';
+import {useTranslation} from 'react-i18next';
 
-const InmobiliariaProfile = ({ navigation }) => {
+const InmobiliariaProfile = ({navigation}) => {
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [isModalImageVisible, setIsModalImageVisible] = React.useState(false);
   const [fetchedInmobiliaria, setFetchedInmobiliaria] = React.useState([]);
   const [editedValues, setEditedValues] = React.useState({});
   const [editingField, setEditingField] = React.useState(null);
   const [modalTitle, setModalTitle] = React.useState('');
-  const { auth, setAuth } = useContext(AuthContext);
+  const {auth, setAuth} = useContext(AuthContext);
   const [error, setError] = React.useState('');
-  const { validateUserField } = userValidation();
+  const {validateUserField} = userValidation();
+  const {t} = useTranslation();
 
   const getUser = async () => {
     try {
       const res = await getUserProfile();
       const user = res.data;
       setFetchedInmobiliaria(user);
-
     } catch (error) {
       console.log('error: ' + error);
     }
@@ -42,44 +52,47 @@ const InmobiliariaProfile = ({ navigation }) => {
     }
   };
 
-const deleteAccount = () => {
-  Alert.alert(
-    'Eliminar Cuenta',
-    '¿Estás seguro de que quieres eliminar tu cuenta?',
-    [
-      {
-        text: 'Cancelar',
-        style: 'cancel',
-      },
-      {
-        text: 'Eliminar',
-        onPress: async () => {
-          try {
-           const formData = new FormData();
-            formData.append('status', 'Deactivated');
-            const res = await updateUser({ formData });
-            await AsyncStorage.clear();
-            setAuth({
-              hasUser: false,
-              user: null,
-            });
-          } catch (error) {
-            console.log('Error al eliminar cuenta:', error);
-          }
+  const deleteAccount = () => {
+    Alert.alert(
+      'Eliminar Cuenta',
+      '¿Estás seguro de que quieres eliminar tu cuenta?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
         },
-      },
-    ],
-    { cancelable: false }
-  );
-};
+        {
+          text: 'Eliminar',
+          onPress: async () => {
+            try {
+              const formData = new FormData();
+              formData.append('status', 'Deactivated');
+              const res = await updateUser({formData});
+              await AsyncStorage.clear();
+              setAuth({
+                hasUser: false,
+                user: null,
+              });
+            } catch (error) {
+              console.log('Error al eliminar cuenta:', error);
+            }
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
 
   const handleEdit = (field, modalTitle) => {
     setIsModalVisible(true);
     setEditingField(field);
     setModalTitle(modalTitle);
     const initialValue = fetchedInmobiliaria[field] || '';
-    const editedValue = field === 'phone' && initialValue.startsWith('+549') ? initialValue.slice(4) : initialValue;
-    setEditedValues({ ...editedValues, [field]: editedValue });
+    const editedValue =
+      field === 'phone' && initialValue.startsWith('+549')
+        ? initialValue.slice(4)
+        : initialValue;
+    setEditedValues({...editedValues, [field]: editedValue});
   };
 
   const handleImagePicker = (field, modalTitle) => {
@@ -88,8 +101,11 @@ const deleteAccount = () => {
 
   const handleSave = async () => {
     try {
-      const errorValidation = await validateUserField(editingField, editedValues[editingField])
-      setError(errorValidation)
+      const errorValidation = await validateUserField(
+        editingField,
+        editedValues[editingField],
+      );
+      setError(errorValidation);
       if (errorValidation != '') {
         console.log('Error:', error);
         return;
@@ -98,14 +114,16 @@ const deleteAccount = () => {
       const userData = JSON.parse(jsonValue);
       const token = userData.token;
 
-      const editedValue = editingField === 'phone' && !editedValues[editingField].startsWith('+549')
-        ? `+549${editedValues[editingField]}`
-        : editedValues[editingField];
+      const editedValue =
+        editingField === 'phone' &&
+        !editedValues[editingField].startsWith('+549')
+          ? `+549${editedValues[editingField]}`
+          : editedValues[editingField];
 
       const formData = new FormData();
       formData.append(editingField, editedValue);
 
-      const res = await updateUser({ formData });
+      const res = await updateUser({formData});
       const user = res.data;
       setFetchedInmobiliaria(user);
 
@@ -115,7 +133,7 @@ const deleteAccount = () => {
     }
   };
 
-  const handleImageSelection = async (response) => {
+  const handleImageSelection = async response => {
     if (response.cancelled) {
       console.log('Selección de imagen cancelada');
       return;
@@ -140,7 +158,7 @@ const deleteAccount = () => {
       const formData = new FormData();
       formData.append('photo', selectedUris[0]);
 
-      const resImage = await updateUser({ formData });
+      const resImage = await updateUser({formData});
       const updatedUser = resImage.data;
       setFetchedInmobiliaria(updatedUser);
       if (!response.fromGallery) {
@@ -174,23 +192,27 @@ const deleteAccount = () => {
     return loadUser;
   }, [navigation]);
 
-
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         {fetchedInmobiliaria.photo ? (
           <Image
-            source={{ uri: fetchedInmobiliaria.photo }}
+            source={{uri: fetchedInmobiliaria.photo}}
             style={styles.profileImage}
-            onError={(error) => console.error('Error al cargar la imagen:', error)}
+            onError={error =>
+              console.error('Error al cargar la imagen:', error)
+            }
           />
         ) : (
-          <Text>Foto no disponible</Text>
+          <Text>{t('Foto no disponible')}</Text>
         )}
-        <Button style={{
-          marginTop: 5
-        }} mode="contained" onPress={handleImagePicker}>
-          <Text>Editar imagen</Text>
+        <Button
+          style={{
+            marginTop: 5,
+          }}
+          mode="contained"
+          onPress={handleImagePicker}>
+          <Text>{t('Editar imagen')}</Text>
         </Button>
       </View>
 
@@ -200,32 +222,32 @@ const deleteAccount = () => {
           name="pencil"
           size={30}
           color={'#ccc'}
-          onPress={() => handleEdit('fantasyName', "Nombre de Fantasia")}
+          onPress={() => handleEdit('fantasyName', 'Nombre de Fantasia')}
         />
       </View>
 
       <View style={styles.fieldName}>
-        <Text>E-mail de usuario</Text>
+        <Text>{t('E-mail de usuario')}</Text>
         <View style={styles.fieldValue}>
           <Text>{fetchedInmobiliaria.mail}</Text>
           <Ionicons
             name="pencil"
             size={20}
             color={'#ccc'}
-            onPress={() => handleEdit('mail', "Email")}
+            onPress={() => handleEdit('mail', 'Email')}
           />
         </View>
       </View>
 
       <View style={styles.fieldName}>
-        <Text>E-mail de contacto</Text>
+        <Text>{t('E-mail de contacto')}</Text>
         <View style={styles.fieldValue}>
           <Text>{fetchedInmobiliaria.contactMail}</Text>
           <Ionicons
             name="pencil"
             size={20}
             color={'#ccc'}
-            onPress={() => handleEdit('contactMail', "Email de Contacto")}
+            onPress={() => handleEdit('contactMail', 'Email de Contacto')}
           />
         </View>
       </View>
@@ -238,80 +260,87 @@ const deleteAccount = () => {
             name="pencil"
             size={20}
             color={'#ccc'}
-            onPress={() => handleEdit('firstName', "Nombre")}
+            onPress={() => handleEdit('firstName', 'Nombre')}
           />
         </View>
       </View>
 
-
       <View style={styles.fieldName}>
-        <Text>Apellido</Text>
+        <Text>{t('Apellido')}</Text>
         <View style={styles.fieldValue}>
           <Text>{fetchedInmobiliaria.lastName}</Text>
           <Ionicons
             name="pencil"
             size={20}
             color={'#ccc'}
-            onPress={() => handleEdit('lastName', "Apellido")}
+            onPress={() => handleEdit('lastName', 'Apellido')}
           />
         </View>
       </View>
 
       <View style={styles.fieldName}>
-        <Text>Teléfono</Text>
+        <Text>{t('Teléfono')}</Text>
         <View style={styles.fieldValue}>
           <Text>{fetchedInmobiliaria.phone}</Text>
           <Ionicons
             name="pencil"
             size={20}
             color={'#ccc'}
-            onPress={() => handleEdit('phone', "Teléfono")}
+            onPress={() => handleEdit('phone', 'Teléfono')}
           />
         </View>
       </View>
 
       <View style={styles.fieldName}>
-        <Text>CUIT</Text>
+        <Text>{t('CUIT')}</Text>
         <View style={styles.fieldValue}>
           <Text>{fetchedInmobiliaria.cuit}</Text>
           <Ionicons
             name="pencil"
             size={20}
             color={'#ccc'}
-            onPress={() => handleEdit('cuit', "CUIT")}
+            onPress={() => handleEdit('cuit', 'CUIT')}
           />
         </View>
       </View>
 
       <Button mode="outlined" onPress={handleLogout}>
-        <Text>Cerrar sesión</Text>
+        <Text>{t('Cerrar sesión')}</Text>
       </Button>
 
-      <Button style={{
-        marginTop: 5
-      }} mode="contained" onPress={deleteAccount}>
-        <Text>Eliminar cuenta</Text>
+      <Button
+        style={{
+          marginTop: 5,
+        }}
+        mode="contained"
+        onPress={deleteAccount}>
+        <Text>{t('Eliminar cuenta')}</Text>
       </Button>
 
       <Modal visible={isModalVisible} animationType="slide">
         <View style={styles.modalContainer}>
-          <Text>Cambiar {modalTitle}</Text>
+          <Text>{`${t('Cambiar')} ${modalTitle}`}</Text>
           <TextInput
             style={styles.input}
             value={editedValues[editingField]}
-            onChangeText={(text) => setEditedValues({ ...editedValues, [editingField]: text })}
+            onChangeText={text =>
+              setEditedValues({...editedValues, [editingField]: text})
+            }
           />
-          <Text style={{ color: 'red' }}>{error}</Text>
+          <Text style={{color: 'red'}}>{error}</Text>
           <Button mode="contained" onPress={handleSave}>
-            <Text>Guardar</Text>
+            <Text>{t('Guardar')}</Text>
           </Button>
-          <Button style={{
-            marginTop: 5
-          }} mode="outlined" onPress={() => {
-            setError('');
-            setIsModalVisible(false);
-          }}>
-            <Text>Cancelar</Text>
+          <Button
+            style={{
+              marginTop: 5,
+            }}
+            mode="outlined"
+            onPress={() => {
+              setError('');
+              setIsModalVisible(false);
+            }}>
+            <Text>{t('Cancelar')}</Text>
           </Button>
         </View>
       </Modal>
@@ -324,18 +353,18 @@ const deleteAccount = () => {
             }}
             mode="outlined"
             onPress={selectImagesFromCamera}>
-            Abrir camara
+            {t('Abrir camara')}
           </Button>
           <Button
             style={{
               width: '50%',
               backgroundColor: '#fff',
-              marginTop: 5
+              marginTop: 5,
             }}
             mode="outlined"
             onPress={selectImagesFromGallery}>
             {' '}
-            Abrir galeria
+            {t('Abrir galeria')}
           </Button>
           <TouchableOpacity
             style={{
@@ -379,7 +408,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
-
   },
   profileImage: {
     width: 150,

@@ -87,9 +87,6 @@ const InmobiliariaApp = () => {
         <Stack.Screen
           name="AddPropiedadStepper"
           component={AddPropiedadStepper}
-          // options={{
-          //   header: () => <AppBar />,
-          // }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -4,9 +4,11 @@ import NoPropiedades from '../../components/NoPropiedades';
 import {View, SafeAreaView, FlatList, StyleSheet} from 'react-native';
 import Heading from '../../components/Heading';
 import PropiedadCard from '../../components/PropiedadCard';
+import {useTranslation} from 'react-i18next';
 
 const UserAlquileres = ({navigation}) => {
   const [misAlguileres, setMisAlquileres] = useState([]);
+  const {t} = useTranslation();
 
   const getAlquileres = async () => {
     const userAlquileres = await getUserAlquileres();
@@ -35,7 +37,7 @@ const UserAlquileres = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        <Heading>Mis Contratos</Heading>
+        <Heading>{t('Mis Contratos')}</Heading>
 
         {misAlguileres.length === 0 ? (
           <NoPropiedades />

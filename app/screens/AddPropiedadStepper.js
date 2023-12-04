@@ -19,6 +19,7 @@ import {
   updatePropiedadStepThree,
   updatePropiedadStepFour,
 } from '../services/API';
+import {useTranslation} from 'react-i18next';
 
 export const AddPropiedadStepper = ({navigation}) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -68,6 +69,7 @@ export const AddPropiedadStepper = ({navigation}) => {
 };
 
 const StepOne = ({onNextStep}) => {
+  const {t} = useTranslation();
   const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
 
   const [tipoPropiedad, setTipoPropiedad] = React.useState(
@@ -107,15 +109,15 @@ const StepOne = ({onNextStep}) => {
   return (
     <View style={{display: 'flex', gap: 10}}>
       <Text variant="titleLarge" style={{marginBottom: 15}}>
-        Contanos, ¿Qué querés publicar?
+        {t('Contanos, ¿Qué querés publicar?')}
       </Text>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Tipo de propiedad
+        {t('Tipo de propiedad')}
       </Text>
       <Dropdown
         onValueChange={itemValue => setTipoPropiedad(itemValue)}
-        placeholder="Elige una opción"
+        placeholder={t('Elige una opción')}
         options={[
           {label: 'Casa', value: 'Casa'},
           {label: 'PH', value: 'PH'},
@@ -144,12 +146,14 @@ const StepOne = ({onNextStep}) => {
         }}
         listHeaderComponent={
           <View style={styles.customComponentContainer}>
-            <Text style={styles.text}>💡 Elige el tipo de propiedad</Text>
+            <Text style={styles.text}>
+              💡 {t('Elige el tipo de propiedad')}
+            </Text>
           </View>
         }
         listFooterComponent={
           <View style={styles.customComponentContainer}>
-            <Text>Solo puedes elegir una opción</Text>
+            <Text>{t('Solo puedes elegir una opción')}</Text>
           </View>
         }
         modalOptionsContainerStyle={{
@@ -169,10 +173,10 @@ const StepOne = ({onNextStep}) => {
         }}
       />
       <Text variant="titleLarge" style={{marginTop: 10}}>
-        Describí la propiedad
+        {t('Describí la propiedad')}
       </Text>
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Título
+        {t('Título')}
       </Text>
       <TextInput
         mode="outlined"
@@ -180,7 +184,7 @@ const StepOne = ({onNextStep}) => {
         onChangeText={title => setPropiedadTitle(title)}
       />
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Descripción
+        {t('Descripción')}
       </Text>
       <TextAreaInput
         editable
@@ -206,13 +210,14 @@ const StepOne = ({onNextStep}) => {
           saveStepOne();
           publishPropiedadStepOne();
         }}>
-        Continuar
+        {t('Continuar')}
       </Button>
     </View>
   );
 };
 
 const StepTwo = ({onNextStep, onPrevStep}) => {
+  const {t} = useTranslation();
   const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
   const [calleAltura, setCalleAltura] = useState(
     publicacion.direccion.calleAltura,
@@ -290,11 +295,11 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
   return (
     <View style={{display: 'flex', gap: 10}}>
       <Text variant="titleLarge" style={{marginBottom: 15}}>
-        ¿Dónde está ubicada la propiedad?
+        {t('¿Dónde está ubicada la propiedad?')}
       </Text>
 
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Calle y Altura
+        {t('Calle y Altura')}
       </Text>
       <TextInput
         mode="outlined"
@@ -304,7 +309,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         onChangeText={title => setCalleAltura(title)}
       />
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Ciudad
+        {t('Ciudad')}
       </Text>
       <TextInput
         mode="outlined"
@@ -314,7 +319,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         onChangeText={title => setCiudad(title)}
       />
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Provincia
+        {t('Provincia')}
       </Text>
       <TextInput
         mode="outlined"
@@ -324,7 +329,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         onChangeText={title => setProvincia(title)}
       />
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Barrio
+        {t('Barrio')}
       </Text>
       <TextInput
         mode="outlined"
@@ -334,7 +339,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         onChangeText={title => setBarrio(title)}
       />
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Localidad
+        {t('Localidad')}
       </Text>
       <TextInput
         mode="outlined"
@@ -344,7 +349,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         onChangeText={title => setLocalidad(title)}
       />
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Piso/Departamento
+        {t('Piso/Departamento')}
       </Text>
       <TextInput
         mode="outlined"
@@ -354,11 +359,11 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
         onChangeText={title => setPiso(title)}
       />
       <Text variant="titleSmall" style={{marginTop: 10, marginBottom: 20}}>
-        Ubicación
+        {t('Ubicación')}
       </Text>
 
       <Button mode="outlined" onPress={showAddressInMap}>
-        Mostrar en el mapa
+        {t('Mostrar en el mapa')}
       </Button>
       <View style={{marginBottom: 20}}>
         <MapView
@@ -419,6 +424,7 @@ const StepTwo = ({onNextStep, onPrevStep}) => {
 };
 
 const StepThree = ({onNextStep, onPrevStep}) => {
+  const {t} = useTranslation();
   const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
   const [modoOperacion, setModoOperacion] = useState(publicacion.tipoOperacion);
   const [countAmenities, setCountAmenities] = useState(publicacion.ambientes);
@@ -504,7 +510,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
   return (
     <View style={{display: 'flex', gap: 10, width: '100%'}}>
       <Text variant="titleLarge" style={{marginBottom: 15}}>
-        Características principales
+        {t('Características principales')}
       </Text>
 
       <View
@@ -524,7 +530,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
               alignItems: 'center',
               gap: 10,
             }}>
-            <Text>Ambientes</Text>
+            <Text>{t('Ambientes')}</Text>
             <View
               style={{
                 display: 'flex',
@@ -559,7 +565,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
               alignItems: 'center',
               gap: 10,
             }}>
-            <Text>Dommitorios</Text>
+            <Text>{t('Dommitorios')}</Text>
             <View
               style={{
                 display: 'flex',
@@ -621,7 +627,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
               alignItems: 'center',
               gap: 10,
             }}>
-            <Text>Baños</Text>
+            <Text>{t('Baños')}</Text>
             <View
               style={{
                 display: 'flex',
@@ -672,7 +678,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
               alignItems: 'center',
               gap: 10,
             }}>
-            <Text>Cocheras</Text>
+            <Text>{t('Cocheras')}</Text>
             <View
               style={{
                 display: 'flex',
@@ -734,7 +740,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
               alignItems: 'center',
               gap: 10,
             }}>
-            <Text>Balcones</Text>
+            <Text>{t('Balcones')}</Text>
             <View
               style={{
                 display: 'flex',
@@ -786,7 +792,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
               alignItems: 'center',
               gap: 10,
             }}>
-            <Text>Terrazas</Text>
+            <Text>{t('Terrazas')}</Text>
             <View
               style={{
                 display: 'flex',
@@ -839,7 +845,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
           marginTop: 20,
           gap: 10,
         }}>
-        <Text>Bauleras</Text>
+        <Text>{t('Bauleras')}</Text>
         <View
           style={{
             display: 'flex',
@@ -883,11 +889,11 @@ const StepThree = ({onNextStep, onPrevStep}) => {
       </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Superficie
+        {t('Superficie')}
       </Text>
       <View>
         <Text variant="titleSmall" style={{marginTop: 10}}>
-          Cubierta
+          {t('Cubierta')}
         </Text>
         <TextInput
           keyboardType="numeric"
@@ -899,7 +905,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
         />
 
         <Text variant="titleSmall" style={{marginTop: 10}}>
-          Semidescubierta
+          {t('Semidescubierta')}
         </Text>
         <TextInput
           keyboardType="numeric"
@@ -911,7 +917,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
         />
 
         <Text variant="titleSmall" style={{marginTop: 10}}>
-          Descubierta
+          {t('Descubierta')}
         </Text>
         <TextInput
           keyboardType="numeric"
@@ -924,7 +930,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
       </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Antiguedad (años)
+        {t('Antiguedad (años)')}
       </Text>
       <TextInput
         mode="outlined"
@@ -936,7 +942,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
       />
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Tipo de operación
+        {t('Tipo de operación')}
       </Text>
 
       <View
@@ -952,28 +958,28 @@ const StepThree = ({onNextStep, onPrevStep}) => {
           mode={modoOperacion === 'Venta' ? 'contained' : 'outlined'}
           color="#EB6440"
           onPress={() => setModoOperacion('Venta')}>
-          Venta
+          {t('Venta')}
         </Button>
         <Button
           mode={modoOperacion === 'Alquiler' ? 'contained' : 'outlined'}
           color="#EB6440"
           onPress={() => setModoOperacion('Alquiler')}>
-          Alquiler
+          {t('Alquiler')}
         </Button>
         <Button
           mode={modoOperacion === 'Temporada' ? 'contained' : 'outlined'}
           color="#EB6440"
           onPress={() => setModoOperacion('Temporada')}>
-          Temporada
+          {t('Temporada')}
         </Button>
       </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Precio
+        {t('Precio')}
       </Text>
 
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Precio de la propiedad
+        {t('Precio de la propiedad')}
       </Text>
       <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
         <Button
@@ -1009,7 +1015,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
       </View>
 
       <Text variant="titleSmall" style={{marginTop: 10}}>
-        Expensas
+        {t('Expensas')}
       </Text>
 
       <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
@@ -1075,7 +1081,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
             saveStepThree();
             publishPropiedadStepThree();
           }}>
-          Continuar
+          {t('Continuar')}
         </Button>
       </View>
     </View>
@@ -1084,7 +1090,7 @@ const StepThree = ({onNextStep, onPrevStep}) => {
 
 const StepFour = ({onPrevStep, onSubmitSteps}) => {
   const {publicacion, setPublicacion} = useContext(InmobiliariaContext);
-
+  const {t} = useTranslation();
   const [amenitiesList, setAmenitiesList] = useState(publicacion.amenities);
   const [orientacion, setOrientacion] = useState(publicacion.orientacion);
   const [disposicion, setDisposicion] = useState(publicacion.disposicion);
@@ -1186,7 +1192,7 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
   return (
     <View style={{display: 'flex', gap: 10}}>
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Que amenities tiene la propiedad?
+        {t('Que amenities tiene la propiedad?')}
       </Text>
       <View
         style={{
@@ -1241,7 +1247,7 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
       </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Orientación
+        {t('Orientación')}
       </Text>
       <Dropdown
         onValueChange={itemValue => setOrientacion(itemValue)}
@@ -1280,13 +1286,13 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
         listHeaderComponent={
           <View style={styles.customComponentContainer}>
             <Text style={styles.text}>
-              💡 Elige la orientación de la propiedad
+              💡 {t('Elige la orientación de la propiedad')}
             </Text>
           </View>
         }
         listFooterComponent={
           <View style={styles.customComponentContainer}>
-            <Text>Solo puedes elegir una opción</Text>
+            <Text>{t('Solo puedes elegir una opción')}</Text>
           </View>
         }
         modalOptionsContainerStyle={{
@@ -1306,7 +1312,7 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
         }}
       />
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Disposición
+        {t('Disposición')}
       </Text>
       <Dropdown
         onValueChange={itemValue => setDisposicion(itemValue)}
@@ -1339,13 +1345,13 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
         listHeaderComponent={
           <View style={styles.customComponentContainer}>
             <Text style={styles.text}>
-              💡 Elige la disposición de la propiedad
+              💡 {t('Elige la disposición de la propiedad')}
             </Text>
           </View>
         }
         listFooterComponent={
           <View style={styles.customComponentContainer}>
-            <Text>Solo puedes elegir una opción</Text>
+            <Text>{t('Solo puedes elegir una opción')}</Text>
           </View>
         }
         modalOptionsContainerStyle={{
@@ -1366,7 +1372,7 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
       />
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Imagenes
+        {t('Imagenes')}
       </Text>
 
       <View
@@ -1414,7 +1420,7 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
           }}
           mode="outlined"
           onPress={selectImagesFromCamera}>
-          Abrir camara
+          {t('Abrir camara')}
         </Button>
         <Button
           style={{
@@ -1424,12 +1430,12 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
           mode="outlined"
           onPress={selectImagesFromGallery}>
           {' '}
-          Abrir galeria
+          {t('Abrir galeria')}
         </Button>
       </View>
 
       <Text variant="titleMedium" style={{marginTop: 10}}>
-        Videos (opcional)
+        {t('Videos (opcional)')}
       </Text>
       <TextInput
         mode="outlined"
@@ -1441,7 +1447,7 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
         mode="outlined"
         color="#EB6440"
         onPress={() => addVideo(videoUrl)}>
-        Agregar url del video
+        {t('Agregar url del video')}
       </Button>
 
       <View
@@ -1465,7 +1471,7 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
             saveStepFour();
             onPrevStep();
           }}>
-          Atrás
+          {t('Atras')}
         </Button>
         <Button
           style={{
@@ -1473,7 +1479,7 @@ const StepFour = ({onPrevStep, onSubmitSteps}) => {
           }}
           mode="contained"
           onPress={publishPropiedadStepfour}>
-          Publicar
+          {t('Publicar')}
         </Button>
       </View>
     </View>
