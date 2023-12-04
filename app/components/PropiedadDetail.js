@@ -59,7 +59,7 @@ const PropiedadDetail = ({route, navigation}) => {
             name="arrow-back-outline"
             size={20}
             color={'#212121'}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('HomeUser')}
           />
           <Avatar.Image
             size={50}
