@@ -95,7 +95,15 @@ const UserHome = ({navigation}) => {
   };
 
   const renderPropiedadCard = ({item}) => {
-    return <PropiedadCard propiedad={item} />;
+    return (
+      <PropiedadCard
+        propiedad={item}
+        actionButtonText="VER MAS"
+        onActionButtonPress={() =>
+          navigation.navigate('PropiedadDetail', {property: item})
+        }
+      />
+    );
   };
 
   return (

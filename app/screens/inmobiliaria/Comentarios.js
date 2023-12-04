@@ -14,7 +14,6 @@ import {useTranslation} from 'react-i18next';
 
 const Comentarios = ({navigation}) => {
   const {auth, _} = React.useContext(AuthContext);
-  console.log(auth);
   const [fetchedComments, setFetchedComments] = React.useState([]);
   const [fetchedPoints, setFetchedPoints] = React.useState(0);
   const {t} = useTranslation();
@@ -28,20 +27,13 @@ const Comentarios = ({navigation}) => {
       const user = res.data;
       if (user.comments && user.comments.length > 0) {
         const comments = user.comments.map(comment => {
-          // Parsear la fecha y formatearla como "MMM d yyyy"
-          const formattedDate = format(
-            new Date(comment.updatedAt),
-            'MMM d yyyy',
-            {locale: es},
-          );
-
           return {
-            author: comment.authorName,
-            date: formattedDate,
-            text: comment.message,
-            id: comment.commentId,
-            status: comment.reviewType,
-            photo: comment.authorPhoto,
+            authorName: comment.authorName,
+            createdAt: comment.createdAt,
+            message: comment.message,
+            commentId: comment.commentId,
+            reviewType: comment.reviewType,
+            authorPhoto: comment.authorPhoto,
           };
         });
 
@@ -86,30 +78,38 @@ const Comentarios = ({navigation}) => {
   );
 };
 
-const Comment = ({id, stars, text, date, author, status, photo}) => {
-  const {t} = useTranslation();
+export const Comment = ({
+  message,
+  createdAt,
+  authorName,
+  reviewType,
+  authorPhoto,
+}) => {
+  const formattedDate = format(new Date(createdAt), 'MMM d yyyy', {
+    locale: es,
+  });
   return (
     <View style={styles.commentContainer} key={uuid.v4()}>
       <View style={styles.imageContainer}>
-        {photo ? (
+        {authorPhoto ? (
           <Image
-            source={{uri: photo}}
+            source={{uri: authorPhoto}}
             style={styles.profileImage}
             onError={error =>
               console.error('Error al cargar la imagen:', error)
             }
           />
         ) : (
-          <Text>{t('Foto no disponible')}</Text>
+          <Text>{'Foto no disponible'}</Text>
         )}
       </View>
       <View style={styles.commentContent}>
         <View style={styles.commentHeader}>
-          <Text style={styles.commentAuthor}>{author}</Text>
-          <Text style={styles.commentDate}>{date}</Text>
+          <Text style={styles.commentAuthor}>{authorName}</Text>
+          <Text style={styles.commentDate}>{formattedDate}</Text>
         </View>
-        <ComentarioType>{status}</ComentarioType>
-        <Text style={styles.commentText}>{text}</Text>
+        <ComentarioType>{reviewType}</ComentarioType>
+        <Text style={styles.commentText}>{message}</Text>
       </View>
     </View>
   );
