@@ -9,6 +9,7 @@ import App from './App';
 import {name as appName} from './app.json';
 import AuthProvider from './app/context/AppContext';
 import InmobiliariaProvider from './app/context/InmobiliariaContext';
+import UsuarioProvider from './app/context/UsuarioContext';
 
 const theme = {
   ...DefaultTheme,
@@ -30,9 +31,11 @@ export default function Main() {
   return (
     <AuthProvider>
       <InmobiliariaProvider>
+      <UsuarioProvider>
         <PaperProvider theme={theme}>
           <App />
         </PaperProvider>
+         </UsuarioProvider>
       </InmobiliariaProvider>
     </AuthProvider>
   );

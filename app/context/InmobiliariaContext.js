@@ -55,10 +55,18 @@ const initialStatePublicacion = {
 function InmobiliariaProvider({children}) {
   const [inmobiliaria, setInmobiliaria] = React.useState(initialState);
   const [publicacion, setPublicacion] = React.useState(initialStatePublicacion);
+  const [propiedades, setPropiedades] = React.useState([]);
 
   return (
     <InmobiliariaContext.Provider
-      value={{inmobiliaria, publicacion, setInmobiliaria, setPublicacion}}>
+      value={{
+        inmobiliaria,
+        publicacion,
+        setInmobiliaria,
+        setPublicacion,
+        propiedades,
+        setPropiedades,
+      }}>
       {children}
     </InmobiliariaContext.Provider>
   );

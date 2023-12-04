@@ -1,12 +1,12 @@
 import React, { useEffect, useContext } from 'react';
-import { StyleSheet, View, Image, Modal, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { BACKEND_URL, API_VERSION } from 'react-native-dotenv';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../context/AppContext';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { updateUser, getUserProfile } from '../../services/API';
+import { userValidation } from '../../utils/utils';
 
 const InmobiliariaProfile = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -17,13 +17,10 @@ const InmobiliariaProfile = ({ navigation }) => {
   const [modalTitle, setModalTitle] = React.useState('');
   const { auth, setAuth } = useContext(AuthContext);
   const [error, setError] = React.useState('');
+  const { validateUserField } = userValidation();
 
   const getUser = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('userToken');
-      const userData = JSON.parse(jsonValue);
-      const token = userData.token;
-      const id = userData.id;
       const res = await getUserProfile();
       const user = res.data;
       setFetchedInmobiliaria(user);
@@ -45,97 +42,36 @@ const InmobiliariaProfile = ({ navigation }) => {
     }
   };
 
-  const deleteAccount = async () => {
-    try {
-      //TODO Agregar endpoint para eliminar cuenta
-      await AsyncStorage.clear();
-      setAuth({
-        hasUser: false,
-        user: null,
-      });
-    } catch (error) {
-      console.log('Error logging out: ' + error);
-    }
-  };
-
-  const validateField = () => {
-    switch (editingField) {
-      case 'fantasyName':
-        if (editedValues[editingField] === '') {
-          setError('Campo obligatorio.');
-        } else {
-          setError('');
-        }
-        break;
-      case 'firstName':
-        if (editedValues[editingField] === '') {
-          setError('Campo obligatorio.');
-        } else {
-          setError('');
-        }
-        break;
-      case 'lastName':
-        if (editedValues[editingField] === '') {
-          setError('Campo obligatorio.');
-        } else {
-          setError('');
-        }
-        break;
-      case 'cuit':
-        if (editedValues[editingField] === '') {
-          setError('Completar con un número de CUIT.');
-        } else if (editedValues[editingField].length !== 11) {
-          setError('El CUIT debe tener 11 dígitos.');
-        } else {
-          setError('');
-        }
-        break;
-      case 'mail':
-        if (editedValues[editingField] === '') {
-          setError('Completar con un email.');
-        } else if (!isValidEmail(editedValues[editingField])) {
-          setError('El email ingresado no es válido.');
-        } else {
-          setError('');
-        }
-        break;
-      case 'contactMail':
-        if (editedValues[editingField] === '') {
-          setError('Completar con un email.');
-        } else if (!isValidEmail(editedValues[editingField])) {
-          setError('El email ingresado no es válido.');
-        } else {
-          setError('');
-        }
-        break;
-      case 'password':
-        if (editedValues[editingField] === '') {
-          setError('Completar con una contraseña.');
-        } else if (editedValues[editingField].length < 8) {
-          setError('La contraseña debe tener al menos 8 caracteres.');
-        } else if (!/[A-Z]/.test(editedValues[editingField])) {
-          setError('La contraseña debe tener al menos una letra mayúscula.');
-        } else {
-          setError('');
-        }
-        break;
-      case 'phone':
-        if (editedValues[editingField] === '') {
-          setError('Completar con un número de teléfono.');
-        } else if (editedValues[editingField].length !== 10) {
-          setError('El número de teléfono debe tener 10 dígitos.');
-        } else {
-          setError('');
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
-  const isValidEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+const deleteAccount = () => {
+  Alert.alert(
+    'Eliminar Cuenta',
+    '¿Estás seguro de que quieres eliminar tu cuenta?',
+    [
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+      },
+      {
+        text: 'Eliminar',
+        onPress: async () => {
+          try {
+           const formData = new FormData();
+            formData.append('status', 'Deactivated');
+            const res = await updateUser({ formData });
+            await AsyncStorage.clear();
+            setAuth({
+              hasUser: false,
+              user: null,
+            });
+          } catch (error) {
+            console.log('Error al eliminar cuenta:', error);
+          }
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+};
 
   const handleEdit = (field, modalTitle) => {
     setIsModalVisible(true);
@@ -152,8 +88,9 @@ const InmobiliariaProfile = ({ navigation }) => {
 
   const handleSave = async () => {
     try {
-      validateField()
-      if (error != '') {
+      const errorValidation = await validateUserField(editingField, editedValues[editingField])
+      setError(errorValidation)
+      if (errorValidation != '') {
         console.log('Error:', error);
         return;
       }
@@ -294,19 +231,6 @@ const InmobiliariaProfile = ({ navigation }) => {
       </View>
 
       <View style={styles.fieldName}>
-        <Text>Contraseña</Text>
-        <View style={styles.fieldValue}>
-          <Text>{fetchedInmobiliaria.password}</Text>
-          <Ionicons
-            name="pencil"
-            size={20}
-            color={'#ccc'}
-            onPress={() => handleEdit('password', "Password")}
-          />
-        </View>
-      </View>
-
-      <View style={styles.fieldName}>
         <Text>Nombre</Text>
         <View style={styles.fieldValue}>
           <Text>{fetchedInmobiliaria.firstName}</Text>
@@ -383,7 +307,10 @@ const InmobiliariaProfile = ({ navigation }) => {
           </Button>
           <Button style={{
             marginTop: 5
-          }} mode="outlined" onPress={() => setIsModalVisible(false)}>
+          }} mode="outlined" onPress={() => {
+            setError('');
+            setIsModalVisible(false);
+          }}>
             <Text>Cancelar</Text>
           </Button>
         </View>
@@ -475,7 +402,7 @@ const styles = StyleSheet.create({
   },
 
   modalContent: {
-    backgroundColor: '#fff',  
+    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
     width: '80%',

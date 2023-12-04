@@ -2,13 +2,10 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
 
-const NoPropiedades = () => {
+const NoFavoritos = () => {
   return (
     <View style={styles.container}>
-      <Text variant="headlineSmall">No hay propiedades 😢</Text>
-      <Text variant="titleSmall">
-        Modifica los filtros para ver otros resultados
-      </Text>
+      <Text variant="headlineSmall">No hay favoritos 😢</Text>
     </View>
   );
 };
@@ -25,4 +22,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NoPropiedades;
+export default NoFavoritos;

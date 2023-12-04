@@ -210,12 +210,39 @@ export const updatePropiedadStepFour = async ({payload}) => {
   }
 };
 
-export const getPropiedades = async ({filters} = {}) => {
+export const getPropiedades = async (filters = {publicada: true, reservada: true, guardada: true, despublicada: true}) => {
   const jsonValue = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(jsonValue);
   const token = userData.token;
 
-  const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned?orderType=DESC&orderBy=title`;
+  console.log("filters", filters);
+
+  let queryParams = '?orderType=ASC&orderBy=status';
+
+  if(filters != undefined) {
+
+    if(filters.publicada) {
+      queryParams = queryParams + '&publicada=' + filters.publicada;
+    }
+  
+    if(filters.despublicada) {
+      queryParams = queryParams + '&despublicada=' + filters.despublicada;
+    }
+  
+    if(filters.guardada) {
+      queryParams = queryParams + '&guardada=' + filters.guardada;
+    }
+  
+    if(filters.reservada) {
+      queryParams = queryParams + '&reservada=' + filters.reservada;
+    }
+  }
+
+  console.log("queryParams", queryParams);
+  
+  
+
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned` + queryParams;
 
   try {
     const response = await fetch(URL, {
@@ -287,14 +314,150 @@ export const getUserProfile = async () => {
   }
 };
 
+export const deletePropiedad = async ({ id }) => {
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties?propertyId=${id}`;
+
+  try {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
+
+    const response = await fetch(URL, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    });
+    const responseJson = await response.json();
+    console.log("Delete Property: ", responseJson)
+    return {
+      status: response.status,
+      message: responseJson.message,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getNearestProperties = async ({filters} = {}) => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
   const token = userData.token;
-  console.log('userData ', userData);
 
-  const URL = `${BACKEND_URL}/${API_VERSION}/properties?orderBy=id&orderType=DESC`;
-  console.log('URL ', URL);
+  // &contractType=${filters.contractType}
+  // &currency=${filters.currency}
+  // const URL = `${BACKEND_URL}/${API_VERSION}/properties?numRooms=1&propertyType=Casa&numEnvironments=1&numBathrooms=1&sum=${filters.sum}&swimming_pool=${filters.swimming_pool}&sport_field=${filters.sport_field}&laundry=${filters.laundry}&solarium=${filters.solarium}&gym=${filters.gym}&vault=${filters.vault}&security=${filters.security}&game_room=${filters.game_room}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`;
+  const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
+
+  console.log('URL', URL);
+  try {
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const responseJson = await response.json();
+    console.log('filtered properties', responseJson);
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log('Error ', error);
+  }
+};
+
+export const getUserFavorites = async () => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/users/favs`;
+
+  try {
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const responseJson = await response.json();
+    console.log("Get User Favorites: " , responseJson)
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addUserFavorite = async (propertyId) => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/users/favs`;
+
+  try {
+    const response = await fetch(URL, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                propertyId: propertyId.id,
+              }),
+            });
+    const responseJson = await response.json();
+    console.log("Add favorite", responseJson)
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteUserFavorite = async (favoriteId) => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/users/favs`;
+
+  try {
+    const response = await fetch(URL, {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            favoriteId: favoriteId.favId,
+          }),
+        });
+    const responseJson = await response.json();
+    console.log("Delete User Favorite", responseJson)
+    return {
+      status: response.status,
+      data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserAlquileres = async () => {
+  const auth = await AsyncStorage.getItem('userToken');
+  const userData = JSON.parse(auth);
+  const token = userData.token;
+  const URL = `${BACKEND_URL}/${API_VERSION}/contracts`;
 
   try {
     const response = await fetch(URL, {
@@ -309,6 +472,42 @@ export const getNearestProperties = async ({filters} = {}) => {
     return {
       status: response.status,
       data: responseJson.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const postUserComment = async ({
+  contractTypeId,
+  reviewType,
+  commentMessage,
+}) => {
+  const URL = `${BACKEND_URL}/${API_VERSION}/contracts`;
+
+  try {
+    const jsonValue = await AsyncStorage.getItem('userToken');
+    const userData = JSON.parse(jsonValue);
+    const token = userData.token;
+
+    const response = await fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        contractTypeId: contractTypeId,
+        reviewType: reviewType,
+        commentMessage: commentMessage,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    });
+
+    const responseJson = await response.json();
+    console.log('responseJson', responseJson);
+    return {
+      ok: responseJson.ok,
+      id: responseJson.data.id,
     };
   } catch (error) {
     console.log(error);

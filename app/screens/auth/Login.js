@@ -22,6 +22,7 @@ const Login = ({navigation}) => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
+      console.log('userInfo', userInfo);
 
       const backLogin = await fetch(
         `${BACKEND_URL}/${API_VERSION}/authGoogle`,

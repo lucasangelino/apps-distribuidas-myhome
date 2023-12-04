@@ -1,14 +1,11 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
 
 const NoPropiedades = () => {
   return (
     <View style={styles.container}>
-      <Text variant="headlineSmall">No hay propiedades 😢</Text>
-      <Text variant="titleSmall">
-        Modifica los filtros para ver otros resultados
-      </Text>
+      <Text variant="headlineSmall">No hay comentarios 😢</Text>
     </View>
   );
 };
@@ -16,7 +13,6 @@ const NoPropiedades = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 10,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
