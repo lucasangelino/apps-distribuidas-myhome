@@ -228,7 +228,7 @@ export const getPropiedades = async (
 
   let queryParams = '?orderType=ASC&orderBy=status';
 
-  if (filters != undefined) {
+  if (filters !== undefined) {
     if (filters.publicada) {
       queryParams = queryParams + '&publicada=' + filters.publicada;
     }
@@ -346,15 +346,74 @@ export const deletePropiedad = async ({id}) => {
   }
 };
 
-export const getNearestProperties = async ({filters} = {}) => {
+export const getNearestProperties = async ({filters, countFilters} = {}) => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
   const token = userData.token;
+  console.log('filters', filters);
 
   // &contractType=${filters.contractType}
   // &currency=${filters.currency}
-  // const URL = `${BACKEND_URL}/${API_VERSION}/properties?numRooms=1&propertyType=Casa&numEnvironments=1&numBathrooms=1&sum=${filters.sum}&swimming_pool=${filters.swimming_pool}&sport_field=${filters.sport_field}&laundry=${filters.laundry}&solarium=${filters.solarium}&gym=${filters.gym}&vault=${filters.vault}&security=${filters.security}&game_room=${filters.game_room}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`;
-  const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
+  // const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
+  let queryParams = '?orderType=ASC';
+  if (filters !== undefined) {
+    if (filters.numRooms !== 0) {
+      queryParams = queryParams + '&numRooms=' + filters.numRooms;
+    }
+    if (filters.numCars !== 0) {
+      queryParams = queryParams + '&numCars=' + filters.numCars;
+    }
+    if (filters.propertyType !== '') {
+      queryParams = queryParams + '&propertyType=' + filters.propertyType;
+    }
+    if (filters.numEnvironments !== 0) {
+      queryParams = queryParams + '&numEnvironments=' + filters.numEnvironments;
+    }
+    if (filters.numBathrooms !== 0) {
+      queryParams = queryParams + '&numBathrooms=' + filters.numBathrooms;
+    }
+    if (filters.sum) {
+      queryParams = queryParams + '&sum=' + filters.sum;
+    }
+    if (filters.swimming_pool) {
+      queryParams = queryParams + '&swimming_pool=' + filters.swimming_pool;
+    }
+    if (filters.sport_field) {
+      queryParams = queryParams + '&sport_field=' + filters.sport_field;
+    }
+    if (filters.laundry) {
+      queryParams = queryParams + '&laundry=' + filters.laundry;
+    }
+    if (filters.solarium) {
+      queryParams = queryParams + '&solarium=' + filters.solarium;
+    }
+    if (filters.gym) {
+      queryParams = queryParams + '&gym=' + filters.gym;
+    }
+    if (filters.vault) {
+      queryParams = queryParams + '&vault=' + filters.vault;
+    }
+    if (filters.security) {
+      queryParams = queryParams + '&security=' + filters.security;
+    }
+    if (filters.game_room) {
+      queryParams = queryParams + '&game_room=' + filters.game_room;
+    }
+    if (filters.currency !== '') {
+      queryParams = queryParams + '&currency=' + filters.currency;
+    }
+    if (filters.minPrice !== 0) {
+      queryParams = queryParams + '&minPrice=' + filters.minPrice;
+    }
+    if (filters.maxPrice !== 0) {
+      queryParams = queryParams + '&maxPrice=' + filters.maxPrice;
+    }
+  }
+  let URL = `${BACKEND_URL}/${API_VERSION}/properties`;
+
+  if (countFilters > 0) {
+    URL = URL + queryParams;
+  }
 
   console.log('URL', URL);
   try {
@@ -366,7 +425,7 @@ export const getNearestProperties = async ({filters} = {}) => {
       },
     });
     const responseJson = await response.json();
-    console.log('filtered properties', responseJson);
+    // console.log('filtered properties', responseJson);
     return {
       status: response.status,
       data: responseJson.data,

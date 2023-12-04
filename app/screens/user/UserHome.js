@@ -32,17 +32,17 @@ const initialFilters = {
   numEnvironments: 0,
   numRooms: 0,
   numBathrooms: 0,
-  cocheras: 0,
+  numCars: 0,
   antiguedad: 0,
-  sum: false,
-  swimming_pool: false,
-  sport_field: false,
-  laundry: false,
-  solarium: false,
-  gym: false,
-  vault: false,
-  security: false,
-  game_room: false,
+  sum: undefined,
+  swimming_pool: undefined,
+  sport_field: undefined,
+  laundry: undefined,
+  solarium: undefined,
+  gym: undefined,
+  vault: undefined,
+  security: undefined,
+  game_room: undefined,
   currency: '',
   minPrice: 0,
   maxPrice: 0,
@@ -68,11 +68,12 @@ const UserHome = ({navigation}) => {
 
   useEffect(() => {
     const count = Object.values(filters).filter(filter => filter).length;
+    console.log(count);
     setCountFilters(count);
   }, [filters]);
 
   const getUserPropiedades = async () => {
-    const userPropiedades = await getNearestProperties({filters});
+    const userPropiedades = await getNearestProperties({filters, countFilters});
     const userFavorites = await getUserFavorites();
 
     const favoritosIds = userFavorites.data.map(fav => fav.propertyId);
@@ -90,7 +91,10 @@ const UserHome = ({navigation}) => {
   };
 
   const handleAplyFilters = async () => {
-    const filteredNearestProperties = await getNearestProperties({filters});
+    const filteredNearestProperties = await getNearestProperties({
+      filters,
+      countFilters,
+    });
     setPropiedades(filteredNearestProperties.data);
   };
 
@@ -292,19 +296,19 @@ const UserHome = ({navigation}) => {
                         onPress={() =>
                           setFilters({
                             ...filters,
-                            cocheras: filters.cocheras + 1,
+                            numCars: filters.numCars + 1,
                           })
                         }
                       />
-                      <Text>{filters.cocheras}</Text>
+                      <Text>{filters.numCars}</Text>
                       <Ionicons
                         name="remove-circle-outline"
                         size={20}
                         onPress={() =>
-                          filters.cocheras > 0 &&
+                          filters.numCars > 0 &&
                           setFilters({
                             ...filters,
-                            cocheras: filters.cocheras - 1,
+                            numCars: filters.numCars - 1,
                           })
                         }
                       />
@@ -356,7 +360,10 @@ const UserHome = ({navigation}) => {
                       label="Sum"
                       status={filters.sum ? 'checked' : 'unchecked'}
                       onPress={() =>
-                        setFilters({...filters, sum: !filters.sum})
+                        setFilters({
+                          ...filters,
+                          sum: filters.sum === undefined ? true : false,
+                        })
                       }
                     />
                     <Checkbox.Item
@@ -365,7 +372,8 @@ const UserHome = ({navigation}) => {
                       onPress={() =>
                         setFilters({
                           ...filters,
-                          swimming_pool: !filters.swimming_pool,
+                          swimming_pool:
+                            filters.swimming_pool === undefined ? true : false,
                         })
                       }
                     />
@@ -375,7 +383,8 @@ const UserHome = ({navigation}) => {
                       onPress={() =>
                         setFilters({
                           ...filters,
-                          sport_field: !filters.sport_field,
+                          sport_field:
+                            filters.sport_field === undefined ? true : false,
                         })
                       }
                     />
@@ -383,28 +392,41 @@ const UserHome = ({navigation}) => {
                       label="Laundry"
                       status={filters.laundry ? 'checked' : 'unchecked'}
                       onPress={() =>
-                        setFilters({...filters, laundry: !filters.laundry})
+                        setFilters({
+                          ...filters,
+                          laundry: filters.laundry === undefined ? true : false,
+                        })
                       }
                     />
                     <Checkbox.Item
                       label="Solarium"
                       status={filters.solarium ? 'checked' : 'unchecked'}
                       onPress={() =>
-                        setFilters({...filters, solarium: !filters.solarium})
+                        setFilters({
+                          ...filters,
+                          solarium:
+                            filters.solarium === undefined ? true : false,
+                        })
                       }
                     />
                     <Checkbox.Item
                       label="Gimnasio"
                       status={filters.gym ? 'checked' : 'unchecked'}
                       onPress={() =>
-                        setFilters({...filters, gym: !filters.gym})
+                        setFilters({
+                          ...filters,
+                          gym: filters.gym === undefined ? true : false,
+                        })
                       }
                     />
                     <Checkbox.Item
                       label="Baulera"
                       status={filters.vault ? 'checked' : 'unchecked'}
                       onPress={() =>
-                        setFilters({...filters, vault: !filters.vault})
+                        setFilters({
+                          ...filters,
+                          vault: filters.vault === undefined ? true : false,
+                        })
                       }
                     />
                     <Checkbox.Item
@@ -413,7 +435,8 @@ const UserHome = ({navigation}) => {
                       onPress={() =>
                         setFilters({
                           ...filters,
-                          security: !filters.security,
+                          security:
+                            filters.security === undefined ? true : false,
                         })
                       }
                     />
@@ -423,7 +446,8 @@ const UserHome = ({navigation}) => {
                       onPress={() =>
                         setFilters({
                           ...filters,
-                          game_room: !filters.game_room,
+                          game_room:
+                            filters.game_room === undefined ? true : false,
                         })
                       }
                     />

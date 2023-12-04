@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
 
 const ActionButton = ({label, onClick, fullWith = false, disable}) => {
-  console.log('disable', onClick);
   return (
     <Button
       disabled={disable}
