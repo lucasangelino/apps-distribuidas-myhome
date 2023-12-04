@@ -1,7 +1,7 @@
 {
-  "user-home-title": "Prepiedades cercanas a ti",
+  "Mis propiedades": "Prepiedades cercanas a ti",
   "inmobiliaria-home-title": "Mis propiedades",
-  "filtrar": "Filtrar",
+  "Filtrar": "Filtrar",
   "Ingresar como Usuario": "Ingresar como usuario",
   "Ingresar como Inmobiliaria": "Ingresar como inmobiliaria",
   "Continuar con Google": "Continuar con Google",
@@ -119,5 +119,6 @@
   "Videos (opcional)": "Videos (opcional)",
   "Agregar url del video": "Agregar url del video",
   "Atrás": "Atrás",
-  "Publicar": "Publicar"
+  "Publicar": "Publicar",
+  "Editar": "Editar"
 }

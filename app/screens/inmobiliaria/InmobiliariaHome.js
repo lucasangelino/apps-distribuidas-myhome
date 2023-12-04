@@ -115,7 +115,7 @@ function InmobiliariaHome({navigation}) {
     return (
       <PropiedadCard
         propiedad={item}
-        actionButtonText="editar"
+        actionButtonText={t('Editar')}
         onActionButtonPress={() => {
           console.log('item', JSON.stringify(item, null, 2));
           setPublicacion({
@@ -126,15 +126,15 @@ function InmobiliariaHome({navigation}) {
             titulo: item.title,
             descripcion: item.description,
             direccion: {
-              calleAltura: item.location.street,
-              ciudad: item.location.country,
-              provincia: item.location.province,
-              barrio: item.location.district,
-              localidad: item.location.country,
-              pisoDepto: item.location.department,
-              place_id: item.location.place_id,
-              latitud: item.location.latitude,
-              longitud: item.location.longitude,
+              calleAltura: item.location?.street || '',
+              ciudad: item.location?.country || '',
+              provincia: item.location?.province || '',
+              barrio: item.location?.district || '',
+              localidad: item.location?.country || '',
+              pisoDepto: item.location?.department || '',
+              place_id: item.location?.place_id || '',
+              latitud: item.location?.latitude || '',
+              longitud: item.location?.longitude || '',
             },
             ambientes: item.numEnvironments,
             dormitorios: item.numRooms,
@@ -188,7 +188,9 @@ function InmobiliariaHome({navigation}) {
                     paddingVertical: 5,
                     borderRadius: 50,
                   }}>{`Filtros (${countFilters})`}</Text>
-                <Text onPress={() => setFilters(initialFilters)}>Limpiar</Text>
+                <Text onPress={() => setFilters(initialFilters)}>
+                  {t('Filtrar')}
+                </Text>
                 <Text onPress={hideModal}>Cerrar</Text>
               </View>
               <Divider style={{marginVertical: 10}} />
@@ -277,9 +279,9 @@ function InmobiliariaHome({navigation}) {
         </Portal>
 
         <View style={styles.headingContainer}>
-          <Heading>Mis propiedades</Heading>
+          <Heading>{t('Mis propiedades')}</Heading>
           <Text onPress={showModal}>
-            {`${t('filtrar')} (${countFilters})`}{' '}
+            {`${t('Filtrar')} (${countFilters})`}{' '}
           </Text>
         </View>
 

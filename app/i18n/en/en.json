@@ -1,9 +1,9 @@
 {
-  "user-home-title": "Properties near you",
+  "Mis propiedades": "Properties near you",
   "inmobiliaria-home-title": "My properties",
-  "filtrar": "Filter",
+  "Filtrar": "Filter",
   "Ingresar como Usuario": "Login as user",
-  "Ingresar como Inmobiliaria": "Login as real estate",
+  "Ingresar como Inmobiliaria": "Login as Real State",
   "Continuar con Google": "Continue with Google",
   "login": "Login",
   "o": "or",
@@ -119,5 +119,6 @@
   "Videos (opcional)": "Videos (optional)",
   "Agregar url del video": "Add video URL",
   "Atrás": "Back",
-  "Publicar": "Publish"
+  "Publicar": "Publish",
+  "Editar": "Edit"
 }
