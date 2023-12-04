@@ -76,23 +76,33 @@ const PropiedadCard = ({
     );
   };
 
-  const handleFavorite = async () => {
-    try {
-      if (!fav) {
-        const res = await addUserFavorite({id});
-        setFav(true);
-        setFavId(res.data.favoriteId);
-      } else {
-        const res = await deleteUserFavorite({favId});
-        setFav(false);
-        setFavorites(() =>
-          favorites.filter(favorite => favorite.favoriteId !== favId),
-        );
-      }
-    } catch (error) {
-      console.error('Error al manejar favorito:', error);
-    }
-  };
+ const handleFavorite = async () => {
+   try {
+     if (!fav) {
+       const res = await addUserFavorite({ id });
+       setFav(true);
+       setFavId(res.data.favoriteId);
+       setPropiedades((prevPropiedades) =>
+         prevPropiedades.map((propiedad) =>
+           propiedad.id === id ? { ...propiedad, isFav: true } : propiedad
+         )
+       );
+     } else {
+       const res = await deleteUserFavorite({ favId });
+       setFav(false);
+       setFavorites(() =>
+         favorites.filter((favorite) => favorite.favoriteId !== favId)
+       );
+       setPropiedades((prevPropiedades) =>
+         prevPropiedades.map((propiedad) =>
+           propiedad.id === id ? { ...propiedad, isFav: false } : propiedad
+         )
+       );
+     }
+   } catch (error) {
+     console.error('Error al manejar favorito:', error);
+   }
+ };
 
   return (
     <Card style={styles.cardContainer} key={id} mode="outlined" elevation={5}>

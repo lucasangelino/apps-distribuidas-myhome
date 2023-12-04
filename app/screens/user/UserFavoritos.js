@@ -32,8 +32,16 @@ const UserFavoritos = ({navigation}) => {
     return loadFavorites;
   }, [navigation]);
 
-  const renderPropiedadCard = ({item}) => {
-    return <PropiedadCard propiedad={item} />;
+const renderPropiedadCard = ({item}) => {
+    return (
+      <PropiedadCard
+        propiedad={item}
+        actionButtonText="VER MAS"
+        onActionButtonPress={() =>
+          navigation.navigate('PropiedadDetail', {property: item})
+        }
+      />
+    );
   };
 
   return (

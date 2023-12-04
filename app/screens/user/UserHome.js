@@ -149,7 +149,20 @@ const UserHome = ({navigation}) => {
       filters,
       countFilters,
     });
-    setPropiedades(filteredNearestProperties.data);
+    const userFavorites = await getUserFavorites();
+
+    const favoritosIds = userFavorites.data.map(fav => fav.propertyId);
+
+    const propiedades = filteredNearestProperties.data.map(propiedad => ({
+        ...propiedad,
+        isFav: favoritosIds.includes(propiedad.id),
+        favoriteId: favoritosIds.includes(propiedad.id)
+        ? userFavorites.data.find(fav => fav.propertyId === propiedad.id)
+        .favoriteId
+        : null,
+    }));
+
+    setPropiedades(propiedades);
   };
 
   const renderPropiedadCard = ({item}) => {
