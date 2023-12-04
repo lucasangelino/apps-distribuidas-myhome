@@ -53,9 +53,11 @@ const InmobiliariaProfile = ({navigation}) => {
   };
 
   const deleteAccount = () => {
+    const title = t('Eliminar Cuenta');
+    const message = t('¿Estás seguro de que quieres eliminar tu cuenta?');
     Alert.alert(
-      'Eliminar Cuenta',
-      '¿Estás seguro de que quieres eliminar tu cuenta?',
+      title,
+      message,
       [
         {
           text: 'Cancelar',

@@ -120,5 +120,7 @@
   "Agregar url del video": "Add video URL",
   "Atrás": "Back",
   "Publicar": "Publish",
-  "Editar": "Edit"
+  "Editar": "Edit",
+  "Eliminar Cuenta": "Delete Account",
+  "¿Estás seguro de que quieres eliminar tu cuenta?": "Are you sure you want to delete your account?"
 }
