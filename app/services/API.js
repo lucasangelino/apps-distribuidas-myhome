@@ -4,7 +4,7 @@ import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 export const altaPropiedad = async ({payload}) => {
   const URL = `${BACKEND_URL}/${API_VERSION}/properties`;
-  const {tipoPropiedad, propiedadTitle, propiedadDes} = payload;
+  const {propertyId, tipoPropiedad, propiedadTitle, propiedadDes} = payload;
 
   try {
     const jsonValue = await AsyncStorage.getItem('userToken');
@@ -12,8 +12,9 @@ export const altaPropiedad = async ({payload}) => {
     const token = userData.token;
 
     const response = await fetch(URL, {
-      method: 'POST',
+      method: `${propertyId ? 'PATCH' : 'POST'}`,
       body: JSON.stringify({
+        propertyId: propertyId,
         propertyType: tipoPropiedad,
         title: propiedadTitle,
         description: propiedadDes,
@@ -287,7 +288,7 @@ export const getUserProfile = async () => {
   }
 };
 
-export const deletePropiedad = async ({ id }) => {
+export const deletePropiedad = async ({id}) => {
   const URL = `${BACKEND_URL}/${API_VERSION}/properties?propertyId=${id}`;
 
   try {
@@ -303,7 +304,7 @@ export const deletePropiedad = async ({ id }) => {
       },
     });
     const responseJson = await response.json();
-    console.log("Delete Property: ", responseJson)
+    console.log('Delete Property: ', responseJson);
     return {
       status: response.status,
       message: responseJson.message,
@@ -358,7 +359,7 @@ export const getUserFavorites = async () => {
       },
     });
     const responseJson = await response.json();
-    console.log("Get User Favorites: " , responseJson)
+    console.log('Get User Favorites: ', responseJson);
     return {
       status: response.status,
       data: responseJson.data,
@@ -368,7 +369,7 @@ export const getUserFavorites = async () => {
   }
 };
 
-export const addUserFavorite = async (propertyId) => {
+export const addUserFavorite = async propertyId => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
   const token = userData.token;
@@ -376,18 +377,18 @@ export const addUserFavorite = async (propertyId) => {
 
   try {
     const response = await fetch(URL, {
-              method: 'POST',
-              headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                propertyId: propertyId.id,
-              }),
-            });
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        propertyId: propertyId.id,
+      }),
+    });
     const responseJson = await response.json();
-    console.log("Add favorite", responseJson)
+    console.log('Add favorite', responseJson);
     return {
       status: response.status,
       data: responseJson.data,
@@ -397,7 +398,7 @@ export const addUserFavorite = async (propertyId) => {
   }
 };
 
-export const deleteUserFavorite = async (favoriteId) => {
+export const deleteUserFavorite = async favoriteId => {
   const auth = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(auth);
   const token = userData.token;
@@ -405,18 +406,18 @@ export const deleteUserFavorite = async (favoriteId) => {
 
   try {
     const response = await fetch(URL, {
-          method: 'DELETE',
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            favoriteId: favoriteId.favId,
-          }),
-        });
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        favoriteId: favoriteId.favId,
+      }),
+    });
     const responseJson = await response.json();
-    console.log("Delete User Favorite", responseJson)
+    console.log('Delete User Favorite', responseJson);
     return {
       status: response.status,
       data: responseJson.data,
