@@ -304,7 +304,7 @@ const InmobiliariaProfile = ({navigation}) => {
         </View>
       </View>
 
-      <Button mode="outlined" onPress={handleLogout}>
+      <Button mode="outlined" onPress={handleLogout} style={{marginTop: 40}}>
         <Text>{t('Cerrar sesión')}</Text>
       </Button>
 
