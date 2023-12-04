@@ -38,10 +38,16 @@ const PropiedadCard = ({
   const {favorites, setFavorites} = useContext(UsuarioContext);
 
   const navigation = useNavigation();
-  const {price = 0, expPrice = 0} =
-    contract_types.length > 0 ? contract_types[0] : {};
-  const uri =
-    multimedia.length > 0 ? multimedia[0].url : 'https://picsum.photos/700';
+  const {price = 0, expPrice = 0} = contract_types
+    ? contract_types.length > 0
+      ? contract_types[0]
+      : {}
+    : {};
+  const uri = multimedia
+    ? multimedia.length > 0
+      ? multimedia[0].url
+      : 'https://picsum.photos/700'
+    : 'https://picsum.photos/700';
 
   const handleDelete = () => {
     Alert.alert(
