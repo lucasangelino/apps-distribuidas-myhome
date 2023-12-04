@@ -13,6 +13,7 @@
     "clear": "cd android && gradlew clean && cd ../"
   },
   "dependencies": {
+    "@os-team/i18next-react-native-language-detector": "^1.0.30",
     "@react-native-async-storage/async-storage": "^1.19.4",
     "@react-native-community/geolocation": "^3.1.0",
     "@react-native-google-signin/google-signin": "^10.1.0",
