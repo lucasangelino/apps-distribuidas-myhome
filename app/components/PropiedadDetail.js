@@ -206,8 +206,10 @@ const PropiedadDetail = ({route, navigation}) => {
                 alignSelf: 'center',
                 alignItems: 'center',
                 backgroundColor: '#FFFFFF',
+                padding: 20,
+                borderRadius: 10,
               }}>
-              <Text>
+              <Text variant="bodyLarge">
                 ¿Desea contactar a la propiedad o solicitar visita programada?
               </Text>
               <View
@@ -241,8 +243,11 @@ const PropiedadDetail = ({route, navigation}) => {
                 alignSelf: 'center',
                 alignItems: 'center',
                 backgroundColor: '#FFFFFF',
+                padding: 20,
+                borderRadius: 10,
+                marginHorizontal: 10,
               }}>
-              <Text>
+              <Text variant="bodyLarge">
                 ¿Desea reservar la propiedad? Deberá abonar el 50% del monto.
               </Text>
               <View
