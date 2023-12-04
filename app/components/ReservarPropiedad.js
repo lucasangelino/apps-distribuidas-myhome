@@ -1,15 +1,116 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, TextInput, SafeAreaView} from 'react-native';
 import {Text, Button, Avatar} from 'react-native-paper';
-import uuid from 'react-native-uuid';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {priceFormater} from '../utils/utils';
+import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 const ReservarPropiedad = ({route, navigation}) => {
   const {propiedad} = route.params;
   const {contract_types} = propiedad;
   const {price = 0} = contract_types.length > 0 ? contract_types[0] : {};
   const reservaMonto = price / 2;
+
+  const [numeroTarjeta, setNumeroTarjeta] = useState('');
+  const [errorNumeroTarjetaEmpty, setErrorNumeroTarjetaEmpty] = useState('');
+  const [errorNumeroTarjetaLength, setErrorNumeroTarjetaLength] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [errorNombreEmpty, setErrorNombreEmpty] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [errorApellidoEmpty, setErrorApellidoEmpty] = useState('');
+  const [fechaExpiracion, setFechaExpiracion] = useState('');
+  const [errorFechaExpiracionEmpty, setErrorFechaExpiracionEmpty] =
+    useState('');
+  const [errorFechaExpiracionLength, setErrorFechaExpiracionLength] =
+    useState('');
+  const [cvc, setCvc] = useState('');
+  const [errorCvcEmpty, setErrorCvcEmpty] = useState('');
+  const [errorCvcLength, setErrorCvcLength] = useState('');
+
+  const handleButtonPress = () => {
+    if (numeroTarjeta === '') {
+      setErrorNumeroTarjetaEmpty('El número de la tarjeta es requerido');
+    } else {
+      setErrorNumeroTarjetaEmpty('');
+      if (numeroTarjeta.length !== 16) {
+        setErrorNumeroTarjetaLength('El número de la tarjeta debe ser de 16');
+      } else {
+        setErrorNumeroTarjetaLength('');
+      }
+
+      if (nombre === '') {
+        setErrorNombreEmpty('El nombre es requerido');
+      } else {
+        setErrorNombreEmpty('');
+      }
+
+      if (apellido === '') {
+        setErrorApellidoEmpty('El apellido es requerido');
+      } else {
+        setErrorApellidoEmpty('');
+      }
+
+      if (fechaExpiracion === '') {
+        setErrorFechaExpiracionEmpty('La fecha de expiración es requerida');
+      } else {
+        setErrorFechaExpiracionEmpty('');
+        if (fechaExpiracion.length !== 4) {
+          setErrorFechaExpiracionLength(
+            'La fecha de expiración debe ser de 4 caracteres',
+          );
+        } else {
+          setErrorFechaExpiracionLength('');
+        }
+      }
+
+      if (cvc === '') {
+        setErrorCvcEmpty('El cvc es requerido');
+      } else {
+        setErrorCvcEmpty('');
+        if (cvc.length !== 3) {
+          setErrorCvcLength('El cvc debe ser de 3 caracteres');
+        } else {
+          setErrorCvcLength('');
+        }
+      }
+
+      if (
+        numeroTarjeta !== '' &&
+        numeroTarjeta.length === 16 &&
+        nombre !== '' &&
+        apellido !== '' &&
+        fechaExpiracion !== '' &&
+        fechaExpiracion.length === 4 &&
+        cvc !== '' &&
+        cvc.length === 3
+      ) {
+        handleReservar();
+      }
+    }
+  };
+
+  const handleReservar = async () => {
+    try {
+      const req = await fetch(`${BACKEND_URL}/${API_VERSION}/contracts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contractTypeId: propiedad.id,
+        }),
+      });
+      const res = await req.json();
+      if (res.ok) {
+        navigation.navigate('ReservaExitosa');
+      } else {
+        console.log('Error al contactar');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView>
       <View style={StyleSheet.container}>
@@ -53,8 +154,33 @@ const ReservarPropiedad = ({route, navigation}) => {
             <Text variant="bodyLarge" style={{marginBottom: 7}}>
               Número de la Tarjeta
             </Text>
-            <TextInput keyboardType="numeric" style={styles.input} />
+            <TextInput
+              keyboardType="numeric"
+              style={styles.input}
+              value={numeroTarjeta}
+              onChangeText={numeroTarjeta => setNumeroTarjeta(numeroTarjeta)}
+            />
           </View>
+          {errorNumeroTarjetaEmpty ? (
+            <Text
+              style={{
+                color: 'red',
+                display: 'flex',
+                alignSelf: 'flex-start',
+              }}>
+              {errorNumeroTarjetaEmpty}
+            </Text>
+          ) : null}
+          {errorNumeroTarjetaLength ? (
+            <Text
+              style={{
+                color: 'red',
+                display: 'flex',
+                alignSelf: 'flex-start',
+              }}>
+              {errorNumeroTarjetaLength}
+            </Text>
+          ) : null}
           <View
             style={{
               display: 'flex',
@@ -68,16 +194,44 @@ const ReservarPropiedad = ({route, navigation}) => {
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
                 Nombre
               </Text>
-              <TextInput style={styles.input} />
+              <TextInput
+                style={styles.input}
+                value={nombre}
+                onChangeText={nombre => setNombre(nombre)}
+              />
             </View>
             <View
               style={{display: 'flex', flexDirection: 'column', width: '45%'}}>
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
                 Apellido
               </Text>
-              <TextInput style={styles.input} />
+              <TextInput
+                style={styles.input}
+                value={apellido}
+                onChangeText={apellido => setApellido(apellido)}
+              />
             </View>
           </View>
+          {errorNombreEmpty ? (
+            <Text
+              style={{
+                color: 'red',
+                display: 'flex',
+                alignSelf: 'flex-start',
+              }}>
+              {errorNombreEmpty}
+            </Text>
+          ) : null}
+          {errorApellidoEmpty ? (
+            <Text
+              style={{
+                color: 'red',
+                display: 'flex',
+                alignSelf: 'flex-start',
+              }}>
+              {errorApellidoEmpty}
+            </Text>
+          ) : null}
           <View
             style={{
               display: 'flex',
@@ -91,16 +245,52 @@ const ReservarPropiedad = ({route, navigation}) => {
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
                 Fecha de Expiración
               </Text>
-              <TextInput keyboardType="numeric" style={styles.input} />
+              <TextInput
+                keyboardType="numeric"
+                style={styles.input}
+                value={fechaExpiracion}
+                onChangeText={fechaExpiracion =>
+                  setFechaExpiracion(fechaExpiracion)
+                }
+              />
             </View>
             <View
               style={{display: 'flex', flexDirection: 'column', width: '45%'}}>
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
                 CVC/CVV
               </Text>
-              <TextInput keyboardType="numeric" style={styles.input} />
+              <TextInput
+                keyboardType="numeric"
+                style={styles.input}
+                value={cvc}
+                onChangeText={cvc => setCvc(cvc)}
+              />
             </View>
           </View>
+          {errorFechaExpiracionEmpty ? (
+            <Text
+              style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+              {errorFechaExpiracionEmpty}
+            </Text>
+          ) : null}
+          {errorFechaExpiracionLength ? (
+            <Text
+              style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+              {errorFechaExpiracionLength}
+            </Text>
+          ) : null}
+          {errorCvcEmpty ? (
+            <Text
+              style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+              {errorCvcEmpty}
+            </Text>
+          ) : null}
+          {errorCvcLength ? (
+            <Text
+              style={{color: 'red', display: 'flex', alignSelf: 'flex-start'}}>
+              {errorCvcLength}
+            </Text>
+          ) : null}
         </View>
         <View
           style={{
@@ -138,7 +328,7 @@ const ReservarPropiedad = ({route, navigation}) => {
           <Button
             mode="contained"
             style={styles.button}
-            onPress={() => navigation.navigate('ReservaExitosa')}>
+            onPress={() => handleButtonPress}>
             Reservar
           </Button>
         </View>
@@ -181,4 +371,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
+
 export default ReservarPropiedad;

@@ -1,10 +1,76 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, SafeAreaView, TextInput} from 'react-native';
 import {Text, Button, Avatar} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 
 const Contactar = ({route, navigation}) => {
   const {propiedad} = route.params;
+  const [message, setMessage] = useState('');
+  const [errorMessageEmpty, setErrorMessageEmpty] = useState('');
+  const [name, setName] = useState('');
+  const [errorNameEmpty, setErrorNameEmpty] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [errorPhoneNumberEmpty, setErrorPhoneNumberEmpty] = useState('');
+  const [errorPhoneNumberLength, setErrorPhoneNumberLength] = useState('');
+
+  const handleButtonPress = () => {
+    if (message === '') {
+      setErrorMessageEmpty('Completar con un mensaje.');
+    } else {
+      setErrorMessageEmpty('');
+    }
+    if (message === '') {
+      setErrorNameEmpty('Completar con un nombre.');
+    } else {
+      setErrorNameEmpty('');
+    }
+    if (phoneNumber === '') {
+      setErrorPhoneNumberEmpty('Completar con un número de teléfono.');
+    } else {
+      setErrorPhoneNumberEmpty('');
+      if (phoneNumber.length !== 10) {
+        setErrorPhoneNumberLength(
+          'El número de teléfono debe tener 10 dígitos.',
+        );
+      } else {
+        setErrorPhoneNumberLength('');
+      }
+    }
+    if (
+      errorMessageEmpty === '' &&
+      errorNameEmpty === '' &&
+      errorPhoneNumberEmpty === '' &&
+      errorPhoneNumberLength === ''
+    ) {
+      handleContactar();
+    }
+  };
+
+  const handleContactar = async () => {
+    try {
+      const req = await fetch(`${BACKEND_URL}/${API_VERSION}/contacts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          statusMessage: message,
+          contactType: 'Pregunta',
+          propertyId: propiedad.id,
+        }),
+      });
+      const res = await req.json();
+      if (res.ok) {
+        navigation.navigate('ContactarExito');
+      } else {
+        console.log('Error al contactar');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView>
       <View style={StyleSheet.container}>
@@ -49,26 +115,79 @@ const Contactar = ({route, navigation}) => {
             <Text variant="bodyLarge" style={{marginBottom: 7}}>
               Nombre
             </Text>
-            <TextInput style={styles.input} />
+            <TextInput
+              style={styles.input}
+              value={name}
+              onChangeText={name => setName(name)}
+            />
+            {errorNameEmpty ? (
+              <Text
+                style={{
+                  color: 'red',
+                  display: 'flex',
+                  alignSelf: 'flex-start',
+                }}>
+                {errorNameEmpty}
+              </Text>
+            ) : null}
           </View>
           <View style={{marginTop: 20}}>
             <Text variant="bodyLarge" style={{marginBottom: 7}}>
               Teléfono
             </Text>
-            <TextInput keyboardType="numeric" style={styles.input} />
+            <TextInput
+              keyboardType="numeric"
+              style={styles.input}
+              value={phoneNumber}
+              onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+            />
+            {errorPhoneNumberEmpty ? (
+              <Text
+                style={{
+                  color: 'red',
+                  display: 'flex',
+                  alignSelf: 'flex-start',
+                }}>
+                {errorPhoneNumberEmpty}
+              </Text>
+            ) : null}
+            {errorPhoneNumberLength ? (
+              <Text
+                style={{
+                  color: 'red',
+                  display: 'flex',
+                  alignSelf: 'flex-start',
+                }}>
+                {errorPhoneNumberLength}
+              </Text>
+            ) : null}
           </View>
           <View style={{marginTop: 20}}>
             <Text variant="bodyLarge" style={{marginBottom: 7}}>
               Mensaje
             </Text>
-            <TextInput style={styles.input} />
+            <TextInput
+              style={styles.input}
+              value={message}
+              onChangeText={message => setMessage(message)}
+            />
+            {errorMessageEmpty ? (
+              <Text
+                style={{
+                  color: 'red',
+                  display: 'flex',
+                  alignSelf: 'flex-start',
+                }}>
+                {errorMessageEmpty}
+              </Text>
+            ) : null}
           </View>
         </View>
         <View style={{width: '90%', marginTop: 50, alignSelf: 'center'}}>
           <Button
             mode="contained"
             style={styles.button}
-            onPress={() => navigation.navigate('ContactarExito')}>
+            onPress={() => handleButtonPress()}>
             Contactar
           </Button>
         </View>
