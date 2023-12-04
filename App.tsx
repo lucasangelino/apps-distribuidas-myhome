@@ -70,41 +70,6 @@ const AuthRouter = () => {
           component={ActivarCuenta}
           options={{headerShown: false}}
         />
-        <Stack.Screen
-          name="PropiedadDetail"
-          component={PropiedadDetail}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Contactar"
-          component={Contactar}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ContactarExito"
-          component={ContactarExito}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ReservarPropiedad"
-          component={ReservarPropiedad}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ReservaExitosa"
-          component={ReservarPropiedadExito}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SolicitarVisita"
-          component={SolicitarVisita}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SolicitarVisitaExito"
-          component={SolicitarVisitaExito}
-          options={{headerShown: false}}
-        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -113,6 +78,41 @@ const AuthRouter = () => {
 const UserApp = () => {
   return (
     <NavigationContainer>
+      <Stack.Screen
+        name="PropiedadDetail"
+        component={PropiedadDetail}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Contactar"
+        component={Contactar}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ContactarExito"
+        component={ContactarExito}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ReservarPropiedad"
+        component={ReservarPropiedad}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ReservaExitosa"
+        component={ReservarPropiedadExito}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SolicitarVisita"
+        component={SolicitarVisita}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SolicitarVisitaExito"
+        component={SolicitarVisitaExito}
+        options={{headerShown: false}}
+      />
       <UserBottomNav />
     </NavigationContainer>
   );
