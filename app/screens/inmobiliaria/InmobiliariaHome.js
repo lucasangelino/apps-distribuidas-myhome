@@ -279,7 +279,7 @@ function InmobiliariaHome({navigation}) {
         </Portal>
 
         <View style={styles.headingContainer}>
-          <Heading>{t('Mis propiedades')}</Heading>
+          <Heading>{t('inmobiliaria-home-title')}</Heading>
           <Text onPress={showModal}>
             {`${t('Filtrar')} (${countFilters})`}{' '}
           </Text>
