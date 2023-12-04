@@ -159,7 +159,7 @@ function InmobiliariaHome({navigation}) {
             images: item.multimedia,
             videoUrl: '',
           });
-          navigation.navigate('AddPropiedadStepper');
+          navigation.navigate('Gestion de Propiedad');
         }}
       />
     );

@@ -133,7 +133,7 @@ const InmobiliariaApp = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="AddPropiedadStepper"
+          name="Gestion de Propiedad"
           component={AddPropiedadStepper}
         />
       </Stack.Navigator>

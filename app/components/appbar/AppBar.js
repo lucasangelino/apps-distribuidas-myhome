@@ -5,7 +5,7 @@ import {Appbar, Text} from 'react-native-paper';
 import {AuthContext} from '../../context/AppContext';
 
 const AppBar = ({navigation}) => {
- const {auth} = useContext(AuthContext);
+  const {auth} = useContext(AuthContext);
   return (
     <Appbar.Header>
       <View style={styles.appBarContaier}>
@@ -16,11 +16,11 @@ const AppBar = ({navigation}) => {
           </Text>
         </Text>
         {auth.user.userType === 'Inmobiliaria' && (
-                  <Appbar.Action
-                    icon="plus-circle"
-                    onPress={() => navigation.navigate('AddPropiedadStepper')}
-                  />
-         )}
+          <Appbar.Action
+            icon="plus-circle"
+            onPress={() => navigation.navigate('Gestion de Propiedad')}
+          />
+        )}
       </View>
     </Appbar.Header>
   );
