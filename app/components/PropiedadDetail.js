@@ -12,6 +12,7 @@ import {
 import uuid from 'react-native-uuid';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {priceFormater} from '../utils/utils';
+import {Comment} from '../screens/inmobiliaria/Comentarios';
 
 const PropiedadDetail = ({route, navigation}) => {
   const [visibleContactar, setVisibleContactar] = React.useState(false);
@@ -155,12 +156,15 @@ const PropiedadDetail = ({route, navigation}) => {
                     backgroundColor: '#e5e5e5',
                     borderRadius: 5,
                   }}>
-                  {user.comments.map(comment => (
-                    <>
-                      <Comment {...comment} />
-                      <Divider key={uuid.v4()} />
-                    </>
-                  ))}
+                  {user.comments.map(comment => {
+                    console.log(comment);
+                    return (
+                      <>
+                        <Comment {...comment} />
+                        <Divider key={uuid.v4()} />
+                      </>
+                    );
+                  })}
                 </View>
               )}
             </View>
@@ -349,18 +353,7 @@ const Amenities = () => {
     </View>
   );
 };
-const Comment = ({id, stars, text, date, author}) => {
-  return (
-    <View style={styles.comment} key={uuid.v4()}>
-      <Stars stars={stars} />
-      <Text style={{marginVertical: 10}}>{text}</Text>
-      <View style={styles.commentFooter}>
-        <Text>{author}</Text>
-        <Text>{date}</Text>
-      </View>
-    </View>
-  );
-};
+
 const Stars = ({stars}) => {
   const starsArray = [];
   const fullStars = Math.floor(stars);

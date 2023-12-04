@@ -37,15 +37,17 @@ const PropiedadCard = ({
   const {propiedades, setPropiedades} = useContext(InmobiliariaContext);
   const {favorites, setFavorites} = useContext(UsuarioContext);
 
-  const PropiedadCard = ({propiedad}) => {
   const navigation = useNavigation();
-  const {id, description, contract_types, location, status, multimedia} =
-    propiedad;
-
-  const {price = 0, expPrice = 0} =
-    contract_types.length > 0 ? contract_types[0] : {};
-  const uri =
-    multimedia.length > 0 ? multimedia[0].url : 'https://picsum.photos/700';
+  const {price = 0, expPrice = 0} = contract_types
+    ? contract_types.length > 0
+      ? contract_types[0]
+      : {}
+    : {};
+  const uri = multimedia
+    ? multimedia.length > 0
+      ? multimedia[0].url
+      : 'https://picsum.photos/700'
+    : 'https://picsum.photos/700';
 
   const handleDelete = () => {
     Alert.alert(
@@ -114,28 +116,11 @@ const PropiedadCard = ({
         <Description>{description}</Description>
       </Card.Content>
       <Card.Actions>
-      {auth.user.userType === 'Usuario' ? (
-           <Button
-          mode="contained"
-          style={{
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 10,
-          }}
-          onPress={() =>
-            navigation.navigate('PropiedadDetail', {property: propiedad})
-          }>
-          VER MÁS
-        </Button>
-        ) : (
         <ActionButton
           label={actionButtonText}
           fullWith
           onClick={onActionButtonPress}
         />
-        )}
-       
       </Card.Actions>
     </Card>
   );

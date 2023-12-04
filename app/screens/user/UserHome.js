@@ -60,10 +60,10 @@ const UserHome = ({navigation}) => {
   const hideModal = () => setVisible(false);
 
   useEffect(() => {
-        const loadPropertites = navigation.addListener('focus', () => {
-          getUserPropiedades();
-        });
-        return loadPropertites;
+    const loadPropertites = navigation.addListener('focus', () => {
+      getUserPropiedades();
+    });
+    return loadPropertites;
   }, [navigation]);
 
   useEffect(() => {
@@ -72,18 +72,21 @@ const UserHome = ({navigation}) => {
   }, [filters]);
 
   const getUserPropiedades = async () => {
-        const userPropiedades = await getNearestProperties({ filters });
-        const userFavorites = await getUserFavorites();
+    const userPropiedades = await getNearestProperties({filters});
+    const userFavorites = await getUserFavorites();
 
-        const favoritosIds = userFavorites.data.map(fav => fav.propertyId);
+    const favoritosIds = userFavorites.data.map(fav => fav.propertyId);
 
-        const propiedades = userPropiedades.data.map(propiedad => ({
-          ...propiedad,
-          isFav: favoritosIds.includes(propiedad.id),
-          favoriteId : favoritosIds.includes(propiedad.id) ? userFavorites.data.find(fav => fav.propertyId === propiedad.id).favoriteId : null
-        }));
+    const propiedades = userPropiedades.data.map(propiedad => ({
+      ...propiedad,
+      isFav: favoritosIds.includes(propiedad.id),
+      favoriteId: favoritosIds.includes(propiedad.id)
+        ? userFavorites.data.find(fav => fav.propertyId === propiedad.id)
+            .favoriteId
+        : null,
+    }));
 
-        setPropiedades(propiedades);
+    setPropiedades(propiedades);
   };
 
   const handleAplyFilters = async () => {
@@ -92,7 +95,15 @@ const UserHome = ({navigation}) => {
   };
 
   const renderPropiedadCard = ({item}) => {
-    return <PropiedadCard propiedad={item} />;
+    return (
+      <PropiedadCard
+        propiedad={item}
+        actionButtonText="VER MAS"
+        onActionButtonPress={() =>
+          navigation.navigate('PropiedadDetail', {property: item})
+        }
+      />
+    );
   };
 
   return (

@@ -1,18 +1,18 @@
-import React, { useEffect, useContext } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
-import { Divider, Text } from 'react-native-paper';
+import React, {useEffect, useContext} from 'react';
+import {View, StyleSheet, Image} from 'react-native';
+import {Divider, Text} from 'react-native-paper';
 import Heading from '../../components/Heading';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import uuid from 'react-native-uuid';
-import { AuthContext } from '../../context/AppContext';
+import {AuthContext} from '../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getUserProfile } from '../../services/API';
+import {getUserProfile} from '../../services/API';
 import NoComentarios from '../../components/NoComentarios';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import {format} from 'date-fns';
+import {es} from 'date-fns/locale';
 
-const Comentarios = ({ navigation }) => {
-  const { auth, _ } = React.useContext(AuthContext);
+const Comentarios = ({navigation}) => {
+  const {auth, _} = React.useContext(AuthContext);
   console.log(auth);
   const [fetchedComments, setFetchedComments] = React.useState([]);
   const [fetchedPoints, setFetchedPoints] = React.useState(0);
@@ -26,26 +26,22 @@ const Comentarios = ({ navigation }) => {
       const user = res.data;
       if (user.comments && user.comments.length > 0) {
         const comments = user.comments.map(comment => {
-          // Parsear la fecha y formatearla como "MMM d yyyy"
-          const formattedDate = format(new Date(comment.updatedAt), 'MMM d yyyy', { locale: es });
-
           return {
-            author: comment.authorName,
-            date: formattedDate,
-            text: comment.message,
-            id: comment.commentId,
-            status: comment.reviewType,
-            photo: comment.authorPhoto
+            authorName: comment.authorName,
+            createdAt: comment.createdAt,
+            message: comment.message,
+            commentId: comment.commentId,
+            reviewType: comment.reviewType,
+            authorPhoto: comment.authorPhoto,
           };
         });
-
 
         setFetchedComments(comments);
       } else {
         console.log('El usuario no tiene comentarios.');
-      };
+      }
 
-      setFetchedPoints(user.rating)
+      setFetchedPoints(user.rating);
     } catch (error) {
       console.log('error: ' + error);
     }
@@ -75,20 +71,32 @@ const Comentarios = ({ navigation }) => {
               <Divider key={uuid.v4()} />
             </React.Fragment>
           ))}
-        </View>)}
+        </View>
+      )}
     </View>
   );
 };
 
-const Comment = ({ id, stars, text, date, author, status, photo }) => {
+export const Comment = ({
+  message,
+  createdAt,
+  authorName,
+  reviewType,
+  authorPhoto,
+}) => {
+  const formattedDate = format(new Date(createdAt), 'MMM d yyyy', {
+    locale: es,
+  });
   return (
     <View style={styles.commentContainer} key={uuid.v4()}>
       <View style={styles.imageContainer}>
-        {photo ? (
+        {authorPhoto ? (
           <Image
-            source={{ uri: photo }}
+            source={{uri: authorPhoto}}
             style={styles.profileImage}
-            onError={(error) => console.error('Error al cargar la imagen:', error)}
+            onError={error =>
+              console.error('Error al cargar la imagen:', error)
+            }
           />
         ) : (
           <Text>Foto no disponible</Text>
@@ -96,29 +104,27 @@ const Comment = ({ id, stars, text, date, author, status, photo }) => {
       </View>
       <View style={styles.commentContent}>
         <View style={styles.commentHeader}>
-          <Text style={styles.commentAuthor}>{author}</Text>
-          <Text style={styles.commentDate}>{date}</Text>
+          <Text style={styles.commentAuthor}>{authorName}</Text>
+          <Text style={styles.commentDate}>{formattedDate}</Text>
         </View>
-        <ComentarioType>{status}</ComentarioType>
-        <Text style={styles.commentText}>{text}</Text>
+        <ComentarioType>{reviewType}</ComentarioType>
+        <Text style={styles.commentText}>{message}</Text>
       </View>
     </View>
   );
 };
 
-const ComentarioType = ({ children }) => {
+const ComentarioType = ({children}) => {
   const statusColor = children === 'Positiva' ? 'green' : 'red';
 
   return (
-    <View style={{ ...styles.cardComentarioType, backgroundColor: statusColor }}>
-      <Text style={styles.cardComentarioTypeText}>
-        {children}
-      </Text>
+    <View style={{...styles.cardComentarioType, backgroundColor: statusColor}}>
+      <Text style={styles.cardComentarioTypeText}>{children}</Text>
     </View>
   );
 };
 
-const Stars = ({ stars }) => {
+const Stars = ({stars}) => {
   const starsArray = [];
   const fullStars = Math.floor(stars);
   const halfStar = stars % 1;
