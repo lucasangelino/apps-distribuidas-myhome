@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useContext} from 'react';
 import {
   Alert,
   Share,
@@ -20,6 +20,11 @@ import uuid from 'react-native-uuid';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {priceFormater} from '../utils/utils';
 import {Comment} from '../screens/inmobiliaria/Comentarios';
+import {InmobiliariaContext} from '../context/InmobiliariaContext';
+import {
+  addUserFavorite,
+  deleteUserFavorite,
+} from '../services/API';
 
 const PropiedadDetail = ({route, navigation}) => {
   const [visibleContactar, setVisibleContactar] = React.useState(false);
@@ -63,13 +68,43 @@ const PropiedadDetail = ({route, navigation}) => {
     }
   };
 
+const {propiedades, setPropiedades} = useContext(InmobiliariaContext);
+
   const {property} = route.params;
-  const {description, contract_types, location, multimedia, user, status} =
+  const {id, description, contract_types, location, multimedia, user, status, isFav, favoriteId} =
     property;
+     const [fav, setFav] = React.useState(isFav);
+      const [favId, setFavId] = React.useState(favoriteId);
   const {price = 0, expPrice = 0} =
     contract_types.length > 0 ? contract_types[0] : {};
   const uri =
     multimedia.length > 0 ? multimedia[0].url : 'https://picsum.photos/700';
+
+  const handleFavorite = async () => {
+    try {
+      if (!fav) {
+        const res = await addUserFavorite({ id });
+        setFav(true);
+        setFavId(res.data.favoriteId);
+        setPropiedades((prevPropiedades) =>
+          prevPropiedades.map((propiedad) =>
+            propiedad.id === id ? { ...propiedad, isFav: true } : propiedad
+          )
+        );
+      } else {
+        const res = await deleteUserFavorite({ favId });
+        setFav(false);
+        setPropiedades((prevPropiedades) =>
+          prevPropiedades.map((propiedad) =>
+            propiedad.id === id ? { ...propiedad, isFav: false } : propiedad
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error al manejar favorito:', error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={StyleSheet.container}>
@@ -112,7 +147,7 @@ const PropiedadDetail = ({route, navigation}) => {
               borderRadius: 30,
             }}>
             <View style={styles.cardImageContainer}>
-              <FavouriteIcon isFav={false} />
+              <FavouriteIcon isFav={fav} onFavorite={() => handleFavorite(id)} />
               <Card.Cover style={styles.cardCover} source={{uri: uri}} />
             </View>
             <Card.Content style={styles.Content}>
@@ -333,7 +368,7 @@ const Description = ({children}) => (
     {children}
   </Text>
 );
-const FavouriteIcon = ({isFav}) => {
+const FavouriteIcon = ({isFav, onFavorite}) => {
   const [fav, setFav] = React.useState(isFav);
   return (
     <View style={styles.cardFavourite}>
@@ -341,7 +376,10 @@ const FavouriteIcon = ({isFav}) => {
         name={fav ? 'bookmark' : 'bookmark-outline'}
         size={20}
         color={fav ? '#EB6440' : '#757474'}
-        onPress={() => setFav(!fav)}
+        onPress={() => {
+          setFav(!fav);
+          onFavorite();
+        }}
       />
     </View>
   );
