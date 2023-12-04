@@ -87,7 +87,7 @@ const StepOne = ({onNextStep}) => {
       tipoPropiedad,
       propiedadTitle,
       propiedadDes,
-      id: publicacion.id,
+      propertyId: publicacion.id,
     };
     const data = await altaPropiedad({payload});
     const id = data.id;

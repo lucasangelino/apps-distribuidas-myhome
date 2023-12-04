@@ -173,7 +173,7 @@ const DeleteIcon = ({onDelete}) => {
 const PropiedadType = ({children}) => (
   <View style={styles.cardPropiedadType}>
     <Text style={styles.cardPropiedadTypeText}>
-      {children || 'en alquiler'}
+      {children.includes('Initial') ? 'Guardada' : children}
     </Text>
   </View>
 );
