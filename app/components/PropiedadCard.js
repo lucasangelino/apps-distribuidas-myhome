@@ -1,15 +1,18 @@
 import React, {useContext} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
-import {Card, Text} from 'react-native-paper';
+import {Button, Card, Text} from 'react-native-paper';
 import ActionButton from './ActionButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
 import {InmobiliariaContext} from '../context/InmobiliariaContext';
 import {UsuarioContext} from '../context/UsuarioContext';
+
 import {
   deletePropiedad,
   addUserFavorite,
   deleteUserFavorite,
 } from '../services/API';
+
 import {priceFormater} from '../utils/utils';
 import {AuthContext} from '../context/AppContext';
 
@@ -33,6 +36,11 @@ const PropiedadCard = ({
   const [favId, setFavId] = React.useState(favoriteId);
   const {propiedades, setPropiedades} = useContext(InmobiliariaContext);
   const {favorites, setFavorites} = useContext(UsuarioContext);
+
+  const PropiedadCard = ({propiedad}) => {
+  const navigation = useNavigation();
+  const {id, description, contract_types, location, status, multimedia} =
+    propiedad;
 
   const {price = 0, expPrice = 0} =
     contract_types.length > 0 ? contract_types[0] : {};
@@ -106,11 +114,28 @@ const PropiedadCard = ({
         <Description>{description}</Description>
       </Card.Content>
       <Card.Actions>
+      {auth.user.userType === 'Usuario' ? (
+           <Button
+          mode="contained"
+          style={{
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}
+          onPress={() =>
+            navigation.navigate('PropiedadDetail', {property: propiedad})
+          }>
+          VER MÁS
+        </Button>
+        ) : (
         <ActionButton
           label={actionButtonText}
           fullWith
           onClick={onActionButtonPress}
         />
+        )}
+       
       </Card.Actions>
     </Card>
   );
