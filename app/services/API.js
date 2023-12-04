@@ -10,6 +10,7 @@ export const altaPropiedad = async ({payload}) => {
     const jsonValue = await AsyncStorage.getItem('userToken');
     const userData = JSON.parse(jsonValue);
     const token = userData.token;
+    console.log('propertyId', propertyId);
 
     const response = await fetch(URL, {
       method: `${propertyId ? 'PATCH' : 'POST'}`,
@@ -211,37 +212,41 @@ export const updatePropiedadStepFour = async ({payload}) => {
   }
 };
 
-export const getPropiedades = async (filters = {publicada: true, reservada: true, guardada: true, despublicada: true}) => {
+export const getPropiedades = async (
+  filters = {
+    publicada: true,
+    reservada: true,
+    guardada: true,
+    despublicada: true,
+  },
+) => {
   const jsonValue = await AsyncStorage.getItem('userToken');
   const userData = JSON.parse(jsonValue);
   const token = userData.token;
 
-  console.log("filters", filters);
+  console.log('filters', filters);
 
   let queryParams = '?orderType=ASC&orderBy=status';
 
-  if(filters != undefined) {
-
-    if(filters.publicada) {
+  if (filters != undefined) {
+    if (filters.publicada) {
       queryParams = queryParams + '&publicada=' + filters.publicada;
     }
-  
-    if(filters.despublicada) {
+
+    if (filters.despublicada) {
       queryParams = queryParams + '&despublicada=' + filters.despublicada;
     }
-  
-    if(filters.guardada) {
+
+    if (filters.guardada) {
       queryParams = queryParams + '&guardada=' + filters.guardada;
     }
-  
-    if(filters.reservada) {
+
+    if (filters.reservada) {
       queryParams = queryParams + '&reservada=' + filters.reservada;
     }
   }
 
-  console.log("queryParams", queryParams);
-  
-  
+  console.log('queryParams', queryParams);
 
   const URL = `${BACKEND_URL}/${API_VERSION}/properties/owned` + queryParams;
 

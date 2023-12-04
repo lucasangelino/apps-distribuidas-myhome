@@ -118,10 +118,6 @@ function InmobiliariaHome({navigation}) {
         actionButtonText="editar"
         onActionButtonPress={() => {
           console.log('item', JSON.stringify(item, null, 2));
-          console.log(
-            ' aaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-            item.contract_types[0].contractType,
-          );
           setPublicacion({
             id: item.id,
             publicada: 'publicada',
@@ -130,16 +126,15 @@ function InmobiliariaHome({navigation}) {
             titulo: item.title,
             descripcion: item.description,
             direccion: {
-              calleAltura: 'Pedro Moran 2430',
-              ciudad: 'CABA',
-              provincia: 'Buenos Aires',
-              barrio: 'Agronomia',
-              localidad: 'CABA',
-              pisoDepto: '0',
-              fullAddress: 'Pedro Moran 2430, CABA, Buenos Aires, Argentina',
-              place_id: 'ChIJq6qq6QvKvJURhZwMkZq7CZM',
-              latitud: '-34.603722',
-              longitud: '-58.381592',
+              calleAltura: item.location.street,
+              ciudad: item.location.country,
+              provincia: item.location.province,
+              barrio: item.location.district,
+              localidad: item.location.country,
+              pisoDepto: item.location.department,
+              place_id: item.location.place_id,
+              latitud: item.location.latitude,
+              longitud: item.location.longitude,
             },
             ambientes: item.numEnvironments,
             dormitorios: item.numRooms,
