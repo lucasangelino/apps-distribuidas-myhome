@@ -52,7 +52,7 @@ const ContactarExito = ({navigation}) => {
           <View style={{marginTop: 20}}>
             <Button
               mode="contained"
-              onPress={() => navigation.navigate('Home')}
+              onPress={() => navigation.navigate('HomeUser')}
               style={styles.button}>
               Volver al Inicio
             </Button>
