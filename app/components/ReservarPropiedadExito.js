@@ -1,8 +1,10 @@
 import * as React from 'react';
 import {View, StyleSheet, SafeAreaView} from 'react-native';
 import {Text, Button, Avatar} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 
 const ReservarPropiedadExito = ({navigation}) => {
+  const {t} = useTranslation();
   return (
     <SafeAreaView style={styles.container}>
       <View style={StyleSheet.container}>
@@ -40,12 +42,13 @@ const ReservarPropiedadExito = ({navigation}) => {
             width: '100%',
           }}>
           <Text style={{fontSize: 20, fontWeight: 'bold', alignSelf: 'center'}}>
-            Reserva Exitosa
+            {t('Reserva Exitosa')}
           </Text>
           <View style={{marginTop: 20}}>
             <Text variant="bodyLarge" style={{marginBottom: 7}}>
-              ¡Felicidades! Tu reserva se ha realizado con exito. La
-              Inmobiliaria se estará poniendo en contacto lo antes posible.
+              {t(
+                '¡Felicidades! Tu reserva se ha realizado con exito. La Inmobiliaria se estará poniendo en contacto lo antes posible.',
+              )}
             </Text>
           </View>
           <View style={{marginTop: 20}}>
@@ -53,7 +56,7 @@ const ReservarPropiedadExito = ({navigation}) => {
               mode="contained"
               onPress={() => navigation.navigate('HomeUser')}
               style={styles.button}>
-              Volver al Inicio
+              {t('Volver al Inicio')}
             </Button>
           </View>
         </View>

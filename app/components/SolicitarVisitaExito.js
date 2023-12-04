@@ -1,8 +1,10 @@
 import * as React from 'react';
 import {View, StyleSheet, SafeAreaView} from 'react-native';
 import {Text, Button, Avatar} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 
 const SolicitarVisitaExito = ({navigation}) => {
+  const {t} = useTranslation();
   return (
     <SafeAreaView style={styles.container}>
       <View style={StyleSheet.container}>
@@ -44,8 +46,9 @@ const SolicitarVisitaExito = ({navigation}) => {
           </Text>
           <View style={{marginTop: 20}}>
             <Text variant="bodyLarge" style={{marginBottom: 7}}>
-              ¡Felicidades! Tu solicitud de visita ha sido exitosa. Pronto nos
-              pondremos en contacto contigo.
+              {t(
+                '¡Felicidades! Tu solicitud de visita ha sido exitosa. Pronto nos pondremos en contacto contigo.',
+              )}
             </Text>
           </View>
           <View style={{marginTop: 20}}>
@@ -53,7 +56,7 @@ const SolicitarVisitaExito = ({navigation}) => {
               mode="contained"
               onPress={() => navigation.navigate('HomeUser')}
               style={styles.button}>
-              Volver al Inicio
+              {t('Volver al Inicio')}
             </Button>
           </View>
         </View>

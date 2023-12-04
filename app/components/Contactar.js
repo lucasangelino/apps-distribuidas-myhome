@@ -10,6 +10,7 @@ import {Text, Button, Avatar} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useTranslation} from 'react-i18next';
 
 const Contactar = ({route, navigation}) => {
   const {propiedad} = route.params;
@@ -20,25 +21,26 @@ const Contactar = ({route, navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [errorPhoneNumberEmpty, setErrorPhoneNumberEmpty] = useState('');
   const [errorPhoneNumberLength, setErrorPhoneNumberLength] = useState('');
+  const {t} = useTranslation();
 
   const handleButtonPress = () => {
     if (message === '') {
-      setErrorMessageEmpty('Completar con un mensaje.');
+      setErrorMessageEmpty(t('Completar con un mensaje.'));
     } else {
       setErrorMessageEmpty('');
     }
     if (message === '') {
-      setErrorNameEmpty('Completar con un nombre.');
+      setErrorNameEmpty(t('Completar con un nombre.'));
     } else {
       setErrorNameEmpty('');
     }
     if (phoneNumber === '') {
-      setErrorPhoneNumberEmpty('Completar con un número de teléfono.');
+      setErrorPhoneNumberEmpty(t('Completar con un número de teléfono.'));
     } else {
       setErrorPhoneNumberEmpty('');
       if (phoneNumber.length !== 10) {
         setErrorPhoneNumberLength(
-          'El número de teléfono debe tener 10 dígitos.',
+          t('El número de teléfono debe tener 10 dígitos.'),
         );
       } else {
         setErrorPhoneNumberLength('');
@@ -122,11 +124,11 @@ const Contactar = ({route, navigation}) => {
               width: '95%',
             }}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-              Contactar Inmobiliaria
+              {t('Contactar Inmobiliaria')}
             </Text>
             <View style={{marginTop: 20}}>
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
-                Nombre
+                {t('Nombre')}
               </Text>
               <TextInput
                 style={styles.input}
@@ -146,7 +148,7 @@ const Contactar = ({route, navigation}) => {
             </View>
             <View style={{marginTop: 20}}>
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
-                Teléfono
+                {t('Teléfono')}
               </Text>
               <TextInput
                 keyboardType="numeric"
@@ -177,7 +179,7 @@ const Contactar = ({route, navigation}) => {
             </View>
             <View style={{marginTop: 20}}>
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
-                Mensaje
+                {t('Mensaje')}
               </Text>
               <TextInput
                 style={styles.input}
@@ -203,7 +205,7 @@ const Contactar = ({route, navigation}) => {
               mode="contained"
               style={styles.button}
               onPress={() => handleButtonPress()}>
-              Contactar
+              {t('Contactar')}
             </Button>
           </View>
         </View>

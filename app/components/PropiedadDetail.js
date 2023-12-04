@@ -20,11 +20,13 @@ import uuid from 'react-native-uuid';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {priceFormater} from '../utils/utils';
 import {Comment} from '../screens/inmobiliaria/Comentarios';
+import {useTranslation} from 'react-i18next';
 
 const PropiedadDetail = ({route, navigation}) => {
   const [visibleContactar, setVisibleContactar] = React.useState(false);
   const showModalContactar = () => setVisibleContactar(true);
   const hideModalContactar = () => setVisibleContactar(false);
+  const {t} = useTranslation();
 
   const [visibleReservar, setVisibleReservar] = React.useState(false);
   const showModalReservar = () => setVisibleReservar(true);
@@ -89,12 +91,12 @@ const PropiedadDetail = ({route, navigation}) => {
           />
           <Avatar.Image
             size={50}
-            source={require('../assets/images/Logo.png')}
-            backgroundColor="#eff5f5"
+            source={require('../assets/images/LogoBlanco.png')}
+            backgroundColor="#FFFFFF"
             style={{marginLeft: 17}}
           />
           <Text variant="titleLarge" style={{marginLeft: 18}}>
-            Detalles de Propiedad
+            {t('Detalles de Propiedad')}
           </Text>
           <Ionicons
             name="share-social-outline"
@@ -112,7 +114,6 @@ const PropiedadDetail = ({route, navigation}) => {
               borderRadius: 30,
             }}>
             <View style={styles.cardImageContainer}>
-              <FavouriteIcon isFav={false} />
               <Card.Cover style={styles.cardCover} source={{uri: uri}} />
             </View>
             <Card.Content style={styles.Content}>
@@ -125,13 +126,13 @@ const PropiedadDetail = ({route, navigation}) => {
                     alignItems: 'baseline',
                   }}>
                   <Price>{`${priceFormater({price})}`}</Price>
-                  <Text variant="bodyLarge">Precio</Text>
+                  <Text variant="bodyLarge">{t('Precio')}</Text>
                 </View>
                 {contract_types[0].contractType === 'Alquiler' ? (
                   <View
                     style={{display: 'flex', flexDirection: 'row', gap: 10}}>
                     <Expenses>{`${priceFormater({price: expPrice})}`}</Expenses>
-                    <Text variant="bodyMedium">Expensas</Text>
+                    <Text variant="bodyMedium">{t('Expensas')}</Text>
                   </View>
                 ) : null}
               </View>
@@ -165,7 +166,7 @@ const PropiedadDetail = ({route, navigation}) => {
             <View style={{alignItems: 'center'}}>
               <View style={{shadowOpacity: 0}}>
                 <Text variant="bodyLarge" style={{marginBottom: 5}}>
-                  Comentarios de la Inmobiliaria
+                  {t('Comentarios de la Inmobiliaria')}
                 </Text>
               </View>
               {user.comments.length < 1 ? (
@@ -177,7 +178,7 @@ const PropiedadDetail = ({route, navigation}) => {
                     backgroundColor: '#fff',
                   }}>
                   <Text variant="bodyMedium">
-                    La Inmobiliaria no posee comentarios 😢
+                    {t('La Inmobiliaria no posee comentarios')} 😢
                   </Text>
                 </View>
               ) : (
@@ -219,11 +220,11 @@ const PropiedadDetail = ({route, navigation}) => {
                   disabled={false}
                   mode="contained"
                   onPress={showModalReservar}>
-                  Reservar
+                  {t('Reservar')}
                 </Button>
               ) : (
                 <Button style={styles.button} disabled={true} mode="contained">
-                  Reservar
+                  {t('Reservar')}
                 </Button>
               )}
             </View>
@@ -242,7 +243,9 @@ const PropiedadDetail = ({route, navigation}) => {
                 marginHorizontal: 10,
               }}>
               <Text variant="bodyLarge">
-                ¿Desea contactar a la propiedad o solicitar visita programada?
+                {t(
+                  '¿Desea contactar a la propiedad o solicitar visita programada?',
+                )}
               </Text>
               <View
                 style={{
@@ -261,7 +264,7 @@ const PropiedadDetail = ({route, navigation}) => {
                   style={styles.button}
                   mode="contained"
                   onPress={handleSolicitarVisita}>
-                  Solicitar Visita
+                  {t('Solicitar Visita')}
                 </Button>
               </View>
             </Modal>
@@ -280,7 +283,9 @@ const PropiedadDetail = ({route, navigation}) => {
                 marginHorizontal: 10,
               }}>
               <Text variant="bodyLarge">
-                ¿Desea reservar la propiedad? Deberá abonar el 50% del monto.
+                {t(
+                  '¿Desea reservar la propiedad? Deberá abonar el 50% del monto.',
+                )}
               </Text>
               <View
                 style={{
@@ -293,13 +298,13 @@ const PropiedadDetail = ({route, navigation}) => {
                   style={styles.button}
                   mode="contained"
                   onPress={hideModalReservar}>
-                  Cancelar
+                  {t('Cancelar')}
                 </Button>
                 <Button
                   style={styles.button}
                   mode="contained"
                   onPress={handleReserva}>
-                  Continuar
+                  {t('Continuar')}
                 </Button>
               </View>
             </Modal>
@@ -420,7 +425,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#eff5f5',
+    backgroundColor: '#FFFFFF',
   },
   starContainer: {
     display: 'flex',

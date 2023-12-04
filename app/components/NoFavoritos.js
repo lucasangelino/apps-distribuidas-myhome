@@ -1,11 +1,13 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 
 const NoFavoritos = () => {
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
-      <Text variant="headlineSmall">No hay favoritos 😢</Text>
+      <Text variant="headlineSmall">{t('No hay favoritos')} 😢</Text>
     </View>
   );
 };

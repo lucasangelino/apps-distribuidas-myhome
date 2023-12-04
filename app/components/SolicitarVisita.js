@@ -4,6 +4,7 @@ import {Text, Button, Avatar, SegmentedButtons} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useTranslation} from 'react-i18next';
 
 const SolicitarVisita = ({route, navigation}) => {
   const {propiedad} = route.params;
@@ -12,10 +13,11 @@ const SolicitarVisita = ({route, navigation}) => {
   const [fecha, setFecha] = useState('');
   const [errorFechaEmpty, setErrorFechaEmpty] = useState('');
   const [errorFechaLength, setErrorFechaLength] = useState('');
+  const {t} = useTranslation();
 
   const handleButtonPress = () => {
     if (horario === '') {
-      setErrorHorarioEmpty('Seleccionar un horario.');
+      setErrorHorarioEmpty(t('Seleccionar un horario.'));
     } else {
       setErrorHorarioEmpty('');
     }
@@ -97,7 +99,7 @@ const SolicitarVisita = ({route, navigation}) => {
         </View>
         <View>
           <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 20}}>
-            Seleccione el horario de la visita que desee:
+            {t('Seleccione el horario de la visita que desee:')}
           </Text>
           <SegmentedButtons
             value={horario}
@@ -125,7 +127,7 @@ const SolicitarVisita = ({route, navigation}) => {
           ) : null}
           <View style={{marginTop: 30}}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-              Ingrese la fecha en la que desea hacer la visita:
+              {t('Ingrese la fecha en la que desea hacer la visita:')}
             </Text>
             <TextInput
               style={styles.input}
@@ -159,7 +161,7 @@ const SolicitarVisita = ({route, navigation}) => {
               mode="contained"
               style={styles.button}
               onPress={() => handleButtonPress()}>
-              Solicitar
+              {t('Solicitar')}
             </Button>
           </View>
         </View>

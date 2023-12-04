@@ -1,13 +1,15 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 
 const NoPropiedades = () => {
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
-      <Text variant="headlineSmall">No hay propiedades 😢</Text>
+      <Text variant="headlineSmall">{t('No hay propiedades')} 😢</Text>
       <Text variant="titleSmall">
-        Modifica los filtros para ver otros resultados
+        {t('Modifica los filtros para ver otros resultados')}
       </Text>
     </View>
   );

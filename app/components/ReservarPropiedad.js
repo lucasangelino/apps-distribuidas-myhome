@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {priceFormater} from '../utils/utils';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useTranslation} from 'react-i18next';
 
 const ReservarPropiedad = ({route, navigation}) => {
   const {propiedad} = route.params;
@@ -27,37 +28,40 @@ const ReservarPropiedad = ({route, navigation}) => {
   const [cvc, setCvc] = useState('');
   const [errorCvcEmpty, setErrorCvcEmpty] = useState('');
   const [errorCvcLength, setErrorCvcLength] = useState('');
+  const {t} = useTranslation();
 
   const handleButtonPress = () => {
     if (numeroTarjeta === '') {
-      setErrorNumeroTarjetaEmpty('El número de la tarjeta es requerido');
+      setErrorNumeroTarjetaEmpty(t('El número de la tarjeta es requerido.'));
     } else {
       setErrorNumeroTarjetaEmpty('');
       if (numeroTarjeta.length !== 16) {
-        setErrorNumeroTarjetaLength('El número de la tarjeta debe ser de 16');
+        setErrorNumeroTarjetaLength(
+          t('El número de la tarjeta debe tener 16 dígitos.'),
+        );
       } else {
         setErrorNumeroTarjetaLength('');
       }
 
       if (nombre === '') {
-        setErrorNombreEmpty('El nombre es requerido');
+        setErrorNombreEmpty(t('El nombre es requerido'));
       } else {
         setErrorNombreEmpty('');
       }
 
       if (apellido === '') {
-        setErrorApellidoEmpty('El apellido es requerido');
+        setErrorApellidoEmpty(t('El apellido es requerido'));
       } else {
         setErrorApellidoEmpty('');
       }
 
       if (fechaExpiracion === '') {
-        setErrorFechaExpiracionEmpty('La fecha de expiración es requerida');
+        setErrorFechaExpiracionEmpty(t('La fecha de expiración es requerida'));
       } else {
         setErrorFechaExpiracionEmpty('');
         if (fechaExpiracion.length !== 4) {
           setErrorFechaExpiracionLength(
-            'La fecha de expiración debe ser de 4 caracteres',
+            t('La fecha de expiración debe ser de 4 caracteres'),
           );
         } else {
           setErrorFechaExpiracionLength('');
@@ -65,11 +69,11 @@ const ReservarPropiedad = ({route, navigation}) => {
       }
 
       if (cvc === '') {
-        setErrorCvcEmpty('El cvc es requerido');
+        setErrorCvcEmpty(t('El cvc es requerido'));
       } else {
         setErrorCvcEmpty('');
         if (cvc.length !== 3) {
-          setErrorCvcLength('El cvc debe ser de 3 caracteres');
+          setErrorCvcLength(t('El cvc debe ser de 3 caracteres'));
         } else {
           setErrorCvcLength('');
         }
@@ -155,11 +159,11 @@ const ReservarPropiedad = ({route, navigation}) => {
             width: '95%',
           }}>
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-            Finalizar Reservar
+            {t('Finalizar Reservar')}
           </Text>
           <View style={{marginTop: 20}}>
             <Text variant="bodyLarge" style={{marginBottom: 7}}>
-              Número de la Tarjeta
+              {t('Número de la Tarjeta')}
             </Text>
             <TextInput
               keyboardType="numeric"
@@ -199,7 +203,7 @@ const ReservarPropiedad = ({route, navigation}) => {
             <View
               style={{display: 'flex', flexDirection: 'column', width: '45%'}}>
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
-                Nombre
+                {t('Nombre')}
               </Text>
               <TextInput
                 style={styles.input}
@@ -210,7 +214,7 @@ const ReservarPropiedad = ({route, navigation}) => {
             <View
               style={{display: 'flex', flexDirection: 'column', width: '45%'}}>
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
-                Apellido
+                {t('Apellido')}
               </Text>
               <TextInput
                 style={styles.input}
@@ -250,7 +254,7 @@ const ReservarPropiedad = ({route, navigation}) => {
             <View
               style={{display: 'flex', flexDirection: 'column', width: '45%'}}>
               <Text variant="bodyLarge" style={{marginBottom: 7}}>
-                Fecha de Expiración
+                {t('Fecha de Expiración')}
               </Text>
               <TextInput
                 keyboardType="numeric"
@@ -270,6 +274,7 @@ const ReservarPropiedad = ({route, navigation}) => {
                 keyboardType="numeric"
                 style={styles.input}
                 value={cvc}
+                secureTextEntry={true}
                 onChangeText={cvc => setCvc(cvc)}
               />
             </View>
@@ -308,10 +313,12 @@ const ReservarPropiedad = ({route, navigation}) => {
             marginTop: 10,
             width: '100%',
           }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Resumen</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>{t('Resumen')}</Text>
           <View
             style={{display: 'flex', flexDirection: 'column', marginTop: 15}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Propiedad:</Text>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              {t('Propiedad:')}
+            </Text>
             <Location>
               {propiedad.propertyType + ' en ' + propiedad.location?.district}
             </Location>
@@ -319,14 +326,14 @@ const ReservarPropiedad = ({route, navigation}) => {
           <View
             style={{display: 'flex', flexDirection: 'column', marginTop: 7}}>
             <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              Valor Alquiler:
+              {t('Valor Alquiler:')}
             </Text>
             <Price>{`${priceFormater({price})}`}</Price>
           </View>
           <View
             style={{display: 'flex', flexDirection: 'column', marginTop: 7}}>
             <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              Monto Reserva:
+              {t('Monto Reserva:')}
             </Text>
             <Price>{`${priceFormater({price: reservaMonto})}`}</Price>
           </View>
@@ -336,7 +343,7 @@ const ReservarPropiedad = ({route, navigation}) => {
             mode="contained"
             style={styles.button}
             onPress={() => handleButtonPress()}>
-            Reservar
+            {t('Reservar')}
           </Button>
         </View>
       </View>
