@@ -42,6 +42,7 @@ const Comentarios = ({navigation}) => {
       }
 
       setFetchedPoints(user.rating);
+
     } catch (error) {
       console.log('error: ' + error);
     }

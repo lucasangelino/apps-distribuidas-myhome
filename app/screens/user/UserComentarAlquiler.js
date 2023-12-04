@@ -7,7 +7,6 @@ import {postUserComment} from '../../services/API';
 
 const UserComentarAlquiler = ({route, navigation}) => {
   const {alquilerId: contractTypeId} = route.params;
-  console.log("Routerrrrrrrrrrrrr", route.params);
 
   const [reviewType, setReviewType] = React.useState(false);
   const [commentMessage, setCommentMessage] = useState('');

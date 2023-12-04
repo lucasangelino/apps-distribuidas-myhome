@@ -10,7 +10,6 @@ const UserAlquileres = ({navigation}) => {
 
   const getAlquileres = async () => {
     const userAlquileres = await getUserAlquileres();
-    console.log('getAlquileres', userAlquileres);
     setMisAlquileres(userAlquileres.data);
   };
 
