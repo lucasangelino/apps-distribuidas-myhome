@@ -65,7 +65,11 @@ const Comentarios = ({navigation}) => {
       {fetchedComments.length === 0 ? (
         <NoComentarios />
       ) : (
-        <View style={styles.commentContainer}>
+        <View
+          style={{
+            backgroundColor: '#e5e5e5',
+            borderRadius: 5,
+          }}>
           {fetchedComments.map(comment => (
             <React.Fragment key={uuid.v4()}>
               <Comment {...comment} />
