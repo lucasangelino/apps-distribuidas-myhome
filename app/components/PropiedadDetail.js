@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
+import {
+  Alert,
+  Share,
+  View,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import {
   Divider,
   Text,
@@ -38,6 +45,24 @@ const PropiedadDetail = ({route, navigation}) => {
     navigation.navigate('ReservarPropiedad', {propiedad: property});
   };
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'Hola, te comparto esta propiedad que encontré: ' +
+          property.description,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+
   const {property} = route.params;
   const {description, contract_types, location, multimedia, user, status} =
     property;
@@ -66,7 +91,7 @@ const PropiedadDetail = ({route, navigation}) => {
             size={50}
             source={require('../assets/images/Logo.png')}
             backgroundColor="#eff5f5"
-            style={{marginLeft: 10}}
+            style={{marginLeft: 17}}
           />
           <Text variant="titleLarge" style={{marginLeft: 18}}>
             Detalles de Propiedad
@@ -76,6 +101,7 @@ const PropiedadDetail = ({route, navigation}) => {
             size={20}
             color={'#212121'}
             style={{marginLeft: 25}}
+            onPress={() => onShare()}
           />
         </View>
         <ScrollView style={{minHeight: '100%'}}>
@@ -96,15 +122,18 @@ const PropiedadDetail = ({route, navigation}) => {
                     display: 'flex',
                     flexDirection: 'row',
                     gap: 10,
-                    alignItems: 'center',
+                    alignItems: 'baseline',
                   }}>
                   <Price>{`${priceFormater({price})}`}</Price>
-                  <Text variant="bodyMedium">Precio</Text>
+                  <Text variant="bodyLarge">Precio</Text>
                 </View>
-                <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
-                  <Expenses>{`${priceFormater({price: expPrice})}`}</Expenses>
-                  <Text variant="bodyMedium">Expensas</Text>
-                </View>
+                {contract_types[0].contractType === 'Alquiler' ? (
+                  <View
+                    style={{display: 'flex', flexDirection: 'row', gap: 10}}>
+                    <Expenses>{`${priceFormater({price: expPrice})}`}</Expenses>
+                    <Text variant="bodyMedium">Expensas</Text>
+                  </View>
+                ) : null}
               </View>
               <Location>
                 {location?.street +
@@ -135,7 +164,9 @@ const PropiedadDetail = ({route, navigation}) => {
             </View>
             <View style={{alignItems: 'center'}}>
               <View style={{shadowOpacity: 0}}>
-                <Text>Comentarios de la Inmobiliaria</Text>
+                <Text variant="bodyLarge" style={{marginBottom: 5}}>
+                  Comentarios de la Inmobiliaria
+                </Text>
               </View>
               {user.comments.length < 1 ? (
                 <View
@@ -208,6 +239,7 @@ const PropiedadDetail = ({route, navigation}) => {
                 backgroundColor: '#FFFFFF',
                 padding: 20,
                 borderRadius: 10,
+                marginHorizontal: 10,
               }}>
               <Text variant="bodyLarge">
                 ¿Desea contactar a la propiedad o solicitar visita programada?
@@ -411,9 +443,10 @@ const styles = StyleSheet.create({
   priceContainer: {
     width: '100%',
     display: 'flex',
-    gap: 20,
+    gap: 10,
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    marginBottom: 10,
   },
   cardCover: {
     borderTopRightRadius: 20,
