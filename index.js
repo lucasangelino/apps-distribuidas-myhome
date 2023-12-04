@@ -31,11 +31,11 @@ export default function Main() {
   return (
     <AuthProvider>
       <InmobiliariaProvider>
-      <UsuarioProvider>
-        <PaperProvider theme={theme}>
-          <App />
-        </PaperProvider>
-         </UsuarioProvider>
+        <UsuarioProvider>
+          <PaperProvider theme={theme}>
+            <App />
+          </PaperProvider>
+        </UsuarioProvider>
       </InmobiliariaProvider>
     </AuthProvider>
   );

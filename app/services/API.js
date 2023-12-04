@@ -408,6 +408,12 @@ export const getNearestProperties = async ({filters, countFilters} = {}) => {
     if (filters.maxPrice !== 0) {
       queryParams = queryParams + '&maxPrice=' + filters.maxPrice;
     }
+    // if (filters.distanceInMeters !== 0) {
+    //   queryParams =
+    //     queryParams + '&distanceInMeters=' + filters.distanceInMeters;
+    //   queryParams = queryParams + '&lat=' + filters.lat;
+    //   queryParams = queryParams + '&long=' + filters.long;
+    // }
   }
   let URL = `${BACKEND_URL}/${API_VERSION}/properties`;
 

@@ -9,12 +9,14 @@ import {
   View,
   FlatList,
   ScrollView,
+  PermissionsAndroid,
 } from 'react-native';
 import Heading from '../../components/Heading';
 import NoPropiedades from '../../components/NoPropiedades';
 import PropiedadCard from '../../components/PropiedadCard';
 import {getNearestProperties, getUserFavorites} from '../../services/API';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Geolocation from '@react-native-community/geolocation';
 import {
   Divider,
   Modal,
@@ -46,6 +48,9 @@ const initialFilters = {
   currency: '',
   minPrice: 0,
   maxPrice: 0,
+  lat: -34.5896513,
+  long: -58.4909745,
+  distanceInMeters: 0,
 };
 
 const UserHome = ({navigation}) => {
@@ -53,6 +58,8 @@ const UserHome = ({navigation}) => {
   const [visible, setVisible] = React.useState(false);
   const [filters, setFilters] = React.useState(initialFilters);
   const [countFilters, setCountFilters] = React.useState(0);
+  const [locationPermission, setLocationPermission] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
 
   const {t} = useTranslation();
 
@@ -69,8 +76,55 @@ const UserHome = ({navigation}) => {
   useEffect(() => {
     const count = Object.values(filters).filter(filter => filter).length;
     console.log(count);
-    setCountFilters(count);
+    setCountFilters(count - 2);
   }, [filters]);
+
+  useEffect(() => {
+    (async () => {
+      console.log('useEffect');
+      const granted = await requestLocationPermission();
+      if (granted) {
+        setLocationPermission(true);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (locationPermission) {
+      Geolocation.getCurrentPosition(info => {
+        setUserLocation({
+          latitude: info.coords.latitude,
+          longitude: info.coords.longitude,
+        });
+      });
+    }
+  }, [locationPermission]);
+
+  const requestLocationPermission = async () => {
+    console.log('requestLocationPermission');
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: t('Permiso de ubicacion'),
+          message: t(
+            'La aplicacion necesita acceder a su ubicacion para poder mostrarle las propiedades mas cercanas a usted',
+          ),
+          buttonNegative: t('Cancelar'),
+          buttonPositive: t('OK'),
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('LOCATION PERSMISSION GRANTED');
+        setLocationPermission(true);
+        return true;
+      } else {
+        console.log('Location permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   const getUserPropiedades = async () => {
     const userPropiedades = await getNearestProperties({filters, countFilters});
@@ -182,6 +236,21 @@ const UserHome = ({navigation}) => {
                 />
 
                 <View style={styles.amenitiesContainer}>
+                  <Text style={{fontSize: 20}}>{t('Distancia en km')}</Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    mode="outlined"
+                    label=""
+                    onChangeText={distanceInMeters =>
+                      setFilters({
+                        ...filters,
+                        distanceInMeters: distanceInMeters,
+                      })
+                    }
+                    value={filters.distanceInMeters.toString()}
+                    style={{height: 40}}
+                  />
+
                   <Text style={{fontSize: 20}}>{t('Caracteristicas')}</Text>
                   {/* Ambientes */}
                   <View style={styles.amenitie}>
@@ -549,6 +618,25 @@ const UserHome = ({navigation}) => {
           <Heading>{t('user-home-title')}</Heading>
           <Text onPress={showModal}>{`${t('filtrar')} (${countFilters})`}</Text>
         </View>
+        {!locationPermission && (
+          <View>
+            <Text
+              style={{
+                borderWidth: 1,
+                backgroundColor: '#e6e6e6',
+                borderColor: 'tomato',
+                padding: 10,
+                borderRadius: 10,
+                color: '#000',
+              }}>
+              ❗
+              {t(
+                'Debes dar permiso a la ubicacion para nua mejor experiencia de usuario',
+              )}
+            </Text>
+            <Button onPress={requestLocationPermission}>Dar permiso</Button>
+          </View>
+        )}
 
         {propiedades.length === 0 ? (
           <NoPropiedades />
