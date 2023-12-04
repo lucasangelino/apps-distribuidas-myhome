@@ -154,11 +154,11 @@ const UserHome = ({navigation}) => {
     const favoritosIds = userFavorites.data.map(fav => fav.propertyId);
 
     const propiedades = filteredNearestProperties.data.map(propiedad => ({
-        ...propiedad,
-        isFav: favoritosIds.includes(propiedad.id),
-        favoriteId: favoritosIds.includes(propiedad.id)
+      ...propiedad,
+      isFav: favoritosIds.includes(propiedad.id),
+      favoriteId: favoritosIds.includes(propiedad.id)
         ? userFavorites.data.find(fav => fav.propertyId === propiedad.id)
-        .favoriteId
+            .favoriteId
         : null,
     }));
 
@@ -628,7 +628,7 @@ const UserHome = ({navigation}) => {
         </Portal>
 
         <View style={styles.filterContainer}>
-          <Heading>{t('user-home-title')}</Heading>
+          <Heading>{t('Mis propiedades')}</Heading>
           <Text onPress={showModal}>{`${t('filtrar')} (${countFilters})`}</Text>
         </View>
         {!locationPermission && (
