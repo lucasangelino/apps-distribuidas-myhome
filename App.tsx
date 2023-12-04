@@ -70,35 +70,6 @@ const AuthRouter = () => {
           component={ActivarCuenta}
           options={{headerShown: false}}
         />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-
-const UserApp = () => {
-  return (
-    <NavigationContainer>
-      <UserBottomNav />
-    </NavigationContainer>
-  );
-};
-
-const InmobiliariaApp = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={InmobiliariaRoutesFromBottomNav}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="AddPropiedadStepper"
-          component={AddPropiedadStepper}
-          // options={{
-          //   header: () => <AppBar />,
-          // }}
-        />
         <Stack.Screen
           name="PropiedadDetail"
           component={PropiedadDetail}
@@ -133,6 +104,35 @@ const InmobiliariaApp = () => {
           name="SolicitarVisitaExito"
           component={SolicitarVisitaExito}
           options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+const UserApp = () => {
+  return (
+    <NavigationContainer>
+      <UserBottomNav />
+    </NavigationContainer>
+  );
+};
+
+const InmobiliariaApp = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={InmobiliariaRoutesFromBottomNav}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AddPropiedadStepper"
+          component={AddPropiedadStepper}
+          // options={{
+          //   header: () => <AppBar />,
+          // }}
         />
       </Stack.Navigator>
     </NavigationContainer>
