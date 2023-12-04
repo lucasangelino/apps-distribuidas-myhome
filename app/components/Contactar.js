@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, SafeAreaView, TextInput} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import {Text, Button, Avatar} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {BACKEND_URL, API_VERSION} from 'react-native-dotenv';
@@ -79,125 +85,129 @@ const Contactar = ({route, navigation}) => {
 
   return (
     <SafeAreaView>
-      <View style={StyleSheet.container}>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            marginTop: 20,
-            alignItems: 'center',
-            gap: 5,
-          }}>
-          <Ionicons
-            name="arrow-back-outline"
-            size={28}
-            color={'#212121'}
-            marginLeft={10}
-            onPress={() =>
-              navigation.navigate('PropiedadDetail', {property: propiedad})
-            }
-          />
-          <Avatar.Image
-            size={50}
-            source={require('../assets/images/Logo.png')}
-            backgroundColor="#eff5f5"
-            style={{marginLeft: 80}}
-          />
-          <Text style={{fontSize: 20}}>MyHome</Text>
-        </View>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            marginLeft: 10,
-            marginRight: 10,
-            marginTop: 30,
-            width: '95%',
-          }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-            Contactar Inmobiliaria
-          </Text>
-          <View style={{marginTop: 20}}>
-            <Text variant="bodyLarge" style={{marginBottom: 7}}>
-              Nombre
-            </Text>
-            <TextInput
-              style={styles.input}
-              value={name}
-              onChangeText={name => setName(name)}
+      <ScrollView>
+        <View style={StyleSheet.container}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              marginTop: 20,
+              alignItems: 'center',
+              gap: 5,
+            }}>
+            <Ionicons
+              name="arrow-back-outline"
+              size={28}
+              color={'#212121'}
+              marginLeft={10}
+              onPress={() =>
+                navigation.navigate('PropiedadDetail', {property: propiedad})
+              }
             />
-            {errorNameEmpty ? (
-              <Text
-                style={{
-                  color: 'red',
-                  display: 'flex',
-                  alignSelf: 'flex-start',
-                }}>
-                {errorNameEmpty}
-              </Text>
-            ) : null}
-          </View>
-          <View style={{marginTop: 20}}>
-            <Text variant="bodyLarge" style={{marginBottom: 7}}>
-              Teléfono
-            </Text>
-            <TextInput
-              keyboardType="numeric"
-              style={styles.input}
-              value={phoneNumber}
-              onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+            <Avatar.Image
+              size={50}
+              source={require('../assets/images/Logo.png')}
+              backgroundColor="#eff5f5"
+              style={{marginLeft: 80}}
             />
-            {errorPhoneNumberEmpty ? (
-              <Text
-                style={{
-                  color: 'red',
-                  display: 'flex',
-                  alignSelf: 'flex-start',
-                }}>
-                {errorPhoneNumberEmpty}
-              </Text>
-            ) : null}
-            {errorPhoneNumberLength ? (
-              <Text
-                style={{
-                  color: 'red',
-                  display: 'flex',
-                  alignSelf: 'flex-start',
-                }}>
-                {errorPhoneNumberLength}
-              </Text>
-            ) : null}
+            <Text style={{fontSize: 20}}>MyHome</Text>
           </View>
-          <View style={{marginTop: 20}}>
-            <Text variant="bodyLarge" style={{marginBottom: 7}}>
-              Mensaje
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              marginLeft: 10,
+              marginRight: 10,
+              marginTop: 30,
+              width: '95%',
+            }}>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+              Contactar Inmobiliaria
             </Text>
-            <TextInput
-              style={styles.input}
-              value={message}
-              onChangeText={message => setMessage(message)}
-            />
-            {errorMessageEmpty ? (
-              <Text
-                style={{
-                  color: 'red',
-                  display: 'flex',
-                  alignSelf: 'flex-start',
-                }}>
-                {errorMessageEmpty}
+            <View style={{marginTop: 20}}>
+              <Text variant="bodyLarge" style={{marginBottom: 7}}>
+                Nombre
               </Text>
-            ) : null}
+              <TextInput
+                style={styles.input}
+                value={name}
+                onChangeText={name => setName(name)}
+              />
+              {errorNameEmpty ? (
+                <Text
+                  style={{
+                    color: 'red',
+                    display: 'flex',
+                    alignSelf: 'flex-start',
+                  }}>
+                  {errorNameEmpty}
+                </Text>
+              ) : null}
+            </View>
+            <View style={{marginTop: 20}}>
+              <Text variant="bodyLarge" style={{marginBottom: 7}}>
+                Teléfono
+              </Text>
+              <TextInput
+                keyboardType="numeric"
+                style={styles.input}
+                value={phoneNumber}
+                onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+              />
+              {errorPhoneNumberEmpty ? (
+                <Text
+                  style={{
+                    color: 'red',
+                    display: 'flex',
+                    alignSelf: 'flex-start',
+                  }}>
+                  {errorPhoneNumberEmpty}
+                </Text>
+              ) : null}
+              {errorPhoneNumberLength ? (
+                <Text
+                  style={{
+                    color: 'red',
+                    display: 'flex',
+                    alignSelf: 'flex-start',
+                  }}>
+                  {errorPhoneNumberLength}
+                </Text>
+              ) : null}
+            </View>
+            <View style={{marginTop: 20}}>
+              <Text variant="bodyLarge" style={{marginBottom: 7}}>
+                Mensaje
+              </Text>
+              <TextInput
+                style={styles.input}
+                value={message}
+                multiline={true}
+                numberOfLines={10}
+                onChangeText={message => setMessage(message)}
+              />
+              {errorMessageEmpty ? (
+                <Text
+                  style={{
+                    color: 'red',
+                    display: 'flex',
+                    alignSelf: 'flex-start',
+                  }}>
+                  {errorMessageEmpty}
+                </Text>
+              ) : null}
+            </View>
+          </View>
+          <View style={{width: '90%', marginTop: 50, alignSelf: 'center'}}>
+            <Button
+              mode="contained"
+              style={styles.button}
+              onPress={() => handleButtonPress()}>
+              Contactar
+            </Button>
           </View>
         </View>
-        <View style={{width: '90%', marginTop: 50, alignSelf: 'center'}}>
-          <Button
-            mode="contained"
-            style={styles.button}
-            onPress={() => handleButtonPress()}>
-            Contactar
-          </Button>
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -212,7 +222,6 @@ const styles = StyleSheet.create({
   input: {
     color: '#000',
     width: '100%',
-    height: 40,
     borderWidth: 0.5,
     borderColor: 'grey',
     borderRadius: 10,
