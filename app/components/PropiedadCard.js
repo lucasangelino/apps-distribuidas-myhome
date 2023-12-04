@@ -1,15 +1,18 @@
 import React, {useContext} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
-import {Card, Text} from 'react-native-paper';
+import {Button, Card, Text} from 'react-native-paper';
 import ActionButton from './ActionButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
 import {InmobiliariaContext} from '../context/InmobiliariaContext';
 import {UsuarioContext} from '../context/UsuarioContext';
+
 import {
   deletePropiedad,
   addUserFavorite,
   deleteUserFavorite,
 } from '../services/API';
+
 import {priceFormater} from '../utils/utils';
 import {AuthContext} from '../context/AppContext';
 
@@ -34,10 +37,17 @@ const PropiedadCard = ({
   const {propiedades, setPropiedades} = useContext(InmobiliariaContext);
   const {favorites, setFavorites} = useContext(UsuarioContext);
 
-  const {price = 0, expPrice = 0} =
-    contract_types.length > 0 ? contract_types[0] : {};
-  const uri =
-    multimedia.length > 0 ? multimedia[0].url : 'https://picsum.photos/700';
+  const navigation = useNavigation();
+  const {price = 0, expPrice = 0} = contract_types
+    ? contract_types.length > 0
+      ? contract_types[0]
+      : {}
+    : {};
+  const uri = multimedia
+    ? multimedia.length > 0
+      ? multimedia[0].url
+      : 'https://picsum.photos/700'
+    : 'https://picsum.photos/700';
 
   const handleDelete = () => {
     Alert.alert(

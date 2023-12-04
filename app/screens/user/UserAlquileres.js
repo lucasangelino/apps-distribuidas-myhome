@@ -23,10 +23,12 @@ const UserAlquileres = ({navigation}) => {
   const renderPropiedadCard = ({item}) => {
     return (
       <PropiedadCard
-        propiedad={item}
+        propiedad={item.contract_type.property}
         actionButtonText="Comentar"
         onActionButtonPress={() =>
-          navigation.navigate('UserComentarAlquiler', {alquilerId: item.id})
+          navigation.navigate('UserComentarAlquiler', {
+            alquilerId: item.contractTypeId,
+          })
         }
       />
     );

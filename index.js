@@ -22,6 +22,8 @@ const theme = {
     secondary: '#497174',
     triary: '#F2C94C',
     outline: '#EB6440',
+    secondaryContainer: '#EB6440',
+    onSecondaryContainer: '#212121',
   },
 };
 

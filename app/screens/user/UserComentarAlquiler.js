@@ -39,11 +39,11 @@ const UserComentarAlquiler = ({route, navigation}) => {
         onValueChange={setReviewType}
         buttons={[
           {
-            value: 'positive',
+            value: 'Positiva',
             label: 'Recomendar',
           },
           {
-            value: 'negative',
+            value: 'Negativa',
             label: 'No Recomendar',
           },
         ]}
